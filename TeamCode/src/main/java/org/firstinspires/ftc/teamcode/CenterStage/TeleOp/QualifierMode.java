@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.ServoImpl;
 import org.firstinspires.ftc.teamcode.CenterStage.Hardware.DriveTrain;
 import org.firstinspires.ftc.teamcode.CenterStage.Hardware.Launcher;
 
-@TeleOp (name = "Qualifier TeleOp")
+@TeleOp (name = "Qualifier TeleOp \uD83D\uDE08")
 public class QualifierMode extends LinearOpMode {
 
     DriveTrain driveTrain = new DriveTrain(this);
