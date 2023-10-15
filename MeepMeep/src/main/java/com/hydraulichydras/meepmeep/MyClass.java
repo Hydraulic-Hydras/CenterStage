@@ -17,7 +17,7 @@ public class MyClass {
                 .setConstraints(100, 65, Math.toRadians(180), Math.toRadians(180), 15)
                 .setDimensions(15,16)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(35, -64, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, 62, Math.toRadians(270)))
 
                                 // BLUE RIGHT
 
