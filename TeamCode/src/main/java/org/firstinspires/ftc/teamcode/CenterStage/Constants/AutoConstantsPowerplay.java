@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Config
 public class AutoConstantsPowerplay {
 
     // VELOCITY && ACCELERATION

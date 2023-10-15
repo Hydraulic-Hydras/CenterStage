@@ -26,11 +26,14 @@ public class DriveTrain extends Contraption {
         drive = new SampleMecanumDrive(hwMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+    }
+
+    // only use if robot has to be in field centric mode
+    public void initGyro(HardwareMap hwMap) {
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
-
     }
 
     public void RobotCentric(Gamepad gamepad1) {

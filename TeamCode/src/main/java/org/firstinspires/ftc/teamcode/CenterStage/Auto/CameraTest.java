@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,12 +18,12 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 @Autonomous
 public class CameraTest extends LinearOpMode {
 
@@ -30,14 +31,23 @@ public class CameraTest extends LinearOpMode {
     double cX = 0;
     double cY = 0;
     double width = 0;
+    private static final int WIDTH = 640; // 640 or 800
+    private static final int HEIGHT = 480;  // 360 or 448
+    private static final double FOV = 60;
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 448;
+    public static double Scalar1_1 = 150; // For lower red = grey on colorizer
+    public static double Scalar1_2 = 150;
+    public static double Scalar1_3 = 150;
+
+    public static double Scalar2_1 = 255; // Upper red values
+    public static double Scalar2_2 = 255; // RGB format
+    public static double Scalar2_3 = 255;
 
     // Calculate the distance using the formula
     public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
+    public static final double focalLength = 822;  // Replace with the focal length of the camera in pixels
 
+    // 728
 
     @Override
     public void runOpMode() {
@@ -48,6 +58,7 @@ public class CameraTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            telemetry.addData("Target IMU Angle", getAngleTarget(cX));
             telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
             telemetry.addData("Distance in Inch", (getDistance(width)));
             telemetry.update();
@@ -71,7 +82,7 @@ public class CameraTest extends LinearOpMode {
             @Override
             public void onOpened() {
 
-                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(WIDTH, HEIGHT); // removed camera rotation here
 
                 FtcDashboard dashboard = FtcDashboard.getInstance();
                 telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -89,8 +100,8 @@ public class CameraTest extends LinearOpMode {
         camera.setPipeline(new ObjectDetectionPipeline());
     }
 
-    class ObjectDetectionPipeline extends OpenCvPipeline {
 
+    class ObjectDetectionPipeline extends OpenCvPipeline {
         Mat hierarchy = new Mat();
         Mat hsvFrame = new Mat();
         Mat yellowMask = new Mat();
@@ -106,6 +117,7 @@ public class CameraTest extends LinearOpMode {
 
             // Find the largest yellow contour (blob)
             MatOfPoint largestContour = findLargestContour(contours);
+
 
             if (largestContour != null) {
                 // Draw a red outline around the largest detected object
@@ -139,7 +151,7 @@ public class CameraTest extends LinearOpMode {
         }
 
         private Mat preprocessFrame(Mat frame) {
-            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
+            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_RGB2HSV);
 
             // RGB FORMAT
             // Scalar lowerYellow = new Scalar(100, 100, 100);
@@ -150,11 +162,17 @@ public class CameraTest extends LinearOpMode {
             // Scalar lowerYellow = new Scalar(0, 80, 100);
 
             // FOR GREEN AND YELLOW
-            Scalar upperYellow = new Scalar(90, 2555, 255);
-            Scalar lowerYellow = new Scalar(50, 100, 50);
+           // Scalar upperYellow = new Scalar(90, 2555, 255);
+            // Scalar lowerYellow = new Scalar(50, 100, 50);
+
+            Scalar lowerRed = new Scalar(Scalar1_1, Scalar1_2, Scalar1_3);
+            Scalar upperRed = new Scalar(Scalar2_1, Scalar2_2, Scalar2_3);
+
+            // Scalar lowerRed = new Scalar(150, 150, 150); // grey
+            // Scalar upperRed = new Scalar(235, 100, 100); // the upper hsv threshold for your detection
 
             // changed from yellowMask to blue Mask
-            Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
+            Core.inRange(hsvFrame, lowerRed, upperRed, yellowMask);
 
             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
             Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_OPEN, kernel);
@@ -188,7 +206,11 @@ public class CameraTest extends LinearOpMode {
 
     public double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
-        return (distance +  5) / 3;
+        return (distance +  5);
+    }
+    private static double getAngleTarget(double objMidpoint){
+        double midpoint = -((objMidpoint - (WIDTH/2))*FOV)/WIDTH;
+        return midpoint;
     }
 
     public interface bgrColor {
