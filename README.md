@@ -1,4 +1,5 @@
 ![alt text](https://github.com/Tea505/9384-CenterStage/blob/9384/TeamCode/9384-logo.png) 
+
 *Logo produced by Qixian from FRC Team 333*
 
 ## NOTICE
