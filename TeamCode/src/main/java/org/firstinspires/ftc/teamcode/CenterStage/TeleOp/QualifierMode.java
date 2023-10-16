@@ -10,21 +10,20 @@ import org.firstinspires.ftc.teamcode.CenterStage.Hardware.Launcher;
 public class QualifierMode extends LinearOpMode {
 
     DriveTrain driveTrain = new DriveTrain(this);
-    Launcher launcher = new Launcher(this);
+    // Launcher launcher = new Launcher(this);
 
     @Override
     public void runOpMode() {
         driveTrain.init(hardwareMap);
-        launcher.init(hardwareMap);
+       // launcher.init(hardwareMap);
 
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                driveTrain.RobotCentric(gamepad1);
-                launcher.loop(gamepad1);
+               driveTrain.RobotCentric(gamepad1);
+               // launcher.loop(gamepad1);
 
-
-                launcher.telemetry(telemetry);
+                // launcher.telemetry(telemetry);
                // driveTrain.FieldCentric(gamepad1);
             }
         }
