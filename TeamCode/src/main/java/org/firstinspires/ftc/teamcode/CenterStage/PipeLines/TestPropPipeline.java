@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-public class TeamPropPipeline extends OpenCvPipeline {
+public class TestPropPipeline extends OpenCvPipeline {
 
     public static double cX = 0;
     public static double cY = 0;

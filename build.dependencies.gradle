@@ -3,6 +3,7 @@ repositories {
     google() // Needed for androidx
     maven { url 'https://jitpack.io' }
     maven { url = 'https://maven.brott.dev/' }
+    maven { url 'https://jitpack.com' } //add jitpack as a maven repo
 }
 
 dependencies {
@@ -42,4 +43,7 @@ dependencies {
     implementation 'org.ftclib.ftclib:core:2.1.1' // core
 }
 
+dependencies {
+    implementation 'com.github.deltacv:EOCV-Sim:3.3.2' //add the EOCV-Sim dependency
+}
 

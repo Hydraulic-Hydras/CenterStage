@@ -18,6 +18,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
@@ -56,6 +57,10 @@ public class CameraTest extends LinearOpMode {
 
         waitForStart();
 
+        telemetry.addData("Coordinate", "(" + (int) cX + ", " + (int) cY + ")");
+        telemetry.addData("Distance in Inch", (getDistance(width)));
+        telemetry.update();
+
         while (opModeIsActive()) {
 
             telemetry.addData("Target IMU Angle", getAngleTarget(cX));
@@ -82,7 +87,7 @@ public class CameraTest extends LinearOpMode {
             @Override
             public void onOpened() {
 
-                camera.startStreaming(WIDTH, HEIGHT); // removed camera rotation here
+                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.SIDEWAYS_RIGHT); // removed camera rotation here
 
                 FtcDashboard dashboard = FtcDashboard.getInstance();
                 telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());

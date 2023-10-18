@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Hardware;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -48,6 +50,15 @@ public class Camera extends Contraption {
         camera.showFpsMeterOnViewport(true);
     }
 
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        FtcDashboard.getInstance().startCameraStream(camera, 30);
+        telemetry.update();
+
+    }
+
     public void stopStreaming() {
         camera.stopStreaming();
     }
@@ -55,6 +66,7 @@ public class Camera extends Contraption {
     public void setPipeline(OpenCvPipeline pipeline) {
         camera.setPipeline(pipeline);
     }
+
 
 }
 
