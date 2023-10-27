@@ -49,8 +49,8 @@ public class PropVision implements VisionProcessor {
         // Convert to HSV format
         Imgproc.cvtColor(frame, mat, Imgproc.COLOR_RGB2HSV);
 
-        Scalar lowHSV = new Scalar(0,0,0);
-        Scalar highHSV = new Scalar(255,255,255);
+        Scalar lowHSV;
+        Scalar highHSV;
 
         // if isRed = true
         if(isRed) {
