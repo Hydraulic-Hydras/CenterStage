@@ -20,7 +20,7 @@ public class Camera extends Contraption {
     private String deviceName;
 
     private static final int WIDTH = 640;
-    private static final int HEIGHT = 360;
+    private static final int HEIGHT = 480;
 
     public Camera(LinearOpMode opMode, String deviceName) {
         this.opMode = opMode;
@@ -37,7 +37,7 @@ public class Camera extends Contraption {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.SIDEWAYS_RIGHT); // 864, 480
+                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); // 864, 480
                 FtcDashboard.getInstance().startCameraStream(camera, 30);
             }
 

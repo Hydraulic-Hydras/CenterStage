@@ -21,17 +21,19 @@ public class TeamPropPipeline extends OpenCvPipeline {
     Mat hsvFrame = new Mat();
     Mat teamMask = new Mat();
 
+    Telemetry telemetry;
+
     double cX = 0;
     double cY = 0;
     double width = 0;
 
-    final int LEFT = 1;
-    final int MIDDLE = 2;
-    final int RIGHT = 0;
+    int objectPos = 0;
+
+    boolean ObjectFound;
 
     // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 822;  // Replace with the focal length of the camera in pixels
+    public static final double objectWidthInRealWorldUnits = 0.7;  // Replace with the actual width of the object in real-world units
+    public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
 
     @Override
     public Mat processFrame(Mat input) {
@@ -56,7 +58,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
             Imgproc.putText(input, widthLabel, new Point(cX + 10, cY + 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             //Display the Distance
             String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
-            Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
+            Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 40), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             // Calculate the centroid of the largest contour
             Moments moments = Imgproc.moments(largestContour);
             cX = moments.get_m10() / moments.get_m00();
@@ -67,28 +69,25 @@ public class TeamPropPipeline extends OpenCvPipeline {
             Imgproc.putText(input, label, new Point(cX + 10, cY), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             Imgproc.circle(input, new Point(cX, cY), 5, new Scalar(0, 255, 0), -1);
 
-        }   else {
-
-            System.out.println("No Object detected");
         }
-
 
         hierarchy.release();
         hsvFrame.release();
         teamMask.release();
 
-
         return input;
     }
 
     private Mat preprocessFrame(Mat frame) {
+        // Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2RGB);
         Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_RGB2HSV);
-
+        
         Scalar lowerBlue = new Scalar(100, 100, 100);
         Scalar upperBlue = new Scalar(180, 255, 255);
 
         Scalar lowerRed = new Scalar(155, 155, 155);
         Scalar upperRed = new Scalar(255, 255, 255);
+
 
         Core.inRange(hsvFrame, lowerRed, upperRed, teamMask);
         Core.inRange(hsvFrame, lowerBlue, upperBlue, teamMask);
@@ -116,6 +115,29 @@ public class TeamPropPipeline extends OpenCvPipeline {
         return largestContour;
     }
 
+    public void telemetry(Telemetry telemetry) {
+        processFrame(teamMask);
+
+        if (getDistance(width) >= 42 ) {
+            // Middle
+            telemetry.addData("Object is in the Middle", ObjectFound = true);
+            telemetry.addData("Object's Position: 2", objectPos = 2);
+            telemetry.update();
+
+        }   else if (getDistance(width) >= 18) {
+            // Left
+            telemetry.addData("Object is on the Left", ObjectFound = true);
+            telemetry.addData("Object's Position: 1", objectPos = 1);
+            telemetry.update();
+
+        }   else {
+            // Right
+            telemetry.addData("No Object detected, object should be on the Right", ObjectFound = false);
+            telemetry.addData("Object's Position: 3", objectPos = 3);
+            telemetry.update();
+        }
+    }
+
     private double calculateWidth(MatOfPoint contour) {
         Rect boundingRect = Imgproc.boundingRect(contour);
         return boundingRect.width;
@@ -123,6 +145,6 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     public double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
-        return (distance +  5);
+        return (distance);
     }
 }

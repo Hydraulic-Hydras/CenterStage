@@ -9,6 +9,20 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
 public class AutoConstants {
+    public enum Side {
+        BLUE,
+        RED
+    }
+
+    public static int LEFTSIDE_REGION_X = 0;
+    public static int LEFTSIDE_REGION_Y = 170;
+
+    public static int RIGHTSIDE_REGION_X = 0;
+    public static int RIGHTSIDE_REGION_Y = 170;
+
+    public static int REGION_WIDTH = 65;
+    public static int REGION_HEIGHT = 65;
+
 
     // VELOCITY AND ACCELERATION
     public static final int MAX_VEL = 100;
@@ -47,8 +61,7 @@ public class AutoConstants {
     public static final double RL_H = Math.toRadians(180);
     public static final Pose2d RL_START = new Pose2d(RL_X, RL_Y, RL_H);
 
-    // WHITE STACK POSES
-
+    public static Side SIDE = Side.RED;
 
 
 }
