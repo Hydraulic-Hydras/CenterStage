@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -16,6 +17,9 @@ public class Cascades extends Contraption {
 
     private MotionProfiledDcMotor leftcascade;
     private MotionProfiledDcMotor rightcascade;
+
+    private TouchSensor high_lift;
+    private TouchSensor low_lift;
 
     public static final double WHEEL_RADIUS = 0; // inches
     public static final double GEAR_RATIO = 1;
@@ -29,12 +33,13 @@ public class Cascades extends Contraption {
     public static double kI = 0;
     public static double kD = 0;
     public static double kF = 0;
-    public static double POS_REST = -1;
+
+    public static double POS_REST = 0;
     public static double POS_GROUND = 0;
-    public static double POS_LOW = 20.2;
-    public static double POS_MEDIUM = 39;
-    public static double POS_HIGH = 58.4;
-    public static double POS_HIGH_AUTO = 58.9;
+    public static double POS_LOW = 0;
+    public static double POS_MEDIUM = 0;
+    public static double POS_HIGH = 0;
+    public static double POS_HIGH_AUTO = 0;
 
     public Cascades(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -61,15 +66,18 @@ public class Cascades extends Contraption {
 
         // TODO : uncomment to reverse motor direction
         rightcascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        high_lift = hwMap.get(TouchSensor.class, "high_Limit");
+        low_lift = hwMap.get(TouchSensor.class, "low_Limit");
     }
 
     @Override
-    public void loop(Gamepad gamepad1, Gamepad gamepad2) {
+    public void loop(Gamepad gamepad2) {
 
-        if (gamepad1.right_trigger > 0) {
+        if (!high_lift.isPressed() && gamepad2.right_trigger > 0) {
             rightcascade.setPower(1);
             leftcascade.setPower(1);
-        } else if (gamepad1.left_trigger > 0) {
+        } else if (!low_lift.isPressed() && gamepad2.left_trigger > 0) {
             rightcascade.setPower(-1);
             leftcascade.setPower(-1);
         } else {

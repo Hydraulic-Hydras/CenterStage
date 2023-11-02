@@ -1,22 +1,31 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-import java.util.List;
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@TeleOp
-public class TensorFlow extends LinearOpMode {
+import java.util.List;
+
+@Autonomous
+public class CVAT extends LinearOpMode {
 
     boolean USE_WEBCAM;
     TfodProcessor myTfodProcessor;
     VisionPortal myVisionPortal;
+
+    public enum Location {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public Location local;
 
     @Override
     public void runOpMode() {
@@ -24,8 +33,7 @@ public class TensorFlow extends LinearOpMode {
 
         initTfod();
 
-        // Wait for the match to begin.
-        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
+        telemetry.addData("Camera is ready to stream", "Streaming opening up");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
 
@@ -51,7 +59,7 @@ public class TensorFlow extends LinearOpMode {
         }
     }
 
-    /**
+     /**
      * Initialize TensorFlow Object Detection.
      */
     private void initTfod() {
@@ -60,6 +68,12 @@ public class TensorFlow extends LinearOpMode {
 
         // First, create a TfodProcessor.Builder.
         myTfodProcessorBuilder = new TfodProcessor.Builder();
+        // Set the name of the file where the model can be found.
+        myTfodProcessorBuilder.setModelFileName("team_prop.tflite");
+        // Set the full ordered list of labels the model is trained to recognize.
+        myTfodProcessorBuilder.setModelLabels(JavaUtil.createListWith("Team Prop", null));
+        // Set the aspect ratio for the images used when the model was created.
+        myTfodProcessorBuilder.setModelAspectRatio(16 / 9);
         // Create a TfodProcessor by calling build.
         myTfodProcessor = myTfodProcessorBuilder.build();
         // Next, create a VisionPortal.Builder and set attributes related to the camera.
@@ -69,17 +83,15 @@ public class TensorFlow extends LinearOpMode {
             myVisionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
         } else {
             // Use the device's back camera.
-            myVisionPortalBuilder.setCamera(BuiltinCameraDirection.FRONT);
+            myVisionPortalBuilder.setCamera(BuiltinCameraDirection.BACK);
         }
         // Add myTfodProcessor to the VisionPortal.Builder.
         myVisionPortalBuilder.addProcessor(myTfodProcessor);
+        myTfodProcessor.setMinResultConfidence((float) 0.50);
         // Create a VisionPortal by calling build.
         myVisionPortal = myVisionPortalBuilder.build();
-
-        // default magnification is 1.0
         myTfodProcessor.setZoom(1.0);
     }
-
 
     /**
      * Display info (using telemetry) for a detected object
@@ -87,6 +99,7 @@ public class TensorFlow extends LinearOpMode {
     private void telemetryTfod() {
         List<Recognition> myTfodRecognitions;
         Recognition myTfodRecognition;
+        int location;
         float x;
         float y;
 
@@ -109,7 +122,9 @@ public class TensorFlow extends LinearOpMode {
             // Display size
             // Display the size of detection boundary for the recognition
             telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
+
         }
 
     }
+
 }

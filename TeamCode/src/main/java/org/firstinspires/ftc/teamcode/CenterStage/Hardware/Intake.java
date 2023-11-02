@@ -45,7 +45,7 @@ public class Intake extends Contraption {
     }
 
     @Override
-    public void loop(Gamepad gamepad1, Gamepad gamepad2) {
+    public void loop(Gamepad gamepad1) {
         if (gamepad1.cross) {
             intake();
         } else if (gamepad1.circle) {

@@ -23,7 +23,6 @@ public class PropVision implements VisionProcessor {
     int RIGHT_LINE = (2 * (width / 3));
 
     boolean isRed;
-
     public enum PropLocation{
         LEFT,
         MIDDLE,
@@ -43,6 +42,9 @@ public class PropVision implements VisionProcessor {
     Mat mat = new Mat();
     Mat thresh = new Mat();
 
+    static int leftNum;
+    static int rightNum;
+    static int middleNum;
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
@@ -73,9 +75,9 @@ public class PropVision implements VisionProcessor {
         Imgproc.line(frame,new Point(RIGHT_LINE,0), new Point(RIGHT_LINE,height),GREEN,4);
 
 
-        int leftNum = Core.countNonZero(left);
-        int middleNum = Core.countNonZero(center);
-        int rightNum = Core.countNonZero(right);
+        leftNum = Core.countNonZero(left);
+        middleNum = Core.countNonZero(center);
+        rightNum = Core.countNonZero(right);
 
         if (leftNum > middleNum && leftNum > rightNum){
             location = PropLocation.LEFT;
@@ -107,16 +109,19 @@ public class PropVision implements VisionProcessor {
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.MAGENTA);
         paint.setStyle(Paint.Style.FILL);
 
-        int myFontSize = 12;
+        double myFontSize = 9.5;
 
         double relation = Math.sqrt(canvas.getWidth() * canvas.getHeight());
         relation = relation / 250;
         paint.setTextSize((float) (myFontSize * relation));
 
-        canvas.drawText("Location: " + location, 670, 400, paint);
+        canvas.drawText("Location: " + location, 655, 400, paint);
+        canvas.drawText("LEFT_NUM: " + leftNum, 655, 450, paint);
+        canvas.drawText("MIDDLE_NUM: " + middleNum, 655, 500, paint);
+        canvas.drawText("RIGHT_NUM: " + rightNum, 655, 550, paint);
 
         }
 
