@@ -32,9 +32,9 @@ public class AutoConstants {
     public static final int VELO = 58;
     public static final int ACCEL = 58;
 
-    public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint(VELO,
+    public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint(MAX_VEL,
             Math.toRadians(180), Math.toRadians(180));
-    public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint(ACCEL);
+    public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint(MAX_ACCEL);
 
 
     // BLUE RIGHT START POSE

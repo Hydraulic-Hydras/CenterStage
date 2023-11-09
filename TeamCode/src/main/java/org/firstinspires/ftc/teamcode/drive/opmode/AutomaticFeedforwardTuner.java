@@ -34,7 +34,6 @@ import java.util.List;
  *      regression.
  */
 
-@Disabled
 @Config
 @Autonomous(group = "drive")
 public class AutomaticFeedforwardTuner extends LinearOpMode {

@@ -14,12 +14,33 @@ public class MyClass {
 
         RoadRunnerBotEntity blueRight = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(100, 65, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(15,16)
+                .setConstraints(60, 65, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 62, Math.toRadians(270)))
 
-                                // BLUE RIGHT
+                                // BLUE RIGHT (RIGHT PROP)
+
+                                .strafeRight(10.7)
+
+                                .lineTo(new Vector2d(-46.7, 35.3))
+
+                                .setTurnConstraint(50,50)
+                                .turn(Math.PI/-2)
+                                .resetTurnConstraint()
+
+                                .lineTo(new Vector2d(-58.3, 35.3))
+                                .waitSeconds(1)
+
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(-40, 12, Math.toRadians(180)), Math.toRadians(0))
+                                .lineTo(new Vector2d(24,12))
+                                .splineToConstantHeading(new Vector2d(50, 41), Math.toRadians(0))
+
+                                .waitSeconds(5)
+
+                                /**
+                                // BLUE RIGHT (CENTER PROP)
 
                                 .lineTo(new Vector2d(-36, 24))
 
@@ -38,17 +59,28 @@ public class MyClass {
                                 .splineToConstantHeading(new Vector2d(50, 35), Math.toRadians(0))
                                 .waitSeconds(5)
 
+                                 **/
+
                                 .build()
+
                 );
 
         RoadRunnerBotEntity blueLeft = new DefaultBotBuilder(meepMeep)
                 .setColorScheme(new ColorSchemeBlueLight())
-                .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(15,16)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(12, 62, Math.toRadians(270)))
 
-                                // BLUE LEFT
+                                // BLUE LEFT (LEFT PROP)
+
+                                .strafeLeft(11.5)
+
+                                .waitSeconds(5)
+
+                                /**
+
+                                // BLUE LEFT (CENTER PROP)
                                 .lineToLinearHeading(new Pose2d(15, 24, Math.toRadians(180)))
                                 .setReversed(true)
 
@@ -68,8 +100,11 @@ public class MyClass {
 
                                 .waitSeconds(1)
 
+                                **/
 
                                 .build()
+
+
 
                 );
 
