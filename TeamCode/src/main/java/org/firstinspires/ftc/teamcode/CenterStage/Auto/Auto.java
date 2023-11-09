@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.CenterStage.AutoConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -16,7 +17,7 @@ public class Auto extends LinearOpMode {
     @Override
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         Pose2d startPose = AutoConstants.BR_START;
         drive.setPoseEstimate(startPose);

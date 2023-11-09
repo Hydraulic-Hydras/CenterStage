@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.Auto;
+package org.firstinspires.ftc.teamcode.CenterStage;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -32,9 +32,9 @@ public class AutoConstants {
     public static final int VELO = 58;
     public static final int ACCEL = 58;
 
-    public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint(MAX_VEL,
+    public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint(FAST_VEL,
             Math.toRadians(180), Math.toRadians(180));
-    public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint(MAX_ACCEL);
+    public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint(FAST_ACCEL);
 
 
     // BLUE RIGHT START POSE
