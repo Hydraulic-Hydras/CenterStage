@@ -33,7 +33,7 @@ public class Left {
                                 .lineTo(new Vector2d(20,-11.60))
                                 .waitSeconds(2)
 
-                                // backdrop
+                                // backdrop on left
                                 .splineToConstantHeading(new Vector2d(48,-29), Math.toRadians(0))
                                 .waitSeconds(1)
 

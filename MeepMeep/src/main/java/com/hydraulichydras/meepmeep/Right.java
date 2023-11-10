@@ -24,6 +24,8 @@ public class Right {
                                 .waitSeconds(1)
 
                                 .setReversed(true)
+
+                                // .splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
                                 .lineTo(new Vector2d(48, -29))
                                 .waitSeconds(1)
 
@@ -36,6 +38,7 @@ public class Right {
                                 .waitSeconds(1)
 
                                 .setReversed(true)
+
 
                                 .build()
                 );
