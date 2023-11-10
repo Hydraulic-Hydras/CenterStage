@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous
 public class Auto extends LinearOpMode {
-
     SampleMecanumDrive drive;
 
     @Override
@@ -26,10 +25,9 @@ public class Auto extends LinearOpMode {
                 .setConstraints(AutoConstants.Vel0, AutoConstants.Accel0)
                 .setTurnConstraint(60, 60)
 
-                .strafeRight(10.7)
                 .forward(5)
 
-                .strafeLeft(15)
+                .strafeLeft(10.7)
 
                 /**
                 .lineTo(new Vector2d(-46.7, 35.3))
