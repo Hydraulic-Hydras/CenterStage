@@ -41,8 +41,8 @@ public class Right {
                                 .splineToConstantHeading(new Vector2d(-35,-58.5), Math.toRadians(0))
                                 .lineTo(new Vector2d(35,-58.5))
 
-                                // left, right middle blah blah
-
+                                .splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
+                                .waitSeconds(1)
                                 .build()
                 );
 

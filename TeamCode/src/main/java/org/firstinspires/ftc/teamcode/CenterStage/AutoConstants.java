@@ -38,7 +38,7 @@ public class AutoConstants {
     public static final int L_PROP_UNLOAD_X = -35;
     public static final int L_PROP_UNLOAD_Y = -32;
     public static final double L_PROP_UNLOAD_HEADING_LEFT = Math.toRadians(180);
-    public static final Pose2d L_LEFT_PROP_UNLOAD_POS = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_LEFT);
+    public static final Pose2d L_LEFT_PROP_UNLOAD_POSE = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_LEFT);
     public static final double L_PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
     public static final Pose2d L_RIGHT_PROP_UNLOAD_POS = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_RIGHT);
 
