@@ -38,7 +38,10 @@ public class Right {
                                 .waitSeconds(1)
 
                                 .setReversed(true)
+                                .splineToConstantHeading(new Vector2d(-35,-58.5), Math.toRadians(0))
+                                .lineTo(new Vector2d(35,-58.5))
 
+                                // left, right middle blah blah
 
                                 .build()
                 );

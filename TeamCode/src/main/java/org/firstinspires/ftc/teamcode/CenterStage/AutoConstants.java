@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.opencv.core.Mat;
 
 @Config
 public class AutoConstants {
@@ -42,19 +43,21 @@ public class AutoConstants {
     public static final double L_PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
     public static final Pose2d L_RIGHT_PROP_UNLOAD_POS = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_RIGHT);
 
-    // TEAM PROP LOCATION == LEFT BACKDROP
+    // LEFT TRAJECTORY
     public static final int L_HIGH_PIXEL_X = -59;
     public static final double L_HIGH_PIXEL_Y = -11.60;
-    public static final double HEADING_HIGH_PIXEL_LEFT = Math.toRadians(180);
-    public static final Vector2d UPPER_WHITE_STACK = new Vector2d(L_HIGH_PIXEL_X, L_HIGH_PIXEL_Y);
+    public static final double HEADING_HIGH_PIXEL = Math.toRadians(180);
+    public static final Vector2d UPPER_WHITE_STACK_VECTOR = new Vector2d(L_HIGH_PIXEL_X, L_HIGH_PIXEL_Y);
     public static final int CENTER_DOOR_POS_X = 20;
     public static final double CENTER_DOOR_POS_Y = -11.60;
-    public static final Vector2d CENTER_DOOR_DELAYPOS = new Vector2d(CENTER_DOOR_POS_X, CENTER_DOOR_POS_Y);
+    public static final Vector2d CENTER_DOOR_DELAYPOS_VECTOR = new Vector2d(CENTER_DOOR_POS_X, CENTER_DOOR_POS_Y);
+    public static final double HEADING_LEFT_BACKDROP = Math.toRadians(0);
+    public static final double HEADING_LEFT_REVERT_BACKDROP = Math.toRadians(180);
+
+    // TEAM PROP LOCATION == LEFT BACKDROP
     public static final int L_BACKDROP_LEFT_X = 48;
     public static final int L_BACKDROP_LEFT_Y = -29;
     public static final Vector2d L_BACKDROP_LEFT_SCORE = new Vector2d(L_BACKDROP_LEFT_X, L_BACKDROP_LEFT_Y);
-    public static final double HEADING_LEFT_BACKDROP = Math.toRadians(0);
-    public static final double HEADING_LEFT_REVERT_BACKDROP = Math.toRadians(180);
 
     // TEAM PROP LOCATION == MIDDLE BACKDROP
     public static final int L_BACKDROP_MIDDLE_X = 48;
@@ -73,6 +76,21 @@ public class AutoConstants {
     public static final Pose2d R_LEFT_PROP_UNLOAD_POS = new Pose2d(R_PROP_UNLOAD_X, R_PROP_UNLOAD_Y, R_PROP_UNLOAD_HEADING_LEFT);
     public static final double R_PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
     public static final Pose2d R_RIGHT_PROP_UNLOAD_POS = new Pose2d(R_PROP_UNLOAD_X, R_PROP_UNLOAD_Y, R_PROP_UNLOAD_HEADING_RIGHT);
+
+    // RIGHT TRAJECTORY
+    // take in account that "UNLOAD" for RIGHT is also positioning
+    public static final int R_TAPE_POS_X = 35;
+    public static final double R_TAPE_POS_Y = -58.5;
+    public static final Vector2d R_TAPE_POS_VECTOR = new Vector2d(R_TAPE_POS_X, R_TAPE_POS_Y);
+    public static final double R_TAPE_POS_HEADING = Math.toRadians(180);
+    public static final int R_BLUE_STRIPE_X = -35;
+    public static final double R_BLUE_STRIPE_Y = -58.5;
+    public static final Vector2d R_BLUE_STRIPE_VECTOR = new Vector2d(R_BLUE_STRIPE_X, R_BLUE_STRIPE_Y);
+    public static final int R_LOWER_PIXEL_X = -58;
+    public static final double R_LOWER_PIXEL_Y = -35.45;
+    public static final double R_LOWER_PIXEL_HEADING = Math.toRadians(180);
+    public static final Vector2d LOWER_PIXEL_VECTOR = new Vector2d(R_LOWER_PIXEL_X, R_LOWER_PIXEL_Y);
+    public static final double HEADING_RIGHT_REVERT_BLUE_STRIPE = Math.toRadians(0);
 
     // TEAM PROP LOCATION == LEFT BACKDROP
     public static final int R_BACKDROP_LEFT_X = 48;
