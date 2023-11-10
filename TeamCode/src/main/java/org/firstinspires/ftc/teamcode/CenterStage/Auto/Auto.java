@@ -19,10 +19,9 @@ public class Auto extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Pose2d startPose = AutoConstants.BR_START;
-        drive.setPoseEstimate(startPose);
+        drive.setPoseEstimate(AutoConstants.LEFT_SP);
 
-        TrajectorySequence RIGHT_Prop = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence RIGHT_Prop = drive.trajectorySequenceBuilder(AutoConstants.LEFT_SP)
 
                 .setConstraints(AutoConstants.Vel0, AutoConstants.Accel0)
                 .setTurnConstraint(60, 60)
