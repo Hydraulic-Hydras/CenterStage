@@ -35,12 +35,12 @@ public class AutoConstants {
     public static final Pose2d RIGHT_SP = new Pose2d(RIGHT_X, WALLPOS, HEADING);
 
         /* === LEFT SIDE === */
-    public static final int PROP_UNLOAD_X = -35;
-    public static final int PROP_UNLOAD_Y = -32;
-    public static final double PROP_UNLOAD_HEADING_LEFT = Math.toRadians(180);
-    public static final Pose2d LEFT_PROP_UNLOAD_POS = new Pose2d(PROP_UNLOAD_X, PROP_UNLOAD_Y, PROP_UNLOAD_HEADING_LEFT);
-    public static final double PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
-    public static final Pose2d RIGHT_PROP_UNLOAD_POS = new Pose2d(PROP_UNLOAD_X, PROP_UNLOAD_Y, PROP_UNLOAD_HEADING_RIGHT);
+    public static final int L_PROP_UNLOAD_X = -35;
+    public static final int L_PROP_UNLOAD_Y = -32;
+    public static final double L_PROP_UNLOAD_HEADING_LEFT = Math.toRadians(180);
+    public static final Pose2d L_LEFT_PROP_UNLOAD_POS = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_LEFT);
+    public static final double L_PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
+    public static final Pose2d L_RIGHT_PROP_UNLOAD_POS = new Pose2d(L_PROP_UNLOAD_X, L_PROP_UNLOAD_Y, L_PROP_UNLOAD_HEADING_RIGHT);
     public static final int L_HIGH_PIXEL_X = -59;
     public static final double L_HIGH_PIXEL_Y = -11.60;
     public static final double HEADING_HIGH_PIXEL_LEFT = Math.toRadians(180);
@@ -53,6 +53,14 @@ public class AutoConstants {
     public static final Vector2d BACKDROP_LEFT_SCORE = new Vector2d(BACKDROP_LEFT_X, BACKDROP_LEFT_Y);
     public static final double HEADING_LEFT_BACKDROP = Math.toRadians(0);
     public static final double HEADING_LEFT_REVERT_BACKDROP = Math.toRadians(180);
+
+        /* === RIGHT SIDE === */
+    public static final int R_PROP_UNLOAD_X = 12;
+    public static final int R_PROP_UNLOAD_Y = -29;
+    public static final double R_PROP_UNLOAD_HEADING_LEFT = Math.toRadians(180);
+    public static final Pose2d R_LEFT_PROP_UNLOAD_POS = new Pose2d(R_PROP_UNLOAD_X, R_PROP_UNLOAD_Y, R_PROP_UNLOAD_HEADING_LEFT);
+    public static final double R_PROP_UNLOAD_HEADING_RIGHT = Math.toRadians(0);
+    public static final Pose2d R_RIGHT_PROP_UNLOAD_POS = new Pose2d(R_PROP_UNLOAD_X, R_PROP_UNLOAD_Y, R_PROP_UNLOAD_HEADING_RIGHT);
 
     /* ======= END COORDINATE CONSTANTS  ======= */
 }

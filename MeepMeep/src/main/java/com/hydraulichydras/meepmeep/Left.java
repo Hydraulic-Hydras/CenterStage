@@ -23,17 +23,21 @@ public class Left {
                                 .lineToLinearHeading(new Pose2d(-35.00, -32.00, Math.toRadians(180.00)))
                                 .waitSeconds(1)
 
+                                // white stack
                                 .strafeRight(1)
                                 .splineToConstantHeading(new Vector2d(-59.00, -11.60), Math.toRadians(180.00))
                                 .waitSeconds(1)
 
+                                // center door pos
                                 .setReversed(true)
                                 .lineTo(new Vector2d(20,-11.60))
                                 .waitSeconds(2)
 
-                                .splineTo(new Vector2d(48,-29), Math.toRadians(0))
+                                // backdrop
+                                .splineToConstantHeading(new Vector2d(48,-29), Math.toRadians(0))
                                 .waitSeconds(1)
 
+                                // back to white stack cycle
                                 .setReversed(false)
                                 .splineToConstantHeading(new Vector2d(20, -11.60), Math.toRadians(180))
                                 .lineTo(new Vector2d(-59,-11.6))

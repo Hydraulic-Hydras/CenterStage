@@ -29,8 +29,10 @@ public class Right {
 
                                 .setReversed(false)
                                 .splineToConstantHeading(new Vector2d(35, -58.5), Math.toRadians(180))
+                                .waitSeconds(1)
                                 .lineTo(new Vector2d(-35, -58.5))
-                                .splineToConstantHeading(new Vector2d(-58, -35.60), Math.toRadians(180))
+                                .waitSeconds(1)
+                                .splineToConstantHeading(new Vector2d(-58, -35.45), Math.toRadians(180))
                                 .waitSeconds(1)
 
                                 .setReversed(true)
