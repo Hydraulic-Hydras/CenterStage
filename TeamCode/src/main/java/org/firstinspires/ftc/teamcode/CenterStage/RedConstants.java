@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
-public class AutoConstants {
+public class RedConstants {
 
     // VELOCITY AND ACCELERATION
     public static final int MAX_VEL = 100;
