@@ -100,13 +100,19 @@ public class FailsafeAuto extends LinearOpMode {
                             telemetry.addData("x", poseEstimate.getX());
                             telemetry.addData("y", poseEstimate.getY());
                             telemetry.addData("heading", poseEstimate.getHeading());
+
+                            time.reset();
                         }
                 case STACK:
                         if (!drive.isBusy()) {
                             drive.followTrajectorySequence(whitePOWER);
+
+                            drivetrain = driveState.DOOR;
+                            sequences = AutoSequences.WORKING;
+
+                            time.reset();
                         }
-                         drivetrain = driveState.DOOR;
-                         sequences = AutoSequences.WORKING;
+
 
                 case DOOR:
                     if (!drive.isBusy()) {
@@ -119,6 +125,8 @@ public class FailsafeAuto extends LinearOpMode {
                         } else {
                             sleep(2000);
                         }
+
+                        time.reset();
                     }
 
                     break;
