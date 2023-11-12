@@ -31,7 +31,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     // TODO: Measured the encoder values and finished with multipliers
     // only thing left is to tune the odometry
     public static double TICKS_PER_REV = 8192;
-    public static double WHEEL_RADIUS = 1; // in, Using 2inch Dualie Omni wheels from andy mark 50A
+    public static double WHEEL_RADIUS = 0.96; // in, Using 2inch Dualie Omni wheels from andy mark 50A
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double X_MULTIPLIER = 1.0729; // Multiplier in the X direction
