@@ -54,7 +54,6 @@ public class Cascades extends Contraption {
         leftcascade.setPIDCoefficients(kP, kI, kD, kF);
         leftcascade.setTargetPosition(0);
 
-        // TODO : uncomment to reverse motor direction
         leftcascade.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightcascade = new MotionProfiledDcMotor(hwMap, "rightCascade");
@@ -64,7 +63,6 @@ public class Cascades extends Contraption {
         rightcascade.setPIDCoefficients(kP, kI, kD, kF);
         rightcascade.setTargetPosition(0);
 
-        // TODO : uncomment to reverse motor direction
         rightcascade.setDirection(DcMotorSimple.Direction.REVERSE);
 
         high_lift = hwMap.get(TouchSensor.class, "high_Limit");
