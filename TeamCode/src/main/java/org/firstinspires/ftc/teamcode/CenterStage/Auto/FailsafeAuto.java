@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.CenterStage.RedConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous
 public class FailsafeAuto extends LinearOpMode {
     public enum driveState {
@@ -117,7 +119,7 @@ public class FailsafeAuto extends LinearOpMode {
                     if (!drive.isBusy()) {
                         // if/else loop if the distance sensor is being used
                             if (backSense.getDistance(DistanceUnit.INCH) <= 15) {
-                                drive.breakFollowing();
+                                // drive.breakFollowing();
                                 sequences = AutoSequences.FAILSAFE;
                                 FAILSAFE_ACTIVATED = true;
                                 // Stop the motors
@@ -130,7 +132,7 @@ public class FailsafeAuto extends LinearOpMode {
                             // if/else loop if the robot collides and crashes
                             if (heading > 185 || heading < 175 && time.seconds() >= 3) {
                                 // Cancel Following
-                                drive.breakFollowing();
+                               // drive.breakFollowing();
                                 sequences = AutoSequences.FAILSAFE;
                                 FAILSAFE_ACTIVATED = true;
                                 // Stop the motors

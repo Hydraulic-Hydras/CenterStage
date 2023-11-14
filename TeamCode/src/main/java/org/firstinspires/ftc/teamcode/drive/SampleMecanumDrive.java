@@ -41,7 +41,6 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunnerCancelable;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ import java.util.List;
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(7, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(5, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -62,8 +61,8 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
-    // private TrajectorySequenceRunner trajectorySequenceRunner;
-    private TrajectorySequenceRunnerCancelable trajectorySequenceRunner;
+    private TrajectorySequenceRunner trajectorySequenceRunner;
+   // private TrajectorySequenceRunnerCancelable trajectorySequenceRunner;
 
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
@@ -152,8 +151,8 @@ public class SampleMecanumDrive extends MecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
 
-       List<Integer> lastTrackingEncPositions = new ArrayList<>();
-       List<Integer> lastTrackingEncVels = new ArrayList<>();
+        List<Integer> lastTrackingEncPositions = new ArrayList<>();
+        List<Integer> lastTrackingEncVels = new ArrayList<>();
 
 
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -162,17 +161,19 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //if desired, use setLocalizer() to change the localization method
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap)); // lastTrackingEncPositions, lastTrackingEncVels));
 
         // TODO: Test to see if cancel works and is compatible with tuning as well
 
-       /* trajectorySequenceRunner = new TrajectorySequenceRunner(
+
+       trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
-        */
 
-        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID);
+
+
+      // trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID);
 
     }
 
@@ -196,9 +197,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         );
     }
 
-    public void breakFollowing() {
+  /*  public void breakFollowing() {
         trajectorySequenceRunner.breakFollowing();
     }
+
+   */
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(getPoseEstimate())

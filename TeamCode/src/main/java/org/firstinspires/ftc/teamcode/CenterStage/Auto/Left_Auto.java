@@ -15,14 +15,12 @@ public class Left_Auto extends LinearOpMode {
     @Override
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         drive.setPoseEstimate(RedConstants.LEFT_SP);
 
         TrajectorySequence RIGHT_Prop = drive.trajectorySequenceBuilder(RedConstants.LEFT_SP)
 
                 .setConstraints(RedConstants.Vel0, RedConstants.Accel0)
-                .setTurnConstraint(60, 60)
 
                 .lineToLinearHeading(RedConstants.L_LEFT_PROP_UNLOAD_POSE)
                 .waitSeconds(1)
@@ -30,7 +28,7 @@ public class Left_Auto extends LinearOpMode {
                 .strafeRight(1)
                 .splineToConstantHeading(RedConstants.UPPER_WHITE_STACK_VECTOR, RedConstants.HEADING_HIGH_PIXEL)
 
-                .waitSeconds(5)
+                .waitSeconds(1)
 
                 .build();
 
