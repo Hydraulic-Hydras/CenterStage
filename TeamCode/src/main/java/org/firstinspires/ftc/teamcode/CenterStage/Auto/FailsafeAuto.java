@@ -77,6 +77,7 @@ public class FailsafeAuto extends LinearOpMode {
 
         TrajectorySequence failSafe = drive.trajectorySequenceBuilder(new Pose2d())
 
+                .setReversed(false)
                 .setConstraints(RedConstants.Vel0, RedConstants.Accel0)
                 .strafeLeft(24)
 
