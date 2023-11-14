@@ -26,6 +26,7 @@ public class QualifierTeleOp extends LinearOpMode {
         // camera.init(hardwareMap);
         launcher.init(hardwareMap);
 
+
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
