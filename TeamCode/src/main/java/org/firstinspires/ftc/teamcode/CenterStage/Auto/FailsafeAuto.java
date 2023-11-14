@@ -115,31 +115,33 @@ public class FailsafeAuto extends LinearOpMode {
 
                 case DOOR:
                     if (!drive.isBusy()) {
-                        // if loop if the distance sensor is being used
-                        if (backSense.getDistance(DistanceUnit.INCH) == 15 ) {
-                            drive.breakFollowing();
-                            sequences = AutoSequences.FAILSAFE;
-                            FAILSAFE_ACTIVATED = true;
-                            // Stop the motors
-                            drive.setDrivePower(new Pose2d());
-                        }   else {
-                            drive.followTrajectorySequence(doorPos);
-                        }
+                        // if/else loop if the distance sensor is being used
+                            if (backSense.getDistance(DistanceUnit.INCH) <= 15) {
+                                drive.breakFollowing();
+                                sequences = AutoSequences.FAILSAFE;
+                                FAILSAFE_ACTIVATED = true;
+                                // Stop the motors
+                                drive.setDrivePower(new Pose2d());
+                            } else {
+                                drive.followTrajectorySequence(doorPos);
+                                drivetrain = driveState.IDLE;
+                            }
 
-                        // if loop if the robot collides and crashes
-                        if (heading > 185 || heading < 175 && time.seconds() >= 3) {
-                            // Cancel Following
-                            drive.breakFollowing();
-                            sequences = AutoSequences.FAILSAFE;
-                            FAILSAFE_ACTIVATED = true;
-                            // Stop the motors
-                            drive.setDrivePower(new Pose2d());
-                        }   else {
-                            drive.followTrajectorySequence(doorPos);
-                        }
+                            // if/else loop if the robot collides and crashes
+                            if (heading > 185 || heading < 175 && time.seconds() >= 3) {
+                                // Cancel Following
+                                drive.breakFollowing();
+                                sequences = AutoSequences.FAILSAFE;
+                                FAILSAFE_ACTIVATED = true;
+                                // Stop the motors
+                                drive.setDrivePower(new Pose2d());
+                            } else {
+                                drive.followTrajectorySequence(doorPos);
+                                drivetrain = driveState.IDLE;
+                            }
 
-                        time.reset();
-                    }
+                            time.reset();
+                        }
 
                     break;
                         case IDLE:
