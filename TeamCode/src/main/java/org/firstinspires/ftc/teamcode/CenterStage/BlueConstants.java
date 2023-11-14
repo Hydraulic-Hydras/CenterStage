@@ -14,8 +14,8 @@ public class BlueConstants {
     public static final int MAX_ACCEL = 100;
     public static final int FAST_VEL = 74;
     public static final int FAST_ACCEL = 74;
-    public static final int VELO = 58;
-    public static final int ACCEL = 58;
+    public static final int VELO = 45;
+    public static final int ACCEL = 45;
 
     public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint
             (FAST_VEL,
@@ -23,11 +23,20 @@ public class BlueConstants {
     public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint
             (FAST_ACCEL);
 
+    public static final TrajectoryVelocityConstraint SlowVel = SampleMecanumDrive.getVelocityConstraint(
+            VELO,
+            Math.toRadians(180), Math.toRadians(180));
+    public static final TrajectoryAccelerationConstraint SlowAccel = SampleMecanumDrive.getAccelerationConstraint(
+            ACCEL);
+
+
     /* ======= COORDINATE CONSTANTS ======= */
 
         /* === LEFT SIDE === */
 
     // LEFT TRAJECTORY
+    // take in account that "UNLOAD" for LEFT is also positioning
+    // its inversed for red and blue yea i know my brain isnt braining with these poses n sh1t
 
     // TEAM PROP LOCATION == LEFT BACKDROP
 
@@ -38,7 +47,6 @@ public class BlueConstants {
         /* === RIGHT SIDE === */
 
     // RIGHT TRAJECTORY
-    // take in account that "UNLOAD" for RIGHT is also positioning
 
     // TEAM PROP LOCATION == LEFT BACKDROP
 
