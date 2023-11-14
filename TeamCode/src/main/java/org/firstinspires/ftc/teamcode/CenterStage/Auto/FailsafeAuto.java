@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.CenterStage.RedConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -68,7 +69,8 @@ public class FailsafeAuto extends LinearOpMode {
         TrajectorySequence doorPos = drive.trajectorySequenceBuilder(whitePOWER.end())
 
                 .setReversed(true)
-                .lineTo(RedConstants.CENTER_DOOR_DELAYPOS_VECTOR)
+                .lineTo(RedConstants.CENTER_DOOR_DELAYPOS_VECTOR, RedConstants.SlowVel, RedConstants.SlowAccel)
+
                 .waitSeconds(2)
 
                 .build();
@@ -97,6 +99,7 @@ public class FailsafeAuto extends LinearOpMode {
                             drive.followTrajectorySequence(preload);
 
                             drivetrain = driveState.STACK;
+                            sequences = AutoSequences.WORKING;
 
                             time.reset();
                         }
@@ -111,15 +114,27 @@ public class FailsafeAuto extends LinearOpMode {
 
                 case DOOR:
                     if (!drive.isBusy()) {
+                        // if loop if the distance sensor is being used
+                        if (backSense.getDistance(DistanceUnit.INCH) == 15 ) {
+                            drive.breakFollowing();
+                            sequences = AutoSequences.FAILSAFE;
+                            FAILSAFE_ACTIVATED = true;
+                            // Stop the motors
+                            drive.setDrivePower(new Pose2d());
+                        }   else {
                             drive.followTrajectorySequence(doorPos);
+                        }
 
-                        if (heading < 175) {
+                        // if loop if the robot collides and crashes
+                        if (heading > 185 || heading < 175 && time.seconds() >= 3) {
                             // Cancel Following
                             drive.breakFollowing();
                             sequences = AutoSequences.FAILSAFE;
                             FAILSAFE_ACTIVATED = true;
                             // Stop the motors
                             drive.setDrivePower(new Pose2d());
+                        }   else {
+                            drive.followTrajectorySequence(doorPos);
                         }
 
                         time.reset();
@@ -129,17 +144,23 @@ public class FailsafeAuto extends LinearOpMode {
                         case IDLE:
                             if (time.seconds() > 1.5) {
                                 if (!drive.isBusy()) {
-                                    stop();
+                                    sequences = AutoSequences.STOP;
                                 }
                             }
                         }
 
                         switch (sequences) {
+                            case WORKING:
+                                // do nothing basically other than display information
+                                drive.update();
+
                             case FAILSAFE:
                                 sleep(1000);
                                 if (!drive.isBusy() && FAILSAFE_ACTIVATED) {
                                     drive.followTrajectorySequence(failSafe);
                                 }
+
+                                drivetrain = driveState.IDLE;
 
                             case STOP:
                                 stop();
