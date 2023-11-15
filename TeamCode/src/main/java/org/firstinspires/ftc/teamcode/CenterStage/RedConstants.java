@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.opencv.core.Mat;
 
 @Config
 public class RedConstants {
@@ -16,8 +17,14 @@ public class RedConstants {
     public static final int MAX_ACCEL = 100;
     public static final int FAST_VEL = 74;
     public static final int FAST_ACCEL = 74;
-    public static final int VELO = 58;
-    public static final int ACCEL = 58;
+    public static final int VELO = 45;
+    public static final int ACCEL = 45;
+
+    public static final TrajectoryVelocityConstraint MaxVel = SampleMecanumDrive.getVelocityConstraint(
+            MAX_VEL,
+            Math.toRadians(180), Math.toRadians(180));
+    public static final TrajectoryAccelerationConstraint MaxAccel = SampleMecanumDrive.getAccelerationConstraint(
+            MAX_ACCEL);
 
     public static final TrajectoryVelocityConstraint Vel0 = SampleMecanumDrive.getVelocityConstraint
             (FAST_VEL,
@@ -25,6 +32,11 @@ public class RedConstants {
     public static final TrajectoryAccelerationConstraint Accel0 = SampleMecanumDrive.getAccelerationConstraint
             (FAST_ACCEL);
 
+    public static final TrajectoryVelocityConstraint SlowVel = SampleMecanumDrive.getVelocityConstraint(
+            VELO,
+            Math.toRadians(180), Math.toRadians(180));
+    public static final TrajectoryAccelerationConstraint SlowAccel = SampleMecanumDrive.getAccelerationConstraint(
+            ACCEL);
 
     /* ======= COORDINATE CONSTANTS ======= */
     public static final double HEADING = Math.toRadians(90);
@@ -50,6 +62,9 @@ public class RedConstants {
     public static final Vector2d UPPER_WHITE_STACK_VECTOR = new Vector2d(L_HIGH_PIXEL_X, L_HIGH_PIXEL_Y);
     public static final int CENTER_DOOR_POS_X = 20;
     public static final double CENTER_DOOR_POS_Y = -11.60;
+    /*
+        Vector can be divided into two adjacent movements so its easier to slow down if needed
+     */
     public static final Vector2d CENTER_DOOR_DELAYPOS_VECTOR = new Vector2d(CENTER_DOOR_POS_X, CENTER_DOOR_POS_Y);
     public static final double HEADING_LEFT_BACKDROP = Math.toRadians(0);
     public static final double HEADING_LEFT_REVERT_BACKDROP = Math.toRadians(180);

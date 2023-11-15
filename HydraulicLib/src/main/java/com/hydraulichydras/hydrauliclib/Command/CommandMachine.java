@@ -1,7 +1,6 @@
 package com.hydraulichydras.hydrauliclib.Command;
 
 import com.hydraulichydras.hydrauliclib.Input.GamepadStatic;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class CommandMachine {
         this.currentCommandIndex = 0;
     }
 
-    public CommandMachine addCommandSequence(CommandSequence commandSequence, GamepadStatic.INPUT triggerCondition) {
+    public CommandMachine addCommandSequence(CommandSequence commandSequence, GamepadStatic.Input triggerCondition) {
         CommandSequenceTrigger commandSequenceTrigger = new CommandSequenceTrigger(commandSequence, triggerCondition);
         commandSequences.add(commandSequenceTrigger);
         return this;
@@ -25,10 +24,22 @@ public class CommandMachine {
         return this;
     }
 
+    /**
+     *
+     * @return index of the current command waiting for gamepad input
+     */
+    public int getCurrentCommandIndex() {
+        return currentCommandIndex;
+    }
+
+    public void reset() {
+        currentCommandIndex = 0;
+    }
+
     public void run(Gamepad gamepad) {
         CommandSequenceTrigger currentCommand = commandSequences.get(currentCommandIndex);
 
-        if (currentCommand.triggerCondition == GamepadStatic.gamepadToEnum(gamepad)) {
+        if (GamepadStatic.isButtonPressed(gamepad, currentCommand.triggerCondition)) {
             currentCommand.trigger();
 
             if (currentCommandIndex == commandSequences.size()-1) {
@@ -39,5 +50,3 @@ public class CommandMachine {
         }
     }
 }
-
-

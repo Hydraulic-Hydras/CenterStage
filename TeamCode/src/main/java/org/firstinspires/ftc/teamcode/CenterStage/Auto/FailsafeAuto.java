@@ -2,14 +2,18 @@ package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.CenterStage.RedConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous
 public class FailsafeAuto extends LinearOpMode {
     public enum driveState {
@@ -31,10 +35,13 @@ public class FailsafeAuto extends LinearOpMode {
     SampleMecanumDrive drive;
     AutoSequences sequences = AutoSequences.WORKING;
     Telemetry telemetry;
+    DistanceSensor backSense;
 
+    boolean FAILSAFE_ACTIVATED = false;
     @Override
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
+        backSense = hardwareMap.get(DistanceSensor.class, "Distance_Sensor");
 
         // Right left
         drive.setPoseEstimate(RedConstants.LEFT_SP);
@@ -64,29 +71,29 @@ public class FailsafeAuto extends LinearOpMode {
         TrajectorySequence doorPos = drive.trajectorySequenceBuilder(whitePOWER.end())
 
                 .setReversed(true)
-                .addDisplacementMarker(15, () -> {
-                    telemetry.addData("x", x);
-                    telemetry.addData("y", y);
-                    telemetry.addData("heading", heading);
-                    telemetry.update();
-                })
+                .lineTo(RedConstants.CENTER_DOOR_DELAYPOS_VECTOR, RedConstants.SlowVel, RedConstants.SlowAccel)
 
-                .lineTo(RedConstants.CENTER_DOOR_DELAYPOS_VECTOR)
                 .waitSeconds(2)
 
                 .build();
 
         TrajectorySequence failSafe = drive.trajectorySequenceBuilder(new Pose2d())
 
-                .addTemporalMarker(0, () -> {
-                    telemetry.addData("heading", heading);
-                    telemetry.update();
+                .setReversed(false)
+                .setConstraints(RedConstants.Vel0, RedConstants.Accel0)
+                .strafeLeft(24)
 
-                })
+                .resetConstraints()
+                .back(20)
+
                 .build();
 
         while (opModeIsActive() && !isStopRequested()) {
             drive.update();
+
+            telemetry.addData("x", x);
+            telemetry.addData("y", y);
+            telemetry.addData("heading", heading);
             telemetry.update();
 
             switch (drivetrain) {
@@ -97,10 +104,6 @@ public class FailsafeAuto extends LinearOpMode {
                             drivetrain = driveState.STACK;
                             sequences = AutoSequences.WORKING;
 
-                            telemetry.addData("x", poseEstimate.getX());
-                            telemetry.addData("y", poseEstimate.getY());
-                            telemetry.addData("heading", poseEstimate.getHeading());
-
                             time.reset();
                         }
                 case STACK:
@@ -108,44 +111,64 @@ public class FailsafeAuto extends LinearOpMode {
                             drive.followTrajectorySequence(whitePOWER);
 
                             drivetrain = driveState.DOOR;
-                            sequences = AutoSequences.WORKING;
 
                             time.reset();
                         }
 
-
                 case DOOR:
                     if (!drive.isBusy()) {
-                            drive.followTrajectorySequence(doorPos);
-                            sequences = AutoSequences.WORKING;
+                        // if/else loop if the distance sensor is being used
+                            if (backSense.getDistance(DistanceUnit.INCH) <= 15) {
+                                // drive.breakFollowing();
+                                sequences = AutoSequences.FAILSAFE;
+                                FAILSAFE_ACTIVATED = true;
+                                // Stop the motors
+                                drive.setDrivePower(new Pose2d());
+                            } else {
+                                drive.followTrajectorySequence(doorPos);
+                                drivetrain = driveState.IDLE;
+                            }
 
-                        if (heading > 0) {
-                            drive.followTrajectorySequence(failSafe);
-                            sequences = AutoSequences.FAILSAFE;
-                        } else {
-                            sleep(2000);
+                            // if/else loop if the robot collides and crashes
+                            if (heading > 185 || heading < 175 && time.seconds() >= 3) {
+                                // Cancel Following
+                               // drive.breakFollowing();
+                                sequences = AutoSequences.FAILSAFE;
+                                FAILSAFE_ACTIVATED = true;
+                                // Stop the motors
+                                drive.setDrivePower(new Pose2d());
+                            } else {
+                                drive.followTrajectorySequence(doorPos);
+                                drivetrain = driveState.IDLE;
+                            }
+
+                            time.reset();
                         }
-
-                        time.reset();
-                    }
 
                     break;
                         case IDLE:
                             if (time.seconds() > 1.5) {
                                 if (!drive.isBusy()) {
-                                    stop();
+                                    sequences = AutoSequences.STOP;
                                 }
                             }
                         }
 
-                        // TODO: fill in for these
-
                         switch (sequences) {
                             case WORKING:
+                                // do nothing basically other than display information
+                                drive.update();
 
                             case FAILSAFE:
+                                sleep(1000);
+                                if (!drive.isBusy() && FAILSAFE_ACTIVATED) {
+                                    drive.followTrajectorySequence(failSafe);
+                                }
+
+                                drivetrain = driveState.IDLE;
 
                             case STOP:
+                                stop();
                     }
         }
     }
