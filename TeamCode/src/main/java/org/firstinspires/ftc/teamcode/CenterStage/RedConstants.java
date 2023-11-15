@@ -33,6 +33,7 @@ public class RedConstants {
     public static final Pose2d LEFT_SP = new Pose2d(LEFT_X, WALLPOS, HEADING);
     public static final int RIGHT_X = 12;
     public static final Pose2d RIGHT_SP = new Pose2d(RIGHT_X, WALLPOS, HEADING);
+    public static final double HEADING_OFFSET = 9.017;
 
         /* === LEFT SIDE === */
     public static final int L_PROP_UNLOAD_X = -35;
