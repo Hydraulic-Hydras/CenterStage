@@ -1,5 +1,17 @@
 package com.hydraulichydras.hydrauliclib.Motion;
 
+/**
+ * This is a PID controller for your robot. Internally, it performs
+ * all the calculations for you. You need to tune your values to the
+ * appropriate amounts in order to properly utilize these calculations.
+ *
+ * The equation we will use is:
+ * u(t) = kP * e(t) + kI * int(0,t)[e(t')dt'] + kD * e'(t) + kF
+ * where e(t) = r(t) - y(t) and r(t) is the setpoint and y(t) is the
+ * measured value. If we consider e(t) the positional error, then
+ * int(0,t)[e(t')dt'] is the total error and e'(t) is the velocity error.
+ */
+
 public class PIDController {
 
     private double kP, kI, kD, kF;
@@ -27,9 +39,9 @@ public class PIDController {
     }
 
     /**
-     * This is the full constructor for the PIDF controller. Our PIDF controller
+     * This is the full constructor for the PIDF controller. This PIDF controller
      * includes a feed-forward value which is useful for fighting friction and gravity.
-     * Our errorVal represents the return of e(t) and prevErrorVal is the previous error.
+     * The errorVal represents the return of e(t) and prevErrorVal is the previous error.
      *
      * @param sp The setpoint of the pid control loop.
      * @param pv The measured value of he pid control loop. We want sp = pv, or to the degree
