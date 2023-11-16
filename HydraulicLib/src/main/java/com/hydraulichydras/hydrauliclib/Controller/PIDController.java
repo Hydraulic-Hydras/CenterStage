@@ -1,4 +1,4 @@
-package com.hydraulichydras.hydrauliclib.Motion;
+package com.hydraulichydras.hydrauliclib.Controller;
 
 /**
  * This is a PID controller for your robot. Internally, it performs
