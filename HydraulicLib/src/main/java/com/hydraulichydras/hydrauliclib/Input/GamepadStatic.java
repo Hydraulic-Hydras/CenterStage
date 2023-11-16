@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadStatic {
 
-    //    private Gamepad gamepad;
-
     public enum Input {
         NONE,
         DPAD_UP,
