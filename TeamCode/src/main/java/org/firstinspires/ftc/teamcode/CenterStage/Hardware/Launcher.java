@@ -28,7 +28,6 @@ public class Launcher extends Contraption {
         this.opMode = opMode;
     }
 
-    @Override
     public void init(HardwareMap hwMap) {
 
         launcher_angle = hwMap.get(Servo.class, "launcher_angle");
@@ -41,7 +40,6 @@ public class Launcher extends Contraption {
         launcher_trigger.setPosition(START_POS_TRIGGER);
     }
 
-    @Override
     public void loop(Gamepad gamepad2) {
 
         if (gamepad2.dpad_up) {
@@ -64,8 +62,9 @@ public class Launcher extends Contraption {
         }
     }
 
-    @Override
     public void telemetry(Telemetry telemetry) {
+        telemetry.addLine();
+        telemetry.addLine();
         telemetry.addData("Angle", launcher_angle.getPosition());
         telemetry.addData("Trigger", launcher_trigger.getPosition());
         telemetry.update();

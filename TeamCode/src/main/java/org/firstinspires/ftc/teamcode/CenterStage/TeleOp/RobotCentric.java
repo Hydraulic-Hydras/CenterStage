@@ -17,7 +17,6 @@ public class RobotCentric extends LinearOpMode {
     @Override
     public void runOpMode() {
         drive = new SampleMecanumDrive(hardwareMap);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         if (opModeIsActive()) {

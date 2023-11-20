@@ -24,8 +24,8 @@ public class Encoder {
     }
 
     public enum Direction {
-        FORWARD(1),
-        REVERSE(-1);
+        FORWARD(1), // 1 original
+        REVERSE(-1); // -1 original
 
         private int multiplier;
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Hardware;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -18,15 +20,14 @@ public class DriveTrain extends Contraption {
     double  powerMultiplier = 1;
     IMU imu;
     SampleMecanumDrive drive;
+    Telemetry telemetry;
     public DriveTrain(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
-    @Override
     public void init(HardwareMap hwMap) {
         drive = new SampleMecanumDrive(hwMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
     }
 
     // only use if robot has to be in field centric mode
@@ -98,5 +99,19 @@ public class DriveTrain extends Contraption {
                 rightRearSpeed * powerMultiplier, rightFrontSpeed * powerMultiplier);
 
 
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        drive.update();
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        double poseX = poseEstimate.getX();
+        double poseY = poseEstimate.getY();
+        double heading = poseEstimate.getHeading();
+
+        telemetry.addData("x", poseX);
+        telemetry.addData("y", poseY);
+        telemetry.addData("heading", heading);
+        telemetry.update();
     }
 }
