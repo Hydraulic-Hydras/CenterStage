@@ -5,20 +5,18 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadStatic {
 
-    //    private Gamepad gamepad;
-
     public enum Input {
         NONE,
-        DPAD_UP,
-        DPAD_DOWN,
-        DPAD_LEFT,
-        DPAD_RIGHT,
+        START,
+        BACK,
         A,
         B,
         X,
         Y,
-        START,
-        BACK,
+        DPAD_UP,
+        DPAD_DOWN,
+        DPAD_LEFT,
+        DPAD_RIGHT,
         LEFT_BUMPER,
         RIGHT_BUMPER,
         LEFT_STICK_BUTTON,
