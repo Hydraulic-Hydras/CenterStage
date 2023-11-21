@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public abstract class Contraption {
 
     /**
-     * OpMode context for a Mechanism class.
+     * OpMode context for a Contraption class.
      */
     protected LinearOpMode opMode;
 
@@ -28,7 +28,7 @@ public abstract class Contraption {
     public abstract void init(HardwareMap hwMap);
 
     /**
-     * Manages gamepad inputs and their corresponding mechanism response
+     * Manages gamepad inputs and their corresponding contraption response
      *
      * Implement when using only one gamepad, in slot 1
      * @param gamepad1
@@ -36,7 +36,7 @@ public abstract class Contraption {
     public void loop(Gamepad gamepad1) {}
 
     /**
-     * Manages multiple gamepad inputs and their corresponding mechanism responses
+     * Manages multiple gamepad inputs and their corresponding contraption responses
      *
      * Implement when using two gamepads
      * @param gamepad1
