@@ -27,7 +27,7 @@ public class Intake extends Contraption {
     }
 
     @Override
-    public void init(HardwareMap hwMap) {
+    public void initialize(HardwareMap hwMap) {
         CLAW = hwMap.get(Servo.class, "9/11");
     }
 

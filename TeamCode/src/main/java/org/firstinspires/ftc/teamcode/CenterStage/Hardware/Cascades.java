@@ -46,7 +46,7 @@ public class Cascades extends Contraption {
     }
 
     @Override
-    public void init(HardwareMap hwMap) {
+    public void initialize(HardwareMap hwMap) {
         leftcascade = new MotionProfiledDcMotor(hwMap, "leftCascade");
         leftcascade.setWheelConstants(WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_REV);
         leftcascade.setMotionConstraints(MAX_VEL, MAX_ACCEL);

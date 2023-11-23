@@ -20,7 +20,7 @@ public class Tfod extends Contraption {
     boolean USE_WEBCAM;
 
     @Override
-    public void init(HardwareMap hardwareMap) {
+    public void initialize(HardwareMap hardwareMap) {
         USE_WEBCAM = true;
 
         TfodProcessor.Builder myTfodProcessorBuilder;

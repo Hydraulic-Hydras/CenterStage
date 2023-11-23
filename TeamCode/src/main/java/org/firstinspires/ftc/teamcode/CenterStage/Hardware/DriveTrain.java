@@ -25,7 +25,7 @@ public class DriveTrain extends Contraption {
         this.opMode = opMode;
     }
 
-    public void init(HardwareMap hwMap) {
+    public void initialize(HardwareMap hwMap) {
         drive = new SampleMecanumDrive(hwMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }

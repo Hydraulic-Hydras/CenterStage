@@ -17,9 +17,9 @@ public class Robot extends Contraption {
     public Robot(LinearOpMode OpMode) {
         this.opMode = OpMode;
     }
-    public void init(HardwareMap hwMap) {
-        driveTrain.init(hwMap);
-        launcher.init(hwMap);
+    public void initialize(HardwareMap hwMap) {
+        driveTrain.initialize(hwMap);
+        launcher.initialize(hwMap);
     }
 
     public void loop(Gamepad gamepad1, Gamepad gamepad2) {

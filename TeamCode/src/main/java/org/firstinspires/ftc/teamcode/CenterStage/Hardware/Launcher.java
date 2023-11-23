@@ -28,7 +28,7 @@ public class Launcher extends Contraption {
         this.opMode = opMode;
     }
 
-    public void init(HardwareMap hwMap) {
+    public void initialize(HardwareMap hwMap) {
 
         launcher_angle = hwMap.get(Servo.class, "launcher_angle");
         launcher_trigger = hwMap.get(Servo.class, "launcher_trigger");

@@ -42,7 +42,7 @@ public class Climbers extends Contraption {
         this.opMode = opMode;
     }
     @Override
-    public void init(HardwareMap hwMap) {
+    public void initialize(HardwareMap hwMap) {
         leftClimber = new MotionProfiledDcMotor(hwMap, "LeftClimber");
         leftClimber.setWheelConstants(WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_REV);
         leftClimber.setMotionConstraints(MAX_VEL, MAX_ACCEL);
