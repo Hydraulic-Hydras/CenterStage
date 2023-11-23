@@ -7,48 +7,45 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * Contraption is an abstract class for all contraptions on a robot. It contains methods and/or instance
- * variables common to all contraptions.
- *
- *  All robot contraption, including the main hardware map, should extend this abstract class.
+ * Contraption serves as an abstract blueprint encompassing shared methods and/or instance variables
+ * applicable to every contraption on a robot.
+ * <p>
+ * Any robotic contraption, inclusive of the primary hardware map, is expected to inherit from this abstract class.
  */
 public abstract class Contraption {
 
     /**
-     * OpMode context for a Contraption class.
+     * OpMode circumstance for a Contraption class.
      */
     protected LinearOpMode opMode;
 
     /**
-     * Initializes hardware on the robot. Gets and stores references to the robot configuration and
-     * sets motors and servos to their starting positions.
+     * Initiates the robot's hardware by obtaining and storing references to the robot configuration.
+     * It also establishes the initial positions for motors and servos.
      *
      * @param hwMap robot's hardware map
      */
-    public abstract void init(HardwareMap hwMap);
+    public abstract void initialize(HardwareMap hwMap);
 
     /**
-     * Manages gamepad inputs and their corresponding contraption response
-     *
-     * Implement when using only one gamepad, in slot 1
-     * @param gamepad1
+     * Handles gamepad inputs and orchestrates the corresponding responses from the contraptions.
+     * <p>
+     * Implement when employing a solitary gamepad in slot 1.
      */
     public void loop(Gamepad gamepad1) {}
 
     /**
-     * Manages multiple gamepad inputs and their corresponding contraption responses
      *
-     * Implement when using two gamepads
-     * @param gamepad1
-     * @param gamepad2
+     * Handles various gamepad inputs and orchestrates the corresponding responses from the contraptions.
+     * <p>
+     * Implement when utilizing two gamepads.
      */
     public void loop(Gamepad gamepad1, Gamepad gamepad2) {}
 
     /**
-     * Manages all telemetry data to driver phone or FTC Dashboard
-     *
-     * Where all telemetry.addData() calls should go
-     * @param telemetry
+     * Oversees the transmission of all telemetry data to the driver's phone or the FTC Dashboard.
+     * <p>
+     * Where all telemetry.addLine() or telemetry.addData() commands should go
      */
     public void telemetry(Telemetry telemetry) { }
 }
