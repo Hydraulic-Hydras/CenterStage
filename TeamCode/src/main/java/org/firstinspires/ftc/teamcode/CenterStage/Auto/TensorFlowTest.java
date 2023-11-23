@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
-import com.hydraulichydras.hydrauliclib.Geometry.Point;
-import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -14,7 +12,7 @@ import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 @TeleOp
-public class TensorFlow extends LinearOpMode {
+public class TensorFlowTest extends LinearOpMode {
 
     boolean USE_WEBCAM;
     TfodProcessor myTfodProcessor;
@@ -130,10 +128,10 @@ public class TensorFlow extends LinearOpMode {
              */
 
             // Display the position of the center of the detection boundary for the recognition
-                telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
-                // Display size
-                // Display the size of detection boundary for the recognition
-                telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
+            telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
+            // Display size
+            // Display the size of detection boundary for the recognition
+            telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
             }
         }
     }
