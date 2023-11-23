@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.CenterStage.Auto;
 
+import com.hydraulichydras.hydrauliclib.Geometry.Point;
+import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,18 +19,22 @@ public class TensorFlow extends LinearOpMode {
     boolean USE_WEBCAM;
     TfodProcessor myTfodProcessor;
     VisionPortal myVisionPortal;
+    double location = 1;
 
+    /**
+     * This function is executed when this OpMode is selected from the Driver Station.
+     */
     @Override
     public void runOpMode() {
+        // This 2023-2024 OpMode illustrates the basics of TensorFlow Object Detection, using
+        // a custom TFLite object detection model.
         USE_WEBCAM = true;
-
+        // Initialize TFOD before waitForStart.
         initTfod();
-
         // Wait for the match to begin.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -44,7 +50,6 @@ public class TensorFlow extends LinearOpMode {
                     // Resume the streaming session if previously stopped.
                     myVisionPortal.resumeStreaming();
                 }
-
                 // Share the CPU.
                 sleep(20);
             }
@@ -60,26 +65,29 @@ public class TensorFlow extends LinearOpMode {
 
         // First, create a TfodProcessor.Builder.
         myTfodProcessorBuilder = new TfodProcessor.Builder();
+        // Set the name of the file where the model can be found.
+        myTfodProcessorBuilder.setModelFileName("Red_Prop.tflite");
+        // Set the full ordered list of labels the model is trained to recognize.
+        myTfodProcessorBuilder.setModelLabels(JavaUtil.createListWith("Team Prop", null));
+        // Set the aspect ratio for the images used when the model was created.
+        myTfodProcessorBuilder.setModelAspectRatio(16 / 9);
         // Create a TfodProcessor by calling build.
         myTfodProcessor = myTfodProcessorBuilder.build();
         // Next, create a VisionPortal.Builder and set attributes related to the camera.
         myVisionPortalBuilder = new VisionPortal.Builder();
         if (USE_WEBCAM) {
             // Use a webcam.
-            myVisionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
+            myVisionPortalBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         } else {
             // Use the device's back camera.
-            myVisionPortalBuilder.setCamera(BuiltinCameraDirection.FRONT);
+            myVisionPortalBuilder.setCamera(BuiltinCameraDirection.BACK);
         }
         // Add myTfodProcessor to the VisionPortal.Builder.
         myVisionPortalBuilder.addProcessor(myTfodProcessor);
+        myTfodProcessor.setZoom(1);
         // Create a VisionPortal by calling build.
         myVisionPortal = myVisionPortalBuilder.build();
-
-        // default magnification is 1.0
-        myTfodProcessor.setZoom(1.0);
     }
-
 
     /**
      * Display info (using telemetry) for a detected object
@@ -104,12 +112,28 @@ public class TensorFlow extends LinearOpMode {
             // Display position.
             x = (myTfodRecognition.getLeft() + myTfodRecognition.getRight()) / 2;
             y = (myTfodRecognition.getTop() + myTfodRecognition.getBottom()) / 2;
-            // Display the position of the center of the detection boundary for the recognition
-            telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
-            // Display size
-            // Display the size of detection boundary for the recognition
-            telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-        }
 
+            // Determine location
+            if (x > 360 && y > 200) {
+                location = 1;
+                telemetry.addLine("Middle");
+            } else if (x > 65 && y > 195) {
+                location = 2;
+                telemetry.addLine("Left");
+            } else {
+                location = 3;
+                telemetry.addLine("Right");
+            }
+            telemetry.addData("Location", location);
+            /* telemetry.addLine(String.format("\nLocation", locationPos));
+            telemetry.addLine(String.format("\nSide", side));
+             */
+
+            // Display the position of the center of the detection boundary for the recognition
+                telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
+                // Display size
+                // Display the size of detection boundary for the recognition
+                telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
+            }
+        }
     }
-}
