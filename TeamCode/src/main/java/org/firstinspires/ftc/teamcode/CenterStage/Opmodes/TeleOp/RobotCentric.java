@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class RobotCentric extends LinearOpMode {
 
     public SampleMecanumDrive drive;
-    double powerMultiplier = 1;
+    public double powerMultiplier = 1;
 
     @Override
     public void runOpMode() {

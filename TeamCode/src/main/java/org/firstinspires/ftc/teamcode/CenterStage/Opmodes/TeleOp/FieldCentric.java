@@ -16,7 +16,7 @@ public class FieldCentric extends LinearOpMode {
 
     public SampleMecanumDrive drive;
     public IMU imu;
-    double powerMultiplier = 1;
+    public double powerMultiplier = 1;
 
     @Override
     public void runOpMode() throws InterruptedException {
