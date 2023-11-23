@@ -13,7 +13,7 @@ public class QualifierTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        robot.init(hardwareMap);
+        robot.initialize(hardwareMap);
 
         waitForStart();
         if (opModeIsActive()) {
