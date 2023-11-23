@@ -1,8 +1,10 @@
 package com.hydraulichydras.hydrauliclib.Input;
 
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+/**
+ * Gamepad Static class works as a utility class of static methods that provide functionality related to gamepad input handling.
+ */
 public class GamepadStatic {
 
     public enum Input {
