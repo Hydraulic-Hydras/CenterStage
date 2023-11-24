@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.common.PipeLines;
+package org.firstinspires.ftc.teamcode.CenterStage.common.Vision;
 
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.CvType;
