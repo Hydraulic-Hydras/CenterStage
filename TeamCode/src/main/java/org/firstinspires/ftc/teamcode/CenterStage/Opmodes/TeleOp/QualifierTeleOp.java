@@ -4,14 +4,14 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions.DriveTrain;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions.MecanumDrive;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
 
 @TeleOp
 public class QualifierTeleOp extends CommandOpMode {
 
     private final RobotHardware robot = RobotHardware.getInstance();
-    public DriveTrain driveTrain;
+    public MecanumDrive mecanumDrive;
     private double loopTime = 0.0;
 
     @Override
@@ -19,14 +19,15 @@ public class QualifierTeleOp extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         robot.init(hardwareMap, telemetry);
-        driveTrain = new DriveTrain();
+        mecanumDrive = new MecanumDrive();
+        mecanumDrive.RobotCentric(gamepad1);
 
-        driveTrain.RobotCentric(gamepad1);
-        robot.addSubsystem(driveTrain);
+        robot.addSubsystem(mecanumDrive);
 
         robot.read();
         while (opModeInInit()) {
-            telemetry.addLine("Robot Initialized.");
+            telemetry.addLine("Robot Initialized. Mr WorldWide we going to the TOPPPPPPPPPPPP, DALEE");
+            telemetry.addLine("Also hi Mr Bao bun");
             telemetry.update();
         }
     }

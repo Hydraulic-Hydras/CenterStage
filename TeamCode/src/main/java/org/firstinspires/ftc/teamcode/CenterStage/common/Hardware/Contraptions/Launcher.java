@@ -63,8 +63,6 @@ public class Launcher extends Contraption {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addLine();
-        telemetry.addLine();
         telemetry.addData("Angle", launcher_angle.getPosition());
         telemetry.addData("Trigger", launcher_trigger.getPosition());
         telemetry.update();

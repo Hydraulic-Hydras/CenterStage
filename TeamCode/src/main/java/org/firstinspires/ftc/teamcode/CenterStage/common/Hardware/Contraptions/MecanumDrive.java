@@ -1,29 +1,26 @@
 package org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HSubsystem;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
-
-public class DriveTrain extends HSubsystem {
+public class MecanumDrive extends HSubsystem {
     IMU imu;
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
-    public DriveTrain() {}
+    public MecanumDrive() {}
 
-    // only use if robot has to be in field centric mode
+    /* only use if robot has to be in field centric mode
     public void initGyro(HardwareMap hwMap) {
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
     }
+     */
 
     public void RobotCentric(Gamepad gamepad1) {
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
