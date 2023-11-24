@@ -1,15 +1,14 @@
-package org.firstinspires.ftc.teamcode.CenterStage.Opmodes.TeleOp;
+package org.firstinspires.ftc.teamcode.CenterStage.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Disabled
 @TeleOp
-public class RobotCentric extends LinearOpMode {
+public class RobotCentricTester extends LinearOpMode {
 
     public SampleMecanumDrive drive;
     public double powerMultiplier = 1;

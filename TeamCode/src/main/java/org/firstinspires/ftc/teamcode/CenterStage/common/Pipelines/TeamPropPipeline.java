@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.common.Vision;
+package org.firstinspires.ftc.teamcode.CenterStage.common.Pipelines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;

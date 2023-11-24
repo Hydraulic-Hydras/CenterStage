@@ -11,7 +11,9 @@ public class MecanumDrive extends HSubsystem {
     IMU imu;
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
-    public MecanumDrive() {}
+    public MecanumDrive() {
+       // RobotCentric(new Gamepad());
+    }
 
     /* only use if robot has to be in field centric mode
     public void initGyro(HardwareMap hwMap) {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.Opmodes.TeleOp;
+package org.firstinspires.ftc.teamcode.CenterStage.Testers;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Disabled
 @TeleOp
-public class FieldCentric extends LinearOpMode {
+public class FieldCentricTeleOp extends LinearOpMode {
 
     public SampleMecanumDrive drive;
     public IMU imu;

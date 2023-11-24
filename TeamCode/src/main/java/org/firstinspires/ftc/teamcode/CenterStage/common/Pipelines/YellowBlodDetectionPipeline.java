@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.common.Vision;
+package org.firstinspires.ftc.teamcode.CenterStage.common.Pipelines;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -14,18 +14,14 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YellowGreenPipeline extends OpenCvPipeline {
+public class YellowBlodDetectionPipeline extends OpenCvPipeline {
 
     double cX = 0;
     double cY = 0;
     double width = 0;
 
-    // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
-    Mat hierarchy = new Mat();
-    Mat hsvFrame = new Mat();
-    Mat yellowMask = new Mat();
+    public static final double objectWidthInRealWorldUnits = 3.75; // Replace with the actual width of the object in real-world units
+    public static final double focalLength = 728; // Replace with the focal length of the camera in pixels
 
     @Override
     public Mat processFrame(Mat input) {
@@ -34,6 +30,7 @@ public class YellowGreenPipeline extends OpenCvPipeline {
 
         // Find contours of the detected yellow regions
         List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
         Imgproc.findContours(yellowMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
         // Find the largest yellow contour (blob)
@@ -63,30 +60,18 @@ public class YellowGreenPipeline extends OpenCvPipeline {
 
         }
 
-        hierarchy.release();
-        hsvFrame.release();
-        yellowMask.release();
-
         return input;
     }
 
     private Mat preprocessFrame(Mat frame) {
-        Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
+        Mat hsvFrame = new Mat();
+        Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_RGB2HSV);
 
-        // RGB FORMAT
-        // Scalar lowerYellow = new Scalar(100, 100, 100);
-        // Scalar upperYellow = new Scalar(180, 255, 255);
-
-        // FOR BLUE
-        // Scalar upperYellow = new Scalar(35, 220, 240);
-        // Scalar lowerYellow = new Scalar(0, 80, 100);
-
-        // FOR GREEN AND YELLOW
-        Scalar upperYellow = new Scalar(90, 2555, 255);
-        Scalar lowerYellow = new Scalar(50, 100, 50);
+        Scalar lowerYellow = new Scalar(100, 100, 100);
+        Scalar upperYellow = new Scalar(180, 255, 255);
 
 
-        // changed from yellowMask to blue Mask
+        Mat yellowMask = new Mat();
         Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
 
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -94,8 +79,8 @@ public class YellowGreenPipeline extends OpenCvPipeline {
         Imgproc.morphologyEx(yellowMask, yellowMask, Imgproc.MORPH_CLOSE, kernel);
 
         return yellowMask;
-
     }
+
 
     private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
         double maxArea = 0;
@@ -111,14 +96,14 @@ public class YellowGreenPipeline extends OpenCvPipeline {
 
         return largestContour;
     }
-
     private double calculateWidth(MatOfPoint contour) {
         Rect boundingRect = Imgproc.boundingRect(contour);
         return boundingRect.width;
     }
 
-    private double getDistance(double width) {
+    private static double getDistance(double width){
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
-        return distance + 5;
+        return distance;
     }
 }
+

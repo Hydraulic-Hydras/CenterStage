@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.Opmodes.TeleOp;
+package org.firstinspires.ftc.teamcode.CenterStage.Opmodes;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -47,4 +47,5 @@ public class QualifierTeleOp extends CommandOpMode {
         robot.write();
         robot.clearBulkCache();
     }
+
 }

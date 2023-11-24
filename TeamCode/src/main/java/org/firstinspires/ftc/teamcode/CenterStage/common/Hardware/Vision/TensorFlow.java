@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CenterStage.common.Hardware;
+package org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Vision;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
