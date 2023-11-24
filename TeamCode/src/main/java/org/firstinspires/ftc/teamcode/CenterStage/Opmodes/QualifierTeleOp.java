@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions.MecanumDrive;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
 
 @TeleOp
