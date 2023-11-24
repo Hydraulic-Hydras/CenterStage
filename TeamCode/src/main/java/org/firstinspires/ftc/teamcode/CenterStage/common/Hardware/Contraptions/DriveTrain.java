@@ -1,34 +1,21 @@
 package org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-import com.hydraulichydras.hydrauliclib.Util.Contraption;
 
-public class DriveTrain extends Contraption {
-
-    double  powerMultiplier = 1;
+public class DriveTrain extends HSubsystem {
     IMU imu;
-    SampleMecanumDrive drive;
-    Telemetry telemetry;
-    public DriveTrain(LinearOpMode opMode) {
-        this.opMode = opMode;
-    }
-
-    public void initialize(HardwareMap hwMap) {
-        drive = new SampleMecanumDrive(hwMap);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
+    public double powerMultiplier = 1;
+    private final RobotHardware robot = RobotHardware.getInstance();
+    public DriveTrain() {}
 
     // only use if robot has to be in field centric mode
     public void initGyro(HardwareMap hwMap) {
@@ -58,8 +45,10 @@ public class DriveTrain extends Contraption {
             powerMultiplier = 1;
         }
 
-        drive.setMotorPowers(leftFrontSpeed * powerMultiplier, leftRearSpeed * powerMultiplier,
-                rightRearSpeed * powerMultiplier, rightFrontSpeed * powerMultiplier);
+        robot.leftRear.setPower(leftRearSpeed * powerMultiplier);
+        robot.leftFront.setPower(leftFrontSpeed * powerMultiplier);
+        robot.rightRear.setPower(rightRearSpeed * powerMultiplier);
+        robot.rightFront.setPower(rightFrontSpeed * powerMultiplier);
     }
 
     public void FieldCentric(Gamepad gamepad1) {
@@ -95,23 +84,29 @@ public class DriveTrain extends Contraption {
             powerMultiplier = 1;
         }
 
-        drive.setMotorPowers(leftFrontSpeed * powerMultiplier, leftRearSpeed * powerMultiplier,
-                rightRearSpeed * powerMultiplier, rightFrontSpeed * powerMultiplier);
+        robot.leftRear.setPower(leftRearSpeed * powerMultiplier);
+        robot.leftFront.setPower(leftFrontSpeed * powerMultiplier);
+        robot.rightRear.setPower(rightRearSpeed * powerMultiplier);
+        robot.rightFront.setPower(rightFrontSpeed * powerMultiplier);
+    }
 
+    @Override
+    public void periodic() {
 
     }
 
-    public void telemetry(Telemetry telemetry) {
-        drive.update();
+    @Override
+    public void read() {
 
-        Pose2d poseEstimate = drive.getPoseEstimate();
-        double poseX = poseEstimate.getX();
-        double poseY = poseEstimate.getY();
-        double heading = poseEstimate.getHeading();
+    }
 
-        telemetry.addData("x", poseX);
-        telemetry.addData("y", poseY);
-        telemetry.addData("heading", heading);
-        telemetry.update();
+    @Override
+    public void write() {
+
+    }
+
+    @Override
+    public void reset() {
+
     }
 }
