@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HEncoder;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -35,6 +36,7 @@ public class RobotHardware {
   //  public HEncoder leftclimb;
   //  public HEncoder rightclimb;
   //  public HEncoder rightLift;
+
     /**
      * HardwareMap storage.
      */
@@ -80,6 +82,7 @@ public class RobotHardware {
         modules = hardwareMap.getAll(LynxModule.class);
         modules.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         modules.get(1).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
             /*
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -104,6 +107,8 @@ public class RobotHardware {
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
              */
+
+
     }
 
     public void read() {
