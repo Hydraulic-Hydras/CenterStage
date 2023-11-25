@@ -20,7 +20,7 @@ public class QualifierTeleOp extends CommandOpMode {
 
         robot.init(hardwareMap, telemetry);
         mecanumDrive = new MecanumDrive();
-        mecanumDrive.RobotCentric(gamepad1);
+       // mecanumDrive.RobotCentric(gamepad1);
 
         robot.addSubsystem(mecanumDrive);
 

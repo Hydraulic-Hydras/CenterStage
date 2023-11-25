@@ -1,33 +1,42 @@
 package org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.Drive;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HSubsystem;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 public class MecanumDrive extends HSubsystem {
+
     IMU imu;
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
+    double[] ws = new double[4];
+    Gamepad gamepad1;
     public MecanumDrive() {
-       // RobotCentric(new Gamepad());
+       RobotCentric(gamepad1);
+       robot.write();
     }
 
-    /* only use if robot has to be in field centric mode
+    // only use if robot has to be in field centric mode
     public void initGyro(HardwareMap hwMap) {
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
     }
-     */
+
 
     public void RobotCentric(Gamepad gamepad1) {
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = gamepad1.right_stick_x;
+
+        double [] wheelspeeds = new double[4];
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
@@ -44,10 +53,16 @@ public class MecanumDrive extends HSubsystem {
             powerMultiplier = 1;
         }
 
-        robot.leftRear.setPower(leftRearSpeed * powerMultiplier);
-        robot.leftFront.setPower(leftFrontSpeed * powerMultiplier);
-        robot.rightRear.setPower(rightRearSpeed * powerMultiplier);
-        robot.rightFront.setPower(rightFrontSpeed * powerMultiplier);
+        wheelspeeds[0] = leftFrontSpeed * powerMultiplier;
+        wheelspeeds[1] = leftRearSpeed * powerMultiplier;
+        wheelspeeds[2] = rightFrontSpeed * powerMultiplier;
+        wheelspeeds[3] = rightRearSpeed * powerMultiplier;
+
+        ws[0] = wheelspeeds[0]; // left front
+        ws[1] = wheelspeeds[1]; // left rear
+        ws[2] = wheelspeeds[2]; // right front
+        ws[3] = wheelspeeds[3]; // right rear
+
     }
 
     public void FieldCentric(Gamepad gamepad1) {
@@ -61,6 +76,8 @@ public class MecanumDrive extends HSubsystem {
         if (gamepad1.options) {
             imu.resetYaw();
         }
+
+        double [] wheelspeeds = new double[4];
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -83,25 +100,33 @@ public class MecanumDrive extends HSubsystem {
             powerMultiplier = 1;
         }
 
-        robot.leftRear.setPower(leftRearSpeed * powerMultiplier);
-        robot.leftFront.setPower(leftFrontSpeed * powerMultiplier);
-        robot.rightRear.setPower(rightRearSpeed * powerMultiplier);
-        robot.rightFront.setPower(rightFrontSpeed * powerMultiplier);
+        wheelspeeds[0] = leftFrontSpeed * powerMultiplier;
+        wheelspeeds[1] = leftRearSpeed * powerMultiplier;
+        wheelspeeds[2] = rightFrontSpeed * powerMultiplier;
+        wheelspeeds[3] = rightRearSpeed * powerMultiplier;
+
+        ws[0] = wheelspeeds[0]; // left front
+        ws[1] = wheelspeeds[1]; // left rear
+        ws[2] = wheelspeeds[2]; // right front
+        ws[3] = wheelspeeds[3]; // right rear
     }
 
     @Override
     public void periodic() {
-
+        // leave blank
     }
 
     @Override
     public void read() {
-
+        // leave blank
     }
 
     @Override
     public void write() {
-
+        robot.leftFront.setPower(ws[0]);
+        robot.leftRear.setPower(ws[1]);
+        robot.rightFront.setPower(ws[2]);
+        robot.rightRear.setPower(ws[3]);
     }
 
     @Override
