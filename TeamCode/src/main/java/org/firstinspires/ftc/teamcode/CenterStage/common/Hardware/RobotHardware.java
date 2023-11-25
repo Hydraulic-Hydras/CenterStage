@@ -23,18 +23,18 @@ import java.util.List;
 public class RobotHardware {
 
     // drivetrain
-    public DcMotorEx leftFront;
-    public DcMotorEx leftRear;
-    public DcMotorEx rightFront;
-    public DcMotorEx rightRear;
+   // public DcMotorEx leftFront;
+   // public DcMotorEx leftRear;
+   // public DcMotorEx rightFront;
+   // public DcMotorEx rightRear;
 
     // Imu
-    public IMU imu;
+   // public IMU imu;
 
     // Odom modules
-    public HEncoder leftclimb;
-    public HEncoder rightclimb;
-    public HEncoder rightLift;
+  //  public HEncoder leftclimb;
+  //  public HEncoder rightclimb;
+  //  public HEncoder rightLift;
     /**
      * HardwareMap storage.
      */
@@ -80,7 +80,7 @@ public class RobotHardware {
         modules = hardwareMap.getAll(LynxModule.class);
         modules.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         modules.get(1).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-
+            /*
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
@@ -102,6 +102,8 @@ public class RobotHardware {
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+
+             */
     }
 
     public void read() {

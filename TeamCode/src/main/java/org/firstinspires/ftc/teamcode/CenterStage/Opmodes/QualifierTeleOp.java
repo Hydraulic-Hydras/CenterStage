@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.CenterStage.common.Hardware.RobotHardware;
 @TeleOp
 public class QualifierTeleOp extends CommandOpMode {
 
-    private final RobotHardware robot = RobotHardware.getInstance();
+   private final RobotHardware robot = RobotHardware.getInstance();
     public MecanumDrive mecanumDrive;
     private double loopTime = 0.0;
 
@@ -18,11 +18,11 @@ public class QualifierTeleOp extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
-        robot.init(hardwareMap, telemetry);
-        mecanumDrive = new MecanumDrive();
+        // robot.init(hardwareMap, telemetry);
+       // mecanumDrive = new MecanumDrive();
        // mecanumDrive.RobotCentric(gamepad1);
 
-        robot.addSubsystem(mecanumDrive);
+        // robot.addSubsystem(mecanumDrive);
 
         robot.read();
         while (opModeInInit()) {

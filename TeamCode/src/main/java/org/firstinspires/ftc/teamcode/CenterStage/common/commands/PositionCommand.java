@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.CenterStage.common.commands;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.hydraulichydras.hydrauliclib.Controller.PIDController;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
