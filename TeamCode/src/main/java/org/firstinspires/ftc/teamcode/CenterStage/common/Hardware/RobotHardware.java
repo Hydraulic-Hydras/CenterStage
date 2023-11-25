@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HEncoder;
 import org.firstinspires.ftc.teamcode.CenterStage.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
@@ -27,7 +28,13 @@ public class RobotHardware {
     public DcMotorEx rightFront;
     public DcMotorEx rightRear;
 
+    // Imu
     public IMU imu;
+
+    // Odom modules
+    public HEncoder leftclimb;
+    public HEncoder rightclimb;
+    public HEncoder rightLift;
     /**
      * HardwareMap storage.
      */
@@ -131,10 +138,21 @@ public class RobotHardware {
         modules.get(1).clearBulkCache();
     }
 
+    public double getVoltage() {
+        return voltage;
+    }
+
     public void addSubsystem(HSubsystem... subsystems) {
         this.subsystems.addAll(Arrays.asList(subsystems));
     }
 
+    public void log(String data) {
+        telemetry.addLine(data);
+    }
+
+    public void log(String data, Object input) {
+        telemetry.addData(data, input.toString());
+    }
 
 
 }
