@@ -1,6 +1,4 @@
-package com.hydraulichydras.hydrauliclib.Util;
-
-import com.hydraulichydras.hydrauliclib.Geometry.Vector2D;
+package com.hydraulichydras.hydrauliclib.Geometry;
 
 /**
  * MathUtils is an utility class that contains various mathematical functions and operations.

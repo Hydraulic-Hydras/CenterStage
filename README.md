@@ -32,7 +32,7 @@ Even if you are an advanced Java programmer, it is helpful to start with the [FT
 
 1. FtcRobotController module contains a large selection of Sample OpModes (robot code examples) which can be cut and pasted into your /teamcode folder to be used as-is, or modified to suit your team's needs.
 
-2. HydraLib is a library designed to  improve the initial programming experience for new members as well as greatly enhance the efficiency of code for veterans.
+2. HydraulicLib is a library designed to  improve the initial programming experience for new members as well as greatly enhance the efficiency of code for veterans.
 
 3. TeamCode is the place where all the code is written/pasted for the team
 

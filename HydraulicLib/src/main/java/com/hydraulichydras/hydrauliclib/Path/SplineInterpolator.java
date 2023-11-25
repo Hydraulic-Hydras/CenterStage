@@ -1,6 +1,6 @@
 package com.hydraulichydras.hydrauliclib.Path;
 
-import com.hydraulichydras.hydrauliclib.Util.MathUtils;
+import com.hydraulichydras.hydrauliclib.Geometry.MathUtils;
 import com.hydraulichydras.hydrauliclib.Geometry.Polynomial;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.hydraulichydras.hydrauliclib.Geometry.Spline;
