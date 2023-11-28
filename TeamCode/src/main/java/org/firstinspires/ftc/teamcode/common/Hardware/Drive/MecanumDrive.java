@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 
-import com.acmerobotics.roadrunner.drive.Drive;
+import com.arcrobotics.ftclib.drivebase.RobotDrive;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
+import com.hydraulichydras.hydrauliclib.Geometry.Vector2D;
 import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -13,12 +14,15 @@ import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.Tuning.DriveConstants;
 
+import java.util.Arrays;
+
 public class MecanumDrive extends HSubsystem implements Drivetrain {
 
     IMU imu;
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
     double[] ws = new double[4];
+    double[] wws = new double[4];
     public MecanumDrive() {}
 
     // only use if robot has to be in field centric mode
@@ -27,6 +31,11 @@ public class MecanumDrive extends HSubsystem implements Drivetrain {
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
+    }
+
+    @Override
+    public void set(Pose pose) {
+        set(pose, 0);
     }
 
 
@@ -110,6 +119,37 @@ public class MecanumDrive extends HSubsystem implements Drivetrain {
         ws[3] = wheelspeeds[3]; // right rear
     }
 
+    public void set(double strafeSpeed, double forwardSpeed,
+                    double turnSpeed, double gyroAngle) {
+
+        Vector2D input = new Vector2D(strafeSpeed, forwardSpeed).rotate(-gyroAngle);
+
+        strafeSpeed = input.x;
+        forwardSpeed = input.y;
+
+        double[] wheelSpeeds = new double[4];
+
+        wheelSpeeds[RobotDrive.MotorType.kFrontLeft.value] = forwardSpeed + strafeSpeed + turnSpeed;
+        wheelSpeeds[RobotDrive.MotorType.kFrontRight.value] = forwardSpeed - strafeSpeed - turnSpeed;
+        wheelSpeeds[RobotDrive.MotorType.kBackLeft.value] = (forwardSpeed - strafeSpeed + turnSpeed);
+        wheelSpeeds[RobotDrive.MotorType.kBackRight.value] = (forwardSpeed + strafeSpeed - turnSpeed);
+        // 1.06, 1.04
+
+        double max = Arrays.stream(wheelSpeeds).max().getAsDouble();
+
+        if (Math.abs(max) > 1) {
+            wheelSpeeds[RobotDrive.MotorType.kFrontLeft.value] /= max;
+            wheelSpeeds[RobotDrive.MotorType.kFrontRight.value] /= max;
+            wheelSpeeds[RobotDrive.MotorType.kBackLeft.value] /= max;
+            wheelSpeeds[RobotDrive.MotorType.kBackRight.value] /= max;
+        }
+
+        wws[0] = wheelSpeeds[0];
+        wws[1] = wheelSpeeds[1];
+        wws[2] = wheelSpeeds[2];
+        wws[3] = wheelSpeeds[3];
+    }
+
     @Override
     public void periodic() {
         // leave blank
@@ -122,19 +162,17 @@ public class MecanumDrive extends HSubsystem implements Drivetrain {
 
     @Override
     public void write() {
-        robot.leftFront.setPower(ws[0]);
-        robot.leftRear.setPower(ws[1]);
-        robot.rightFront.setPower(ws[2]);
-        robot.rightRear.setPower(ws[3]);
+        robot.leftFront.setPower(wws[0]);
+        robot.leftRear.setPower(wws[1]);
+        robot.rightFront.setPower(wws[2]);
+        robot.rightRear.setPower(wws[3]);
     }
 
     @Override
     public void reset() {
 
     }
-
-    @Override
-    public void set(Pose pose) {
-
+    public void set(Pose pose, double angle) {
+        set(pose.x, pose.y, pose.heading, angle);
     }
 }
