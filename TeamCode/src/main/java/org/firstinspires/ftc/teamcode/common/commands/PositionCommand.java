@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.common.commands;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.hydraulichydras.hydrauliclib.Controller.PIDController;
-import com.hydraulichydras.hydrauliclib.Geometry.Pose;
-import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
-import com.hydraulichydras.hydrauliclib.Path.Localizer;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
+import com.hydraulichydras.hydrauliclib.Path.Localizer;
+import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
+import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 
+import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 @Config
 public class PositionCommand extends CommandBase {
     Localizer localizer;
@@ -17,28 +17,25 @@ public class PositionCommand extends CommandBase {
     Pose targetPose;
 
     // X cord pid
-    public static double xP = 0.0;
-    public static double xD = 0;
-    public static double xF = 0.0;
+    public static double xP = 0.0385;
+    public static double xD = 0.005;
 
     // y cord pid
-    public static double yP = 0.0;
-    public static double yD = 0;
-    public static double yF = 0.0;
+    public static double yP = 0.0385;
+    public static double yD = 0.005;
 
     // heading pid
-    public static double hP = 0.0;
-    public static double hD = 0.0;
-    public static double hF = 0;
+    public static double hP = 0.75;
+    public static double hD = 0.02;
 
-    public static double kStatic = 0;
+    public static double kStatic = 0.05;
 
-    public static PIDController xController = new PIDController(xP, 0.0, xD, xF);
-    public static PIDController yController = new PIDController(yP, 0.0, yD, yF);
-    public static PIDController hController = new PIDController(hP, 0.0, hD, hF);
+    public static PIDFController xController = new PIDFController(xP, 0.0, xD, 0);
+    public static PIDFController yController = new PIDFController(yP, 0.0, yD, 0);
+    public static PIDFController hController = new PIDFController(hP, 0.0, hD, 0);
 
-    public static double ALLOWED_TRANSLATIONAL_ERROR = 0.5; // inches
-    public static double ALLOWED_HEADING_ERROR = 0.04; // radians
+    public static double ALLOWED_TRANSLATIONAL_ERROR = 1; // inches
+    public static double ALLOWED_HEADING_ERROR = 0.03; // radians
 
     private RobotHardware robot = RobotHardware.getInstance();
 

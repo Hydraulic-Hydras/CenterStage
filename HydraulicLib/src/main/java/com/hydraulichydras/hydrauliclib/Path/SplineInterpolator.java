@@ -28,7 +28,7 @@ public class SplineInterpolator {
     }
 
     private Spline createSpline(SplinePose start, SplinePose end) {
-        SimpleMatrix CUBIC_HERMITE_MATRIX = new SimpleMatrix(splineConstants);
+        SimpleMatrix CUBIC_SPLINE_MATRIX = new SimpleMatrix(splineConstants);
 
         double[][] inputs = {
                 {start.x, start.y},
@@ -37,7 +37,7 @@ public class SplineInterpolator {
                 {(1 / end.subt(start).add(EPSILON).x) * end.tangent.x, (1 / end.subt(start).add(EPSILON).y) * end.tangent.y}
         };
 
-        SimpleMatrix O = CUBIC_HERMITE_MATRIX.solve(new SimpleMatrix(inputs));
+        SimpleMatrix O = CUBIC_SPLINE_MATRIX.solve(new SimpleMatrix(inputs));
 
         SimpleMatrix x = O.extractVector(false, 0);
         SimpleMatrix y = O.extractVector(false, 1);

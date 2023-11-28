@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.hydraulichydras.hydrauliclib.Path.Localizer;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import androidx.annotation.NonNull;
 
+@Config
 public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Localizer {
 
     private final RobotHardware robot;
@@ -32,11 +35,11 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         ));
         robot = RobotHardware.getInstance();
 
-        positionLeft = () -> robot.leftclimb.getPosition();
-        positionRight = () -> robot.rightclimb.getPosition();
-        positionFront = () -> -robot.rightLift.getPosition();
-//        imuAngle = robot::getAngle;
-        imuAngle = () -> 0.0;
+       positionLeft = () -> robot.leftOdo.getCurrentPosition();
+       positionRight = () -> robot.rightOdo.getCurrentPosition();
+       positionFront = () -> -robot.perpOdo.getCurrentPosition();
+         //   imuAngle = robot::getAngle;
+            imuAngle = () -> 0.0;
 
 //        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
 //        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
@@ -67,9 +70,9 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(robot.leftclimb.getRawVelocity()),
-                encoderTicksToInches(robot.rightLift.getRawVelocity()),
-                encoderTicksToInches(robot.rightclimb.getRawVelocity())
+                encoderTicksToInches(robot.leftOdo.getVelocity()),
+                encoderTicksToInches(robot.rightOdo.getVelocity()),
+                encoderTicksToInches(robot.perpOdo.getVelocity())
         );
     }
 
@@ -111,3 +114,4 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         return new Pose(a.getX(), a.getY(), Math.toRadians(a.getHeading()));
     }
 }
+

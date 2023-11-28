@@ -1,39 +1,55 @@
 package org.firstinspires.ftc.teamcode.common.Hardware;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Tuning.DriveConstants;
+import org.firstinspires.ftc.teamcode.common.Util.HEncoder;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
+
 @Config
 public class RobotHardware {
 
     // drivetrain
-   // public DcMotorEx leftFront;
-   // public DcMotorEx leftRear;
-   // public DcMotorEx rightFront;
-   // public DcMotorEx rightRear;
+   public DcMotorEx leftFront;
+   public DcMotorEx leftRear;
+   public DcMotorEx rightFront;
+   public DcMotorEx rightRear;
 
     // Imu
-   // public IMU imu;
+    public IMU imu;
 
     // Odom modules
-  //  public HEncoder leftclimb;
-  //  public HEncoder rightclimb;
-  //  public HEncoder rightLift;
+    //public HEncoder leftOdo;
+    //public HEncoder perpOdo;
+    //public HEncoder rightOdo;
+
+    public DcMotorEx leftOdo;
+    public DcMotorEx rightOdo;
+    public DcMotorEx perpOdo;
 
     /**
      * HardwareMap storage.
      */
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
+
+    private double imuAngle ;
 
     /**
      * Voltage timer and voltage value.
@@ -75,7 +91,7 @@ public class RobotHardware {
         modules.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         modules.get(1).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
-            /*
+
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
@@ -98,12 +114,19 @@ public class RobotHardware {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-             */
 
+        leftOdo = hardwareMap.get(DcMotorEx.class, "leftOdo");
+        rightOdo = hardwareMap.get(DcMotorEx.class, "rightOdo");
+        perpOdo = hardwareMap.get(DcMotorEx.class, "perpOdo");
+
+       // this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
+       // this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
+       // this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
 
     }
 
     public void read() {
+//        imuAngle = imu.getAngularOrientation().firstAngle;
         for (HSubsystem subsystem : subsystems) {
             subsystem.read();
         }
@@ -139,6 +162,13 @@ public class RobotHardware {
 
     public double getVoltage() {
         return voltage;
+    }
+
+    // TODO add offset
+    // imuAngle - imuOffset;
+    @Nonnegative
+    public double getAngle() {
+        return imuAngle;
     }
 
     public void addSubsystem(HSubsystem... subsystems) {

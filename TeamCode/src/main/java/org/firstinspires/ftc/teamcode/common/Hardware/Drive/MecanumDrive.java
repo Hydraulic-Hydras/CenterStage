@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 
+import com.acmerobotics.roadrunner.drive.Drive;
+import com.hydraulichydras.hydrauliclib.Geometry.Pose;
+import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,17 +13,13 @@ import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.Tuning.DriveConstants;
 
-public class MecanumDrive extends HSubsystem {
+public class MecanumDrive extends HSubsystem implements Drivetrain {
 
     IMU imu;
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
     double[] ws = new double[4];
-    Gamepad gamepad1;
-    public MecanumDrive() {
-       RobotCentric(gamepad1);
-       robot.write();
-    }
+    public MecanumDrive() {}
 
     // only use if robot has to be in field centric mode
     public void initGyro(HardwareMap hwMap) {
@@ -131,6 +130,11 @@ public class MecanumDrive extends HSubsystem {
 
     @Override
     public void reset() {
+
+    }
+
+    @Override
+    public void set(Pose pose) {
 
     }
 }
