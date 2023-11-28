@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.Testers;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@TeleOp
+@Autonomous
 public class TensorFlowTest extends LinearOpMode {
     boolean USE_WEBCAM;
     TfodProcessor myTfodProcessor;
@@ -29,10 +30,11 @@ public class TensorFlowTest extends LinearOpMode {
         USE_WEBCAM = true;
         // Initialize TFOD before waitForStart.
         initTfod();
+        
+        Side side = Side.RIGHT;
         // Wait for the match to begin.
-        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -51,13 +53,24 @@ public class TensorFlowTest extends LinearOpMode {
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
-                if (gamepad1.dpad_down) {
-                    // Temporarily stop the streaming session.
-                    myVisionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    // Resume the streaming session if previously stopped.
-                    myVisionPortal.resumeStreaming();
+
+                switch (side) {
+                    case LEFT:
+                        // do the thing
+                        break;
+                    case CENTER:
+                        // do the thing again
+                        break;
+                    case RIGHT:
+                        // wtvwtv
+                        break;
+                    default:
+                        // MR WORLD WIDE
+
                 }
+
+                // Temporarily stop the streaming session.
+                myVisionPortal.stopStreaming();
                 // Share the CPU.
                 sleep(20);
             }
