@@ -35,13 +35,13 @@ public class RobotHardware {
     public IMU imu;
 
     // Odom modules
-    //public HEncoder leftOdo;
-    //public HEncoder perpOdo;
-    //public HEncoder rightOdo;
+    public HEncoder leftOdo;
+    public HEncoder perpOdo;
+    public HEncoder rightOdo;
 
-    public DcMotorEx leftOdo;
-    public DcMotorEx rightOdo;
-    public DcMotorEx perpOdo;
+   // public DcMotorEx leftOdo;
+   // public DcMotorEx rightOdo;
+   // public DcMotorEx perpOdo;
 
     /**
      * HardwareMap storage.
@@ -114,14 +114,15 @@ public class RobotHardware {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
+       // leftOdo = hardwareMap.get(DcMotorEx.class, "leftOdo");
+       // rightOdo = hardwareMap.get(DcMotorEx.class, "rightOdo");
+       // perpOdo = hardwareMap.get(DcMotorEx.class, "perpOdo");
 
-        leftOdo = hardwareMap.get(DcMotorEx.class, "leftOdo");
-        rightOdo = hardwareMap.get(DcMotorEx.class, "rightOdo");
-        perpOdo = hardwareMap.get(DcMotorEx.class, "perpOdo");
-
-       // this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
-       // this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
-       // this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
+        // ODOMETRY
+        // TODO: Switch Odom wires with drivetrain encoders and test
+       this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
+       this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
+       this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
 
     }
 

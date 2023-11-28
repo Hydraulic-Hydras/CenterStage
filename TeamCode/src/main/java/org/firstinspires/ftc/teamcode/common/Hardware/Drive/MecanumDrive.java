@@ -22,6 +22,7 @@ public class MecanumDrive extends HSubsystem implements Drivetrain {
     public double powerMultiplier = 1;
     private final RobotHardware robot = RobotHardware.getInstance();
     double[] ws = new double[4];
+    // auto power i think
     double[] wws = new double[4];
     public MecanumDrive() {}
 

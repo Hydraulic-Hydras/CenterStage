@@ -35,9 +35,9 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         ));
         robot = RobotHardware.getInstance();
 
-       positionLeft = () -> robot.leftOdo.getCurrentPosition();
-       positionRight = () -> robot.rightOdo.getCurrentPosition();
-       positionFront = () -> -robot.perpOdo.getCurrentPosition();
+       positionLeft = () -> robot.leftOdo.getPosition();
+       positionRight = () -> robot.rightOdo.getPosition();
+       positionFront = () -> -robot.perpOdo.getPosition();
          //   imuAngle = robot::getAngle;
             imuAngle = () -> 0.0;
 
@@ -70,9 +70,9 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(robot.leftOdo.getVelocity()),
-                encoderTicksToInches(robot.rightOdo.getVelocity()),
-                encoderTicksToInches(robot.perpOdo.getVelocity())
+                encoderTicksToInches(robot.leftOdo.getRawVelocity()),
+                encoderTicksToInches(robot.rightOdo.getRawVelocity()),
+                encoderTicksToInches(robot.perpOdo.getRawVelocity())
         );
     }
 
