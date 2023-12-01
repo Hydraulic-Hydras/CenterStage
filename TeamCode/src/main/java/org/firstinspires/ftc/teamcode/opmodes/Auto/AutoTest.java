@@ -2,16 +2,15 @@ package org.firstinspires.ftc.teamcode.opmodes.Auto;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
+import com.hydraulichydras.hydrauliclib.Geometry.Point;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 
 import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.common.Hardware.Constants.PoseStorage;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.ThreeWheelOdom;
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
@@ -20,6 +19,12 @@ import org.firstinspires.ftc.teamcode.common.Pathing.WayPoint;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 import org.firstinspires.ftc.teamcode.common.commands.ChaiTrackingCommand;
 
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+
+import java.nio.file.Watchable;
 
 @Autonomous
 public class AutoTest extends CommandOpMode {
@@ -42,6 +47,7 @@ public class AutoTest extends CommandOpMode {
         robot.enabled = true;
 
         drivetrain = new MecanumDrive();
+        localizer = new ThreeWheelOdom();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.addSubsystem(drivetrain);
@@ -82,6 +88,8 @@ public class AutoTest extends CommandOpMode {
         telemetry.addData("voltage", robot.getVoltage());
         loopTime = loop;
         telemetry.update();
+        // hopefully pose transfer works
+        PoseStorage.currentPose = localizer.getPoseEstimate();
 
         robot.write();
     }

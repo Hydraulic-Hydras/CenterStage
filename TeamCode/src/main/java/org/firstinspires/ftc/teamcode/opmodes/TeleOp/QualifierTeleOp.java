@@ -9,9 +9,10 @@ import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 
 @TeleOp
 public class QualifierTeleOp extends CommandOpMode {
-    // TELEOP WORKS HAAHAHAHAHA
+
    private final RobotHardware robot = RobotHardware.getInstance();
    public MecanumDrive mecanumDrive;
+
     private double loopTime = 0.0;
 
     @Override
@@ -20,6 +21,7 @@ public class QualifierTeleOp extends CommandOpMode {
 
         robot.init(hardwareMap, telemetry);
         mecanumDrive = new MecanumDrive();
+      //  localizer = new ThreeWheelOdom();
 
         robot.addSubsystem(mecanumDrive);
 
@@ -44,6 +46,11 @@ public class QualifierTeleOp extends CommandOpMode {
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
+       // localizer.periodic();
+        // testing pose transfer
+        // just a maybe for now
+      //  localizer.setPoseEstimate(PoseStorage.currentPose);
+
         telemetry.update();
         robot.write();
         robot.clearBulkCache();

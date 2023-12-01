@@ -27,6 +27,10 @@ public class Camera extends Contraption {
         this.deviceName = deviceName;
     }
 
+    public Camera (String deviceName) {
+        this.deviceName = deviceName;
+    }
+
     public void initialize(HardwareMap hwMap) {
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
                 "id", hwMap.appContext.getPackageName());

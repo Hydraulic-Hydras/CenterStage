@@ -36,9 +36,9 @@ public class CameraTest extends LinearOpMode {
     private static final int HEIGHT = 480;  // 360 or 448
     private static final double FOV = 60;
 
-    public static double Scalar1_1 = 150; // For lower red = grey on colorizer
-    public static double Scalar1_2 = 150;
-    public static double Scalar1_3 = 150;
+    public static double Scalar1_1 = 192; // For lower red = grey on colorizer
+    public static double Scalar1_2 = 192;
+    public static double Scalar1_3 = 190;
 
     public static double Scalar2_1 = 255; // Upper red values
     public static double Scalar2_2 = 255; // RGB format
@@ -87,7 +87,7 @@ public class CameraTest extends LinearOpMode {
             @Override
             public void onOpened() {
 
-                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.SIDEWAYS_RIGHT); // removed camera rotation here
+                camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); // removed camera rotation here
 
                 FtcDashboard dashboard = FtcDashboard.getInstance();
                 telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());

@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
@@ -30,8 +29,6 @@ public class TensorFlowTest extends LinearOpMode {
         USE_WEBCAM = true;
         // Initialize TFOD before waitForStart.
         initTfod();
-        
-        Side side = Side.RIGHT;
         // Wait for the match to begin.
         telemetry.update();
 
@@ -54,23 +51,7 @@ public class TensorFlowTest extends LinearOpMode {
                 // Push telemetry to the Driver Station.
                 telemetry.update();
 
-                switch (side) {
-                    case LEFT:
-                        // do the thing
-                        break;
-                    case CENTER:
-                        // do the thing again
-                        break;
-                    case RIGHT:
-                        // wtvwtv
-                        break;
-                    default:
-                        // MR WORLD WIDE
 
-                }
-
-                // Temporarily stop the streaming session.
-                myVisionPortal.stopStreaming();
                 // Share the CPU.
                 sleep(20);
             }
@@ -87,7 +68,7 @@ public class TensorFlowTest extends LinearOpMode {
         // First, create a TfodProcessor.Builder.
         myTfodProcessorBuilder = new TfodProcessor.Builder();
         // Set the name of the file where the model can be found.
-        myTfodProcessorBuilder.setModelFileName("Red_Prop.tflite");
+        myTfodProcessorBuilder.setModelFileName("TeamProp_V2.tflite");
         // Set the full ordered list of labels the model is trained to recognize.
         myTfodProcessorBuilder.setModelLabels(JavaUtil.createListWith("None", "Team Prop 9384"));
         // Set the aspect ratio for the images used when the model was created.
