@@ -22,7 +22,6 @@ public class TensorFlow extends Contraption {
     TfodProcessor myTfodProcessor;
     VisionPortal myVisionPortal;
     public double location;
-
     Side side = Side.RIGHT;
     public void initialize(HardwareMap hardwareMap) {
         TfodProcessor.Builder myTfodProcessorBuilder;
@@ -59,7 +58,6 @@ public class TensorFlow extends Contraption {
         float x;
         float y;
 
-        location = Tfod_location(telemetry);
         // Get a list of recognitions from TFOD.
         myTfodRecognitions = myTfodProcessor.getRecognitions();
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
@@ -80,8 +78,6 @@ public class TensorFlow extends Contraption {
                 // Display the position of the center of the detection boundary for the recognition
                 telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
                 telemetry.addData("location", location);
-                switch (side) {
-                }
 
                     if (x <= 250) {
                         scan_loc = 1;
@@ -112,5 +108,6 @@ public class TensorFlow extends Contraption {
     public void stopStreaming() {
         myVisionPortal.stopStreaming();
     }
+
 
 }

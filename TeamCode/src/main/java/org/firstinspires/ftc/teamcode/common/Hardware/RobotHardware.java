@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.common.Hardware;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -38,9 +37,9 @@ public class RobotHardware {
     public IMU imu;
 
     // Odom modules
-    public HEncoder leftOdo;
-    public HEncoder perpOdo;
-    public HEncoder rightOdo;
+   // public HEncoder leftOdo;
+   // public HEncoder perpOdo;
+   // public HEncoder rightOdo;
 
    // public DcMotorEx leftOdo;
    // public DcMotorEx rightOdo;
@@ -87,13 +86,6 @@ public class RobotHardware {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
 
-        // Camera camera = new Camera("OpenCvCam");
-        TensorFlow tensorFlow = new TensorFlow();
-        
-       // camera.initialize(hardwareMap);
-        tensorFlow.initialize(hardwareMap);
-        tensorFlow.Tfod_location(telemetry);
-
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 
        // camera.initialize(hardwareMap);
@@ -133,9 +125,9 @@ public class RobotHardware {
 
         // ODOMETRY
         // TODO: Switch Odom wires with drivetrain encoders and test
-       this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
-       this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
-       this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
+      // this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
+      // this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
+      // this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
 
     }
 

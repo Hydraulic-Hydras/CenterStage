@@ -21,7 +21,6 @@ public class QualifierTeleOp extends CommandOpMode {
 
         robot.init(hardwareMap, telemetry);
         mecanumDrive = new MecanumDrive();
-      //  localizer = new ThreeWheelOdom();
 
         robot.addSubsystem(mecanumDrive);
 

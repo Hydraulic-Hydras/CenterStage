@@ -30,6 +30,7 @@ public class TensorFlowTest extends LinearOpMode {
         // Initialize TFOD before waitForStart.
         initTfod();
         // Wait for the match to begin.
+        telemetry.addLine("\"Initialized\"");
         telemetry.update();
 
         waitForStart();
