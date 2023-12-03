@@ -42,17 +42,17 @@ public class PoseTest extends CommandOpMode {
     public void run() {
         if (!started) {
             started = true;
-            localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+            // localizer.setPoseEstimate(new Pose2d(0, 0, 0));
         }
         robot.clearBulkCache();
 
-        localizer.periodic();
+        // localizer.periodic();
         super.run();
 
-        Pose currentPose = localizer.getPos();
-        telemetry.addData("poseX", currentPose.x);
-        telemetry.addData("poseY", currentPose.y);
-        telemetry.addData("heading", currentPose.heading);
+       // Pose currentPose = localizer.getPos();
+       // telemetry.addData("poseX", currentPose.x);
+      //  telemetry.addData("poseY", currentPose.y);
+      //  telemetry.addData("heading", currentPose.heading);
         // TODO: Add telemetry for encoders
 
         telemetry.update();

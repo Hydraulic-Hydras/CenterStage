@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.Hardware;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,9 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Tuning.DriveConstants;
-import org.firstinspires.ftc.teamcode.common.Hardware.Vision.Camera;
-import org.firstinspires.ftc.teamcode.common.Hardware.Vision.TensorFlow;
-import org.firstinspires.ftc.teamcode.common.Util.HEncoder;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 
 import java.util.ArrayList;
@@ -65,8 +61,6 @@ public class RobotHardware {
     public List<LynxModule> modules;
     private ArrayList<HSubsystem> subsystems;
 
-    public TensorFlow tensorFlow;
-
     /**
      * Creating the singleton the first time, instantiating.
      */
@@ -90,15 +84,10 @@ public class RobotHardware {
 
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 
-        // camera.initialize(hardwareMap);
-        tensorFlow.initialize(hardwareMap);
-        tensorFlow.Tfod_location(telemetry);
-
         this.subsystems = new ArrayList<>();
         modules = hardwareMap.getAll(LynxModule.class);
         modules.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         modules.get(1).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-
 
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
@@ -13,17 +14,21 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 @Autonomous
 public class TensorFlowTest extends LinearOpMode {
-    boolean USE_WEBCAM;
+
     TfodProcessor myTfodProcessor;
     VisionPortal myVisionPortal;
+    Side side = Side.RIGHT;
 
+    public double location;
+    public boolean USE_WEBCAM;
+    public int scan_location = 3;
+    public float x;
+    public float y;
     /**
      * This function is executed when this OpMode is selected from the Driver Station.
      */
     @Override
     public void runOpMode() {
-        double location;
-
         // This 2023-2024 OpMode illustrates the basics of TensorFlow Object Detection, using
         // a custom TFLite object detection model.
         USE_WEBCAM = true;
@@ -31,27 +36,41 @@ public class TensorFlowTest extends LinearOpMode {
         initTfod();
         // Wait for the match to begin.
         telemetry.addLine("\"Initialized\"");
+
         telemetry.update();
 
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
             while (opModeIsActive()) {
-                // Put loop blocks here.
                 location = Tfod_location();
+                // Put loop blocks here.
                 telemetry.addData("location", location);
 
                 if (location == 3) {
                     telemetry.addLine("Side: Right");
+                    side = Side.RIGHT;
                 }   else if (location == 2) {
                     telemetry.addLine("Side: Center");
+                    side = Side.CENTER;
                 }   else {
                     telemetry.addLine("Side: Left");
+                    side = Side.LEFT;
                 }
+
+                switch (side) {
+                    case CENTER:
+                        telemetry.addLine("Im in the middle");
+                        break;
+                    case LEFT:
+                        telemetry.addLine("Im on the Left");
+                        break;
+                    case RIGHT:
+                        telemetry.addLine("im on the right");
+                    }
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
-
 
                 // Share the CPU.
                 sleep(20);
@@ -62,7 +81,7 @@ public class TensorFlowTest extends LinearOpMode {
     /**
      * Initialize TensorFlow Object Detection.
      */
-    private void initTfod() {
+    public void initTfod() {
         TfodProcessor.Builder myTfodProcessorBuilder;
         VisionPortal.Builder myVisionPortalBuilder;
 
@@ -94,18 +113,15 @@ public class TensorFlowTest extends LinearOpMode {
     /**
      * Describe this function...
      */
-    private int Tfod_location() {
+    public int Tfod_location() {
         List<Recognition> myTfodRecognitions;
-        int scan_loc = 3;
         Recognition myTfodRecognition;
-        float x;
-        float y;
 
         // Get a list of recognitions from TFOD.
         myTfodRecognitions = myTfodProcessor.getRecognitions();
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
-            scan_loc = 3;
+            scan_location = 3;
         } else {
             // Iterate through list and call a function to display info for each recognized object.
             for (Recognition myTfodRecognition_item : myTfodRecognitions) {
@@ -121,17 +137,17 @@ public class TensorFlowTest extends LinearOpMode {
                 // Display the position of the center of the detection boundary for the recognition
                 telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
                 if (x <= 250) {
-                    scan_loc = 1;
+                    scan_location = 1;
                 } else if (x <= 600) {
-                    scan_loc = 2;
+                    scan_location = 2;
                 } else {
-                    scan_loc = 3;
+                    scan_location = 3;
                 }
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
             }
         }
-        return scan_loc;
+        return scan_location;
     }
 }

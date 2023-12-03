@@ -33,7 +33,7 @@ public class AutoTest extends CommandOpMode {
 
     public final RobotHardware robot = RobotHardware.getInstance();
     private HSubsystem drivetrain;
-    private ThreeWheelOdom localizer;
+   //  private ThreeWheelOdom localizer;
     private double loopTime = 0.0;
 
     private Pose[] STRAIGHT_TEST = new Pose[]{
@@ -49,7 +49,7 @@ public class AutoTest extends CommandOpMode {
         robot.enabled = true;
 
         drivetrain = new MecanumDrive();
-        localizer = new ThreeWheelOdom();
+        // localizer = new ThreeWheelOdom();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.addSubsystem(drivetrain);
@@ -60,7 +60,7 @@ public class AutoTest extends CommandOpMode {
             telemetry.update();
         }
 
-        localizer.setPoseEstimate(new Pose2d(0, 0, 0));
+       // localizer.setPoseEstimate(new Pose2d(0, 0, 0));
 
         ChaiTrackingPath movement1 = new ChaiTrackingPath(
                 new WayPoint(STRAIGHT_TEST[1], 20),
@@ -70,7 +70,7 @@ public class AutoTest extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new ChaiTrackingCommand((Drivetrain) drivetrain, localizer, movement1),
+                        // new ChaiTrackingCommand((Drivetrain) drivetrain, localizer, movement1),
                         new WaitCommand(200)
                 ));
     }
@@ -82,16 +82,16 @@ public class AutoTest extends CommandOpMode {
 
         CommandScheduler.getInstance().run();
         robot.periodic();
-        localizer.periodic();
+       //  localizer.periodic();
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("pose", localizer.getPos());
+        // telemetry.addData("pose", localizer.getPos());
         telemetry.addData("voltage", robot.getVoltage());
         loopTime = loop;
         telemetry.update();
         // hopefully pose transfer works
-        PoseStorage.currentPose = localizer.getPoseEstimate();
+        // PoseStorage.currentPose = localizer.getPoseEstimate();
 
         robot.write();
     }
