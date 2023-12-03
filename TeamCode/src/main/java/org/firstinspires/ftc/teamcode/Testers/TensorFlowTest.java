@@ -12,7 +12,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@Autonomous
+@Autonomous (name = "TensorFlowTest", group = "Testers")
 public class TensorFlowTest extends LinearOpMode {
 
     TfodProcessor myTfodProcessor;

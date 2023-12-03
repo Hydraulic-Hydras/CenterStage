@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 
-@TeleOp
+@TeleOp (name = "Qual TeleOp", group = "OpMode")
 public class QualifierTeleOp extends CommandOpMode {
 
    private final RobotHardware robot = RobotHardware.getInstance();
