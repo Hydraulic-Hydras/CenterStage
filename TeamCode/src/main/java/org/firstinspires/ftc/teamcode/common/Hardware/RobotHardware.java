@@ -65,6 +65,8 @@ public class RobotHardware {
     public List<LynxModule> modules;
     private ArrayList<HSubsystem> subsystems;
 
+    public TensorFlow tensorFlow;
+
     /**
      * Creating the singleton the first time, instantiating.
      */
@@ -88,8 +90,9 @@ public class RobotHardware {
 
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 
-       // camera.initialize(hardwareMap);
-        // tensorFlow.initialize(hardwareMap);
+        // camera.initialize(hardwareMap);
+        tensorFlow.initialize(hardwareMap);
+        tensorFlow.Tfod_location(telemetry);
 
         this.subsystems = new ArrayList<>();
         modules = hardwareMap.getAll(LynxModule.class);

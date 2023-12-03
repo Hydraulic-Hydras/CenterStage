@@ -15,7 +15,7 @@ import java.util.function.DoubleSupplier;
 import androidx.annotation.NonNull;
 
 @Config
-public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Localizer {
+public class ThreeWheelOdom {} /** extends ThreeTrackingWheelLocalizer implements Localizer {
 
     private final RobotHardware robot;
 
@@ -114,4 +114,5 @@ public class ThreeWheelOdom extends ThreeTrackingWheelLocalizer implements Local
         return new Pose(a.getX(), a.getY(), Math.toRadians(a.getHeading()));
     }
 }
+ **/
 

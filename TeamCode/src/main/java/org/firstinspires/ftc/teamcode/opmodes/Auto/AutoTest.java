@@ -23,9 +23,11 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import java.nio.file.Watchable;
 
+@Disabled
 @Autonomous
 public class AutoTest extends CommandOpMode {
 
