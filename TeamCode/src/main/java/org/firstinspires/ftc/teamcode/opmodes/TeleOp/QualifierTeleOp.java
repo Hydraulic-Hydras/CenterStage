@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.opmodes.TeleOp;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
 
+@Disabled
 @TeleOp (name = "Qual TeleOp", group = "OpMode")
 public class QualifierTeleOp extends CommandOpMode {
 

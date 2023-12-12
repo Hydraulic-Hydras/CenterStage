@@ -30,8 +30,8 @@ public class Launcher extends Contraption {
 
     public void initialize(HardwareMap hwMap) {
 
-        launcher_angle = hwMap.get(Servo.class, "launcher_angle");
-        launcher_trigger = hwMap.get(Servo.class, "launcher_trigger");
+        launcher_angle = hwMap.get(Servo.class, "launcher_angle"); // no 4 control
+        launcher_trigger = hwMap.get(Servo.class, "launcher_trigger"); // no 2 exp
 
         launcher_angle.setDirection(Servo.Direction.REVERSE);
         launcher_trigger.setDirection(Servo.Direction.REVERSE);
@@ -40,23 +40,23 @@ public class Launcher extends Contraption {
         launcher_trigger.setPosition(START_POS_TRIGGER);
     }
 
-    public void loop(Gamepad gamepad2) {
+    public void loop(Gamepad gamepad1) {
 
-        if (gamepad2.dpad_up) {
+        if (gamepad1.dpad_up) {
             // Triangle or Y button is High
             launcher_angle.setPosition(HIGH_POS);
-        }   else if (gamepad2.dpad_right) {
+        }   else if (gamepad1.dpad_left) {
             // Circle or B is Mid
             launcher_angle.setPosition(MID_POS);
-        }   else if (gamepad2.dpad_down) {
+        }   else if (gamepad1.dpad_down) {
             // Cross or A is low
             launcher_angle.setPosition(LOW_POS);
         }
 
         // both bumpers for shoot
-        if (gamepad2.left_bumper && gamepad2.right_bumper) {
+        if (gamepad1.left_bumper && gamepad1.right_bumper) {
             launcher_trigger.setPosition(SHOOT);
-        }   else if (gamepad2.b) {
+        }   else if (gamepad1.dpad_right) {
             // dpad down for loading
             launcher_trigger.setPosition(LOAD);
         }

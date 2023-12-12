@@ -18,8 +18,8 @@ public class Slides extends Contraption {
     private MotionProfiledDcMotor leftSlide;
     private MotionProfiledDcMotor rightSlide;
 
-    private TouchSensor high_lift;
-    private TouchSensor low_lift;
+    private TouchSensor high_limit;
+    private TouchSensor low_limit;
 
     public static final double WHEEL_RADIUS = 0; // inches
     public static final double GEAR_RATIO = 1;
@@ -47,41 +47,45 @@ public class Slides extends Contraption {
 
     @Override
     public void initialize(HardwareMap hwMap) {
-        leftSlide = new MotionProfiledDcMotor(hwMap, "leftCascade");
+        leftSlide = new MotionProfiledDcMotor(hwMap, "LeftCascade");
         leftSlide.setWheelConstants(WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_REV);
         leftSlide.setMotionConstraints(MAX_VEL, MAX_ACCEL);
         leftSlide.setRetractionMultiplier(RETRACTION_MULTIPLIER);
         leftSlide.setPIDCoefficients(kP, kI, kD, kF);
         leftSlide.setTargetPosition(0);
 
-        leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        // leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        rightSlide = new MotionProfiledDcMotor(hwMap, "rightCascade");
+        rightSlide = new MotionProfiledDcMotor(hwMap, "RightCascade");
         rightSlide.setWheelConstants(WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_REV);
         rightSlide.setMotionConstraints(MAX_VEL, MAX_ACCEL);
         rightSlide.setRetractionMultiplier(RETRACTION_MULTIPLIER);
         rightSlide.setPIDCoefficients(kP, kI, kD, kF);
         rightSlide.setTargetPosition(0);
 
-        rightSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        // rightSlide.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        high_lift = hwMap.get(TouchSensor.class, "high_Limit");
-        low_lift = hwMap.get(TouchSensor.class, "low_Limit");
+        high_limit = hwMap.get(TouchSensor.class, "high_Limit");
+        low_limit = hwMap.get(TouchSensor.class, "low_Limit");
     }
 
     @Override
     public void loop(Gamepad gamepad2) {
 
-        if (!high_lift.isPressed() && gamepad2.right_trigger > 0) {
-            rightSlide.setPower(1);
-            leftSlide.setPower(1);
-        } else if (!low_lift.isPressed() && gamepad2.left_trigger > 0) {
-            rightSlide.setPower(-1);
-            leftSlide.setPower(-1);
+        // Put loop blocks here.
+        if (gamepad2.right_trigger > 0 && !high_limit.isPressed()) {
+            // up
+            leftSlide.setPower(gamepad2.right_trigger * -0.86);
+            rightSlide.setPower(gamepad2.right_trigger * -0.86);
+        } else if (gamepad2.left_trigger > 0 && !low_limit.isPressed()) {
+            // down
+            leftSlide.setPower(gamepad2.left_trigger * 0.8);
+            rightSlide.setPower(gamepad2.left_trigger * 0.8);
         } else {
             leftSlide.setPower(0);
             rightSlide.setPower(0);
         }
+
     }
 
 

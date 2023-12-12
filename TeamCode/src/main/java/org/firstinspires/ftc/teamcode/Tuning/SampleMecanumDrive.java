@@ -107,6 +107,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -129,14 +134,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
 
-        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //if desired, use setLocalizer() to change the localization method
-        //  setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap)); // lastTrackingEncPositions, lastTrackingEncVels));
-        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap)); // lastTrackingEncPositions, lastTrackingEncVels));
+        // setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
         // TODO: Test to see if cancel works and is compatible with tuning as well
 
 
