@@ -3,11 +3,15 @@ package org.firstinspires.ftc.teamcode.common.Hardware;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -23,23 +27,29 @@ import javax.annotation.Nonnegative;
 @Config
 public class RobotHardware {
 
-    // drivetrain
-   public DcMotorEx leftFront;
-   public DcMotorEx leftRear;
-   public DcMotorEx rightFront;
-   public DcMotorEx rightRear;
+    // Drivetrain
+    public DcMotorEx leftFront;
+    public DcMotorEx leftRear;
+    public DcMotorEx rightFront;
+    public DcMotorEx rightRear;
+
+    // Contraptions
+    public DcMotorEx LeftCascade;
+    public DcMotorEx RightCascade;
+
+    public Servo Bucket;
+    public CRServo Wheels;
+    public CRServo Intake;
+    public CRServo Zip;
+
+    public Servo Launcher_Angle;
+    public Servo Launcher_Trigger;
+
+    // public DcMotorEx LeftHook;
+    // public DcMotorEx RightHook;
 
     // Imu
     public IMU imu;
-
-    // Odom modules
-   // public HEncoder leftOdo;
-   // public HEncoder perpOdo;
-   // public HEncoder rightOdo;
-
-   // public DcMotorEx leftOdo;
-   // public DcMotorEx rightOdo;
-   // public DcMotorEx perpOdo;
 
     /**
      * HardwareMap storage.
@@ -49,11 +59,16 @@ public class RobotHardware {
 
     private double imuAngle ;
 
+    // Sensors
+    private TouchSensor high_Limit;
+    private TouchSensor low_Limit;
+    private DistanceSensor BackdropSens;
+
     /**
      * Voltage timer and voltage value.
      */
     private ElapsedTime voltageTimer = new ElapsedTime();
-    private double voltage = 0.0;
+    private double voltage = 12.0;
 
     private static RobotHardware instance = null;
     public boolean enabled;
@@ -61,9 +76,6 @@ public class RobotHardware {
     public List<LynxModule> modules;
     private ArrayList<HSubsystem> subsystems;
 
-    /**
-     * Creating the singleton the first time, instantiating.
-     */
     public static RobotHardware getInstance() {
         if (instance == null) {
             instance = new RobotHardware();
@@ -72,6 +84,13 @@ public class RobotHardware {
         return instance;
     }
 
+    /**
+     * Values for all Contraptions
+     */
+    public static double START_POS_ANGLE = 1;
+    public static double START_POS_TRIGGER = 0.5;
+
+    public static double POS_REST = 0;
     /**
      * Created at the start of every OpMode.
      *
@@ -111,15 +130,40 @@ public class RobotHardware {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-       // leftOdo = hardwareMap.get(DcMotorEx.class, "leftOdo");
-       // rightOdo = hardwareMap.get(DcMotorEx.class, "rightOdo");
-       // perpOdo = hardwareMap.get(DcMotorEx.class, "perpOdo");
+        // INTAKE AND OUTTAKE
+        Wheels = hardwareMap.get(CRServo.class, "Wheels");
+        Zip = hardwareMap.get(CRServo.class, "Zip");
+        Intake = hardwareMap.get(CRServo.class, "Intake");
 
-        // ODOMETRY
-        // TODO: Switch Odom wires with drivetrain encoders and test
-      // this.perpOdo = new HEncoder(new MotorEx(hardwareMap, "perpOdp").encoder);
-      // this.leftOdo = new HEncoder(new MotorEx(hardwareMap, "leftOdo").encoder);
-      // this.rightOdo = new HEncoder(new MotorEx(hardwareMap, "rightOdo").encoder);
+        Bucket = hardwareMap.get(Servo.class, "rotateBucket");
+
+        Bucket.setPosition(POS_REST);
+
+        // DRONE
+        Launcher_Angle = hardwareMap.get(Servo.class, "launcher_angle");
+        Launcher_Trigger = hardwareMap.get(Servo.class, "launcher_trigger");
+
+        Launcher_Angle.setDirection(Servo.Direction.REVERSE);
+        Launcher_Trigger.setDirection(Servo.Direction.REVERSE);
+
+        Launcher_Angle.setPosition(START_POS_ANGLE);
+        Launcher_Trigger.setPosition(START_POS_TRIGGER);
+
+        // SLIDES
+        LeftCascade = hardwareMap.get(DcMotorEx.class, "LeftCascade");
+        LeftCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LeftCascade.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LeftCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
+        RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RightCascade.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // SENSORS
+        high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
+        low_Limit = hardwareMap.get(TouchSensor.class, "low_Limit");
+
 
     }
 
@@ -162,8 +206,6 @@ public class RobotHardware {
         return voltage;
     }
 
-    // TODO add offset
-    // imuAngle - imuOffset;
     @Nonnegative
     public double getAngle() {
         return imuAngle;

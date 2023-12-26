@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 import com.arcrobotics.ftclib.drivebase.RobotDrive;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.hydraulichydras.hydrauliclib.Geometry.Vector2D;
-import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
+import com.hydraulichydras.hydrauliclib.Localization.Drivetrain;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;

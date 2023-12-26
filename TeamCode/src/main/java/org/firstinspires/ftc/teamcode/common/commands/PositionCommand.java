@@ -5,8 +5,8 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.hydraulichydras.hydrauliclib.Path.Localizer;
-import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
+import com.hydraulichydras.hydrauliclib.Localization.Localizer;
+import com.hydraulichydras.hydrauliclib.Localization.Drivetrain;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;

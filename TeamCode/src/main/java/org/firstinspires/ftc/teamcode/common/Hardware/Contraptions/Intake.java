@@ -12,18 +12,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class Intake extends Contraption {
 
-    public enum OuttakeLoop {
-        SCORING,
-        REST
-    }
-
-    OuttakeLoop outtakeLoop = OuttakeLoop.REST;
-
     private CRServo Wheels;
     private CRServo Zip;
     private CRServo Intake;
     private Servo rotateBucket;
 
+    public static double POS_REST = 0;
+    public static double POS_PANEL = 0.5;
+    public static double POS_DUMP = 1;
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
     }
@@ -64,13 +60,13 @@ public class Intake extends Contraption {
 
         if (gamepad2.x) {
             // reset
-            rotateBucket.setPosition(0);
+            rotateBucket.setPosition(POS_REST);
         } else if (gamepad2.a) {
             // dump
-            rotateBucket.setPosition(1);
+            rotateBucket.setPosition(POS_DUMP);
         } else if (gamepad2.b   ) {
             // panel
-            rotateBucket.setPosition(0.5);
+            rotateBucket.setPosition(POS_PANEL);
         }
     }
 

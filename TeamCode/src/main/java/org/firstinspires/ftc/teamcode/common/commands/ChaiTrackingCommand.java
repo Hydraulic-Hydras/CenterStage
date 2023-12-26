@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.common.commands;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
-import com.hydraulichydras.hydrauliclib.Path.Drivetrain;
-import com.hydraulichydras.hydrauliclib.Path.Localizer;
+import com.hydraulichydras.hydrauliclib.Localization.Drivetrain;
+import com.hydraulichydras.hydrauliclib.Localization.Localizer;
 import com.arcrobotics.ftclib.controller.PIDFController;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;

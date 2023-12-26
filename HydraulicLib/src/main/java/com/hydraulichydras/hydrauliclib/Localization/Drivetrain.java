@@ -1,4 +1,4 @@
-package com.hydraulichydras.hydrauliclib.Path;
+package com.hydraulichydras.hydrauliclib.Localization;
 
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 

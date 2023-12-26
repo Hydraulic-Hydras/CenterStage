@@ -1,18 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-
-import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
-import com.hydraulichydras.hydrauliclib.Geometry.Pose;
-import com.hydraulichydras.hydrauliclib.Path.Localizer;
-
-import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.DoubleSupplier;
-import androidx.annotation.NonNull;
 
 @Config
 public class ThreeWheelOdom {} /** extends ThreeTrackingWheelLocalizer implements Localizer {
