@@ -17,8 +17,6 @@ public class Drivetrain extends Contraption {
     public Drivetrain(LinearOpMode opMode) {
         this.opMode = opMode;
     }
-
-
     @Override
     public void initialize(HardwareMap hwMap) {
         drive = new SampleMecanumDrive(hwMap);

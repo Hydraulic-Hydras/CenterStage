@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Tuning.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -23,5 +24,11 @@ public class TurnTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         drive.turn(Math.toRadians(ANGLE));
+
+        drive.update();
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("heading", poseEstimate.getHeading());
+        telemetry.update();
     }
 }
