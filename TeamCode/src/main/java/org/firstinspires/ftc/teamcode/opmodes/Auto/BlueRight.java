@@ -1,4 +1,4 @@
 package org.firstinspires.ftc.teamcode.opmodes.Auto;
 
-public class BlueLeft {
+public class BlueRight {
 }

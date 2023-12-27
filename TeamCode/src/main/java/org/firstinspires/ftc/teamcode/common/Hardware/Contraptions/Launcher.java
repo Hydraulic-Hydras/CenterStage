@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Launcher extends Contraption {
 
-    Servo launcher_angle;
-    Servo launcher_trigger;
+    public Servo launcher_angle;
+    public Servo launcher_trigger;
 
     public static double START_POS_ANGLE = 1;
     public static double START_POS_TRIGGER = 0.5;
