@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmodes.Auto;
+package org.firstinspires.ftc.teamcode.opmodes.Auto.Advanced;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -22,8 +23,9 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Vision.PropVision;
 import org.firstinspires.ftc.teamcode.common.Hardware.Vision.TFOD;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous (name = "Red Right")
-public class RedRightBK extends CommandOpMode {
+
+@Autonomous (name = "ADV_Red Right")
+public class Adv_RedRightBK extends CommandOpMode {
 
     // Contraptions
     private final Mitsumi mitsumi = new Mitsumi(this);
@@ -43,14 +45,12 @@ public class RedRightBK extends CommandOpMode {
 
     // Trajectories
     public static TrajectorySequence preloadCenter;
-    public static TrajectorySequence turningCenter;
-
     public static TrajectorySequence preloadLeft;
-    public static TrajectorySequence turningLeft;
-
     public static TrajectorySequence preloadRight;
-    public static TrajectorySequence turningRight;
 
+    public static TrajectorySequence BackdropLeft;
+    public static TrajectorySequence BackdropCenter;
+    public static TrajectorySequence BackdropRight;
     public static TrajectorySequence park;
 
     @Override
@@ -68,7 +68,9 @@ public class RedRightBK extends CommandOpMode {
 
         location = PropVision.getSide();
 
-        Pose2d startPose = new Pose2d(0,0, Math.toRadians(0));
+        // Poses
+        Pose2d startPose = Globals.StartPoseRED_RIGHT;
+        Pose2d backdrop_pos = Globals.RED_SPIKEMARK_RIGHT;
 
         while (!isStarted()) {
 
@@ -91,35 +93,14 @@ public class RedRightBK extends CommandOpMode {
         // CENTER PROP
         preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .forward(29)
-
-                .build();
-
-        turningCenter = drive.trajectorySequenceBuilder(preloadCenter.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .back(5)
-                .turn(Math.toRadians(90))
-                .back(33.8)
-                .strafeRight(3.2)
+                .lineToLinearHeading(Globals.RED_SPIKEMARK_RIGHT)
 
                 .build();
 
         // LEFT PROP
         preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .forward(29)
-                .turn(Math.toRadians(90))
-
-                .build();
-
-        turningLeft = drive.trajectorySequenceBuilder(preloadLeft.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .back(33.8)
-                .strafeRight(6)
+                .lineToLinearHeading(Globals.RED_TEAMPROP_LEFT_POSE)
 
                 .build();
 
@@ -127,22 +108,14 @@ public class RedRightBK extends CommandOpMode {
         preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .forward(29)
-                .turn(Math.toRadians(-90))
+                // spline movement towards it
+                .splineToConstantHeading(new Vector2d(23, -40), Math.toRadians(90))
 
                 .build();
 
-        turningRight = drive.trajectorySequenceBuilder(preloadRight.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .forward(33.8)
-                .turn(Math.toRadians(180))
-                .strafeLeft(8)
-
-                .build();
-
-        // LEFT Park
-        park = drive.trajectorySequenceBuilder(new Pose2d())
+        // PARK
+        park = drive.trajectorySequenceBuilder(backdrop_pos)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .strafeLeft(15)
@@ -167,7 +140,7 @@ public class RedRightBK extends CommandOpMode {
                                 new WaitCommand(700),
                                 new IntakeStopCommand(),
 
-                                new InstantCommand(() -> drive.followTrajectorySequence(turningCenter))
+                                new InstantCommand(() -> drive.followTrajectorySequence(Backdrop))
                                         .alongWith(new LiftCommand(1250, 1)),
 
                                 new WaitCommand(900),
@@ -193,7 +166,7 @@ public class RedRightBK extends CommandOpMode {
                                 new WaitCommand(700),
                                 new IntakeStopCommand(),
 
-                                new InstantCommand(() -> drive.followTrajectorySequence(turningLeft))
+                                new InstantCommand(() -> drive.followTrajectorySequence(Backdrop))
                                         .alongWith(new LiftCommand(1500, 1)),
 
                                 new WaitCommand(900),
@@ -220,12 +193,12 @@ public class RedRightBK extends CommandOpMode {
                                 new WaitCommand(700),
                                 new IntakeStopCommand(),
 
-                                new InstantCommand(() -> drive.followTrajectorySequence(turningRight))
+                                new InstantCommand(() -> drive.followTrajectorySequence(Backdrop))
                                         .alongWith(new LiftCommand(1500, 1)),
                                 new WaitCommand(900),
                                 new OuttakeCommand(),
 
-                                 new LiftCommand(100, 0.65)
+                                new LiftCommand(100, 0.65)
                                         .alongWith(new InstantCommand(() -> drive.followTrajectorySequence(park))),
 
                                 new InstantCommand(() -> endTime = timer.seconds())

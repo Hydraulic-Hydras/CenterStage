@@ -6,6 +6,8 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import sun.security.provider.JavaKeyStore;
+
 public class Right {
 
     public static void main(String[] args) {
@@ -13,36 +15,14 @@ public class Right {
 
         RoadRunnerBotEntity blueRight = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(74, 74, Math.toRadians(180), Math.toRadians(180), 16.5)
+                .setConstraints(74, 74, Math.toRadians(180), Math.toRadians(180), 16.68)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(12, -62.5, Math.toRadians(90)))
 
                                 /* === RIGHT === */
 
-                                .lineToLinearHeading(new Pose2d(12, -29, Math.toRadians(180)))
-                                .waitSeconds(1)
-
-                                .setReversed(true)
-
-                                // .splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
-                                .lineTo(new Vector2d(48, -29))
-                                .waitSeconds(1)
-
-                                .setReversed(false)
-                                .splineToConstantHeading(new Vector2d(35, -58.5), Math.toRadians(180))
-                                .waitSeconds(1)
-                                .lineTo(new Vector2d(-35, -58.5))
-                                .waitSeconds(1)
-                                .splineToConstantHeading(new Vector2d(-58, -35.45), Math.toRadians(180))
-                                .waitSeconds(1)
-
-                                .setReversed(true)
-                                .splineToConstantHeading(new Vector2d(-35,-58.5), Math.toRadians(0))
-                                .lineTo(new Vector2d(35,-58.5))
-
-                                .splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
-                                .waitSeconds(1)
+                                .splineToConstantHeading(new Vector2d(23, -40), Math.toRadians(90))
                                 .build()
                 );
 
