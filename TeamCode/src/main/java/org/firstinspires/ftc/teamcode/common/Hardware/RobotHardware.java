@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 
+// TODO: finalize this file
 @Config
 public class RobotHardware {
 

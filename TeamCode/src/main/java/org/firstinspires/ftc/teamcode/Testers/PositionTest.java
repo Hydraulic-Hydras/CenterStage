@@ -7,11 +7,13 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Autonomous
 public class PositionTest extends CommandOpMode {
 
@@ -27,7 +29,7 @@ public class PositionTest extends CommandOpMode {
 
         TrajectorySequence goForward = drive.trajectorySequenceBuilder(startPose)
 
-                .forward(20)
+                .forward(50)
 
                 .build();
 

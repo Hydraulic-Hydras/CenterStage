@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Contraptions;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.hydraulichydras.hydrauliclib.Controller.PIDController;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +18,7 @@ public class Mitsumi extends Contraption {
     public static TouchSensor low_Limit;
     public static DcMotor LeftCascade;
     public static DcMotor RightCascade;
-    public static PIDController controller;
+    // public static PIDController controller;
 
     /**
      * Sets PID gains to be used by the PIDF controller
@@ -34,14 +33,6 @@ public class Mitsumi extends Contraption {
     public static double kD = 0.0;
     public static double kF = 0.0;
 
-    public static int Target = 0;
-    public static double Hold = 0.0001;
-    public static double kG = Hold;
-
-    public static int POS_REST = 0;
-    public static int POS_LOW = 900;
-    public static int POS_MID = 1500;
-    public static int POS_HIGH = 2600;
     public Mitsumi(LinearOpMode opMode) { this.opMode = opMode; }
     @Override
     public void initialize(HardwareMap hwMap) {
@@ -77,38 +68,18 @@ public class Mitsumi extends Contraption {
         // Put loop blocks here.
         if (gamepad2.right_trigger > 0 && !high_Limit.isPressed() ) {
             // up
-            LeftCascade.setPower(gamepad2.right_trigger * 0.9);
-            RightCascade.setPower(gamepad2.right_trigger * 0.9);
+            LeftCascade.setPower(gamepad2.right_trigger * 0.8);
+            RightCascade.setPower(gamepad2.right_trigger * 0.8);
         } else if (gamepad2.left_trigger > 0 && !low_Limit.isPressed()) {
             // down
-            LeftCascade.setPower(gamepad2.left_trigger * -0.82);
-            RightCascade.setPower(gamepad2.left_trigger * -0.82);
+            LeftCascade.setPower(gamepad2.left_trigger * -0.6);
+            RightCascade.setPower(gamepad2.left_trigger * -0.6);
         } else {
             LeftCascade.setPower(0);
             RightCascade.setPower(0);
         }
 
     }
-
-    public void AutoMoveTo(int newTarget, double power) {
-
-        if (high_Limit.isPressed()) {
-            LeftCascade.setPower(0);
-            RightCascade.setPower(0);
-        }   else {
-            RightCascade.setTargetPosition(newTarget);
-            LeftCascade.setTargetPosition(newTarget);
-
-            LeftCascade.setPower(power);
-            RightCascade.setPower(power);
-
-            LeftCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            RightCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-    }
-
-
-
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Left Position: ", LeftCascade.getCurrentPosition());
@@ -117,10 +88,6 @@ public class Mitsumi extends Contraption {
 
         telemetry.addData("Direction of Left: ", LeftCascade.getDirection());
         telemetry.addData("Direction of Right: ", RightCascade.getDirection());
-        telemetry.addLine();
-
-        telemetry.addData("Power Left: ", LeftCascade.getPower());
-        telemetry.addData("Power Right: ", RightCascade.getPower());
         telemetry.addLine();
 
         telemetry.update();

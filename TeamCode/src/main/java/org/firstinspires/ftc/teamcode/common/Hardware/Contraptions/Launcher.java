@@ -12,18 +12,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Launcher extends Contraption {
 
-    public Servo launcher_angle;
-    public Servo launcher_trigger;
+    public static Servo launcher_angle;
+    public static Servo droneTrigger;
 
-    public static double START_POS_ANGLE = 1;
-    public static double START_POS_TRIGGER = 0.5;
+    public static double SHOOT_POS = 0.52;
+    public static double HORIZONTAL_POS = 0.35;
 
-    public static double HIGH_POS = 0.89;
-    public static double MID_POS = 0.6;
-    public static double LOW_POS = 0.35;
+    public static double INIT_POS = 0.28;
 
-    public static double SHOOT = 0.2;
-    public static double LOAD = 0.5;
+    public static double SHOOT = 0.9;
+    public static double LOAD = 0;
     public Launcher(LinearOpMode opMode) {
         this.opMode = opMode;
     }
@@ -31,40 +29,34 @@ public class Launcher extends Contraption {
     public void initialize(HardwareMap hwMap) {
 
         launcher_angle = hwMap.get(Servo.class, "launcher_angle"); // no 4 control
-        launcher_trigger = hwMap.get(Servo.class, "launcher_trigger"); // no 2 exp
+        droneTrigger = hwMap.get(Servo.class, "droneTrigger");
 
-        launcher_angle.setDirection(Servo.Direction.REVERSE);
-        launcher_trigger.setDirection(Servo.Direction.REVERSE);
+        launcher_angle.setPosition(INIT_POS);
 
-        launcher_angle.setPosition(START_POS_ANGLE);
-        launcher_trigger.setPosition(START_POS_TRIGGER);
     }
 
-    public void loop(Gamepad gamepad1) {
+    public void loop(Gamepad gamepad2) {
 
-        if (gamepad1.dpad_up) {
-            // Triangle or Y button is High
-            launcher_angle.setPosition(HIGH_POS);
-        }   else if (gamepad1.dpad_left) {
-            // Circle or B is Mid
-            launcher_angle.setPosition(MID_POS);
-        }   else if (gamepad1.dpad_down) {
-            // Cross or A is low
-            launcher_angle.setPosition(LOW_POS);
+        if (gamepad2.dpad_up) {
+            // shooting angle
+            launcher_angle.setPosition(SHOOT_POS);
+        } else if (gamepad2.dpad_down) {
+            // horizontal angle
+            launcher_angle.setPosition(HORIZONTAL_POS);
         }
 
-        // both bumpers for shoot
-        if (gamepad1.left_bumper && gamepad1.right_bumper) {
-            launcher_trigger.setPosition(SHOOT);
-        }   else if (gamepad1.dpad_right) {
-            // dpad down for loading
-            launcher_trigger.setPosition(LOAD);
+        if (gamepad2.dpad_left) {
+            // standby
+            droneTrigger.setPosition(LOAD);
+        } else if (gamepad2.dpad_right) {
+            // shoot
+            droneTrigger.setPosition(SHOOT);
         }
     }
 
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Angle", launcher_angle.getPosition());
-        telemetry.addData("Trigger", launcher_trigger.getPosition());
+        telemetry.addData("Trigger", droneTrigger.getPosition());
         telemetry.update();
     }
 }

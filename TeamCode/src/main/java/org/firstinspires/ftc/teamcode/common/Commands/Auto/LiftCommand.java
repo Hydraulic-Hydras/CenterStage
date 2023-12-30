@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.common.Commands.Auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
@@ -12,7 +11,6 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 public class LiftCommand extends SequentialCommandGroup {
     public LiftCommand(int Target, double power) {
         super(
-                new WaitCommand(500),
                 new InstantCommand(() -> Mitsumi.LeftCascade.setTargetPosition(Target)),
                 new InstantCommand(() -> Mitsumi.RightCascade.setTargetPosition(Target)),
                 new InstantCommand(() -> Mitsumi.LeftCascade.setPower(power)),

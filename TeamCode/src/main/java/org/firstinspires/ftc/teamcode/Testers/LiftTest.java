@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.Commands.Auto.LiftCommand;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.common.Commands.Auto.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 
+@Disabled
 @Autonomous( name = "JAVA-LiftTest")
 public class LiftTest extends CommandOpMode {
 
@@ -19,7 +21,6 @@ public class LiftTest extends CommandOpMode {
     private final Intake intake = new Intake(this);
 
     private final ElapsedTime timer = new ElapsedTime();
-
 
     @Override
     public void initialize() {

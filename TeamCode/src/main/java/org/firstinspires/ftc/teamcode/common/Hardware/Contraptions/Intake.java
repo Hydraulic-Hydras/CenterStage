@@ -7,8 +7,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
+
+// TODO: write down a function for finger
 @Config
 public class Intake extends Contraption {
 
@@ -17,15 +18,21 @@ public class Intake extends Contraption {
     public static CRServo Intake;
     public static Servo rotateBucket;
 
-    public static double POS_REST = 0.2;
+    public static double POS_REST = 0;
     public static double POS_PANEL = 0.5;
     public static double POS_DUMP = 1;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
 
-    public static ElapsedTime timer = new ElapsedTime();
+    // State is only for telemetry
+    public enum State {
+        REST,
+        PANEL,
+        DUMP,
+    }
 
+    public static State outtakeState = State.REST;
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
     }
@@ -64,32 +71,27 @@ public class Intake extends Contraption {
     public void outtakeLoop(Gamepad gamepad2) {
 
         if (gamepad2.a) {
-            // Intake
+            // Intake Position
             rotateBucket.setPosition(POS_REST);
+            outtakeState = State.REST;
         } else if (gamepad2.b && !Mitsumi.low_Limit.isPressed()) {
-            // Drop
-            if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0.2) {
+            if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0) {
                 // Parallel
                 rotateBucket.setPosition(POS_PANEL);
-            } else if (rotateBucket.getPosition() == 0.5) {
+                outtakeState = State.PANEL;
+            } else if (rotateBucket.getPosition() == POS_PANEL) {
+                // Drop
                 rotateBucket.setPosition(POS_DUMP);
+                outtakeState = State.DUMP;
             }
         }
     }
 
     public static void startIntaking() {
         IS_INTAKING = true;
-        timer.startTime();
-
-        if (timer.seconds() <= 5) {
-            Wheels.setPower(1);
-            Zip.setPower(1);
-            Intake.setPower(1);
-        }   else if (timer.seconds() > 5) {
-            stopIntaking();
-            timer.reset();
-        }
-
+        Wheels.setPower(1);
+        Zip.setPower(1);
+        Intake.setPower(1);
     }
 
     public static void stopIntaking() {
@@ -105,5 +107,11 @@ public class Intake extends Contraption {
         Wheels.setPower(-1);
         Zip.setPower(-1);
     }
+
+    public static State getState() {
+        return outtakeState;
+    }
+
+
 
 }

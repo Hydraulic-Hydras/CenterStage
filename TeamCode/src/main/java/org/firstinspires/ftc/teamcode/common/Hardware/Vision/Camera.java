@@ -58,7 +58,7 @@ public class Camera extends Contraption {
     public void telemetry(Telemetry telemetry) {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        FtcDashboard.getInstance().startCameraStream(camera, 30);
+        FtcDashboard.getInstance().startCameraStream(camera, 60);
         telemetry.update();
 
     }
