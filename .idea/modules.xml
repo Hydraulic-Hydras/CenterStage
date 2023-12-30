@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CenterStage.iml" filepath="$PROJECT_DIR$/.idea/CenterStage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CenterStage-master.iml" filepath="$PROJECT_DIR$/.idea/modules/CenterStage-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.main.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/CenterStage-master.FtcRobotController.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.iml" filepath="$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/HydraulicLib/CenterStage-master.HydraulicLib.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.iml" filepath="$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.main.iml" filepath="$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.test.iml" filepath="$PROJECT_DIR$/.idea/modules/MeepMeep/CenterStage-master.MeepMeep.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/CenterStage-master.TeamCode.unitTest.iml" />
     </modules>
   </component>
 </project>
