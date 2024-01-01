@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
+import org.firstinspires.ftc.teamcode.common.Util.InfoFiles;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
@@ -16,7 +16,7 @@ public class DuoTeleOp extends LinearOpMode {
     private final Mitsumi slides = new Mitsumi(this);
     private final Launcher launcher = new Launcher(this);
 
-    private final LogFiles files = new LogFiles(telemetry);
+    private final InfoFiles files = new InfoFiles(telemetry);
     @Override
     public void runOpMode() {
         intake.initialize(hardwareMap);

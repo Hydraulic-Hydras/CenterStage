@@ -17,6 +17,7 @@ public class Intake extends Contraption {
     public static CRServo Zip;
     public static CRServo Intake;
     public static Servo rotateBucket;
+    public static Servo finger;
 
     public static double POS_REST = 0;
     public static double POS_PANEL = 0.5;

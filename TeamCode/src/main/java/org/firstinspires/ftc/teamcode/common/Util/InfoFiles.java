@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
 
 @Config
-public class LogFiles {
+public class InfoFiles {
 
     Telemetry telemetry;
-    public LogFiles(Telemetry telemetry) {
+    public InfoFiles(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
     public void Telemetry(Telemetry telemetry) {

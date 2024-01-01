@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.Commands.Auto.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Constants.Globals;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
-import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
+import org.firstinspires.ftc.teamcode.common.Util.InfoFiles;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
@@ -29,7 +29,7 @@ public class Bsc_RedLeft extends CommandOpMode {
     private final Intake intake = new Intake(this);
 
     // Telemetry
-    private final LogFiles logFiles = new LogFiles(telemetry);
+    private final InfoFiles infoFiles = new InfoFiles(telemetry);
 
     // DriveTrain
     private SampleMecanumDrive drive;
@@ -137,7 +137,7 @@ public class Bsc_RedLeft extends CommandOpMode {
         telemetry.addData("Runtime: ", endTime == 0 ? timer.seconds() : endTime);
         telemetry.addLine();
 
-        logFiles.Telemetry(telemetry);
+        infoFiles.Telemetry(telemetry);
         telemetry.update();
     }
 

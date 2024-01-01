@@ -7,22 +7,25 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Tuning.DriveConstants;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Util.HSubsystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Nonnegative;
 
 // TODO: finalize this file
 @Config
@@ -39,6 +42,7 @@ public class RobotHardware {
     public DcMotorEx RightCascade;
 
     public Servo Bucket;
+    public Servo Finger;
     public CRServo Wheels;
     public CRServo Intake;
     public CRServo Zip;
@@ -58,12 +62,33 @@ public class RobotHardware {
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
 
-    private double imuAngle ;
-
     // Sensors
-    private TouchSensor high_Limit;
-    private TouchSensor low_Limit;
-    private DistanceSensor BackdropSens;
+    public TouchSensor high_Limit;
+    public TouchSensor low_Limit;
+
+    public DistanceSensor distanceBackdrop;
+
+    public DigitalChannel LED_GreenL;
+    public DigitalChannel LED_RedL;
+    public DigitalChannel LED_GreenR;
+    public DigitalChannel LED_RedR;
+
+    public DigitalChannel ALED_Green;
+    public DigitalChannel ALED_Red;
+    public DigitalChannel BLED_Green;
+    public DigitalChannel BLED_Red;
+
+    public static int count = 0;
+
+    /**
+     * PID Values
+     * @param kP Proportional term
+     * @param kI Integral term
+     * @param kD Derivative term
+     */
+    public static double kP = 0.26;
+    public static double kI = 0;
+    public static double kD = 0;
 
     /**
      * Voltage timer and voltage value.
@@ -88,10 +113,11 @@ public class RobotHardware {
     /**
      * Values for all Contraptions
      */
-    public static double START_POS_ANGLE = 1;
-    public static double START_POS_TRIGGER = 0.5;
+    public static double INIT_POS = 0.28;
+    public static double LOAD = 0;
 
     public static double POS_REST = 0;
+
     /**
      * Created at the start of every OpMode.
      *
@@ -137,6 +163,7 @@ public class RobotHardware {
         Intake = hardwareMap.get(CRServo.class, "Intake");
 
         Bucket = hardwareMap.get(Servo.class, "rotateBucket");
+        Finger = hardwareMap.get(Servo.class, "Finger");
 
         Bucket.setPosition(POS_REST);
 
@@ -144,28 +171,99 @@ public class RobotHardware {
         Launcher_Angle = hardwareMap.get(Servo.class, "launcher_angle");
         Launcher_Trigger = hardwareMap.get(Servo.class, "launcher_trigger");
 
-        Launcher_Angle.setDirection(Servo.Direction.REVERSE);
-        Launcher_Trigger.setDirection(Servo.Direction.REVERSE);
-
-        Launcher_Angle.setPosition(START_POS_ANGLE);
-        Launcher_Trigger.setPosition(START_POS_TRIGGER);
+        Launcher_Angle.setPosition(INIT_POS);
+        Launcher_Trigger.setPosition(LOAD);
 
         // SLIDES
         LeftCascade = hardwareMap.get(DcMotorEx.class, "LeftCascade");
         LeftCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LeftCascade.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LeftCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+        LeftCascade.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(kP, kI, kD, 0));
 
         RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+        RightCascade.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(kP, kI, kD, 0));
 
         // SENSORS
         high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
         low_Limit = hardwareMap.get(TouchSensor.class, "low_Limit");
 
+        LED_GreenL = hardwareMap.get(DigitalChannel.class, "LED_Green-L");
+        LED_RedL = hardwareMap.get(DigitalChannel.class, "LED_Red-L");
+        LED_GreenR = hardwareMap.get(DigitalChannel.class, "LED_Green-R");
+        LED_RedR = hardwareMap.get(DigitalChannel.class, "LED_Red-R");
 
+        distanceBackdrop = hardwareMap.get(DistanceSensor.class, "distanceBackdrop");
+
+        LED_GreenL.setMode(DigitalChannel.Mode.OUTPUT);
+        LED_RedL.setMode(DigitalChannel.Mode.OUTPUT);
+        LED_GreenR.setMode(DigitalChannel.Mode.OUTPUT);
+        LED_RedR.setMode(DigitalChannel.Mode.OUTPUT);
+
+        ALED_Green = hardwareMap.get(DigitalChannel.class, "ALED_Green");
+        ALED_Red = hardwareMap.get(DigitalChannel.class, "ALED_Red");
+        BLED_Green = hardwareMap.get(DigitalChannel.class, "BLED_Green");
+        BLED_Red = hardwareMap.get(DigitalChannel.class, "BLED_Red");
+
+        ALED_Green.setMode(DigitalChannel.Mode.OUTPUT);
+        ALED_Red.setMode(DigitalChannel.Mode.OUTPUT);
+        BLED_Green.setMode(DigitalChannel.Mode.OUTPUT);
+        BLED_Red.setMode(DigitalChannel.Mode.OUTPUT);
+
+
+        if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16
+                && Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22) {
+            LED_RedL.setState(false);
+            LED_GreenL.setState(true);
+            LED_RedR.setState(false);
+            LED_GreenR.setState(true);
+        } else {
+            LED_GreenL.setState(false);
+            LED_RedL.setState(true);
+            LED_GreenR.setState(false);
+            LED_RedR.setState(true);
+        }
+
+        if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16 && Double.parseDouble(
+                JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22
+                && org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake.rotateBucket.getPosition() != 0.2) {
+            ALED_Green.setState(true);
+            ALED_Red.setState(false);
+            BLED_Green.setState(true);
+            BLED_Red.setState(false);
+        } else if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 40) {
+            ALED_Green.setState(false);
+            ALED_Red.setState(true);
+            BLED_Green.setState(false);
+            BLED_Red.setState(true);
+        } else if (Launcher.launcher_angle.getPosition() < 0.4) {
+            if (Launcher.droneTrigger.getPosition() > 0.5) {
+                ALED_Green.setState(true);
+                ALED_Red.setState(false);
+                BLED_Green.setState(true);
+                BLED_Red.setState(false);
+            } else if (count == 1) {
+                ALED_Green.setState(false);
+                ALED_Red.setState(true);
+                BLED_Green.setState(false);
+                BLED_Red.setState(true);
+                count = 0;
+            } else {
+                ALED_Green.setState(true);
+                ALED_Red.setState(true);
+                BLED_Green.setState(true);
+                BLED_Red.setState(true);
+                count = 1;
+            }
+        } else {
+            ALED_Green.setState(true);
+            ALED_Red.setState(true);
+            BLED_Green.setState(true);
+            BLED_Red.setState(true);
+        }
     }
 
     public void read() {
@@ -205,11 +303,6 @@ public class RobotHardware {
 
     public double getVoltage() {
         return voltage;
-    }
-
-    @Nonnegative
-    public double getAngle() {
-        return imuAngle;
     }
 
     public void addSubsystem(HSubsystem... subsystems) {

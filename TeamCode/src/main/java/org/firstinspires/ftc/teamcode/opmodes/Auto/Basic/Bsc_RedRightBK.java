@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Vision.PropVision;
 import org.firstinspires.ftc.teamcode.common.Hardware.Vision.TFOD;
-import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
+import org.firstinspires.ftc.teamcode.common.Util.InfoFiles;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (name = "BASIC_Red Right")
@@ -29,7 +29,7 @@ public class Bsc_RedRightBK extends CommandOpMode {
     // Contraptions
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
-    private final LogFiles files = new LogFiles(telemetry);
+    private final InfoFiles files = new InfoFiles(telemetry);
 
     // Drivetrain
     private SampleMecanumDrive drive;

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
+import org.firstinspires.ftc.teamcode.common.Util.InfoFiles;
 
 @TeleOp (name = "Solo TeleOp")
 public class SoloTeleOp extends LinearOpMode {
@@ -17,7 +17,7 @@ public class SoloTeleOp extends LinearOpMode {
     private final Intake intake = new Intake(this);
     private final Launcher drone = new Launcher(this);
 
-    private final LogFiles logFiles = new LogFiles(telemetry);
+    private final InfoFiles infoFiles = new InfoFiles(telemetry);
 
     @Override
     public void runOpMode() {
@@ -26,7 +26,7 @@ public class SoloTeleOp extends LinearOpMode {
         intake.initialize(hardwareMap);
         drive.initialize(hardwareMap);
 
-        logFiles.Telemetry(telemetry);
+        infoFiles.Telemetry(telemetry);
 
         waitForStart();
         if (opModeIsActive()) {
@@ -39,7 +39,7 @@ public class SoloTeleOp extends LinearOpMode {
                 intake.outtakeLoop(gamepad1);
                 drone.loop(gamepad1);
 
-                logFiles.Telemetry(telemetry);
+                infoFiles.Telemetry(telemetry);
             }
         }
     }

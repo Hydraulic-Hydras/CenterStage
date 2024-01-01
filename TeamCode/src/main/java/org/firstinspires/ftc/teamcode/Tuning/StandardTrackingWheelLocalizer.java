@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    // only thing left is to tune the odometry
+
     public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.96; // in, Using 2inch Dualie Omni wheels from andy mark 50A
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
@@ -44,7 +44,6 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
    // private List<Integer> lastEncPositions, lastEncVels;
 
     // add List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels
-    // to method StandardTrackingWheelLocalizer if without doesnt work
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) { // List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
@@ -58,7 +57,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
          */
         // TODO: need tuning
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightRear")); // configured
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightRear"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftFront"));
 
         leftEncoder.setDirection(Encoder.Direction.REVERSE);
