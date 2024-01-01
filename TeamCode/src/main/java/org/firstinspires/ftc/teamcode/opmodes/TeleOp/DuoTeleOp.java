@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
 @TeleOp (name = "Duo TeleOp")
 public class DuoTeleOp extends LinearOpMode {
 
-    private Intake intake = new Intake(this);
-    private Drivetrain drive = new Drivetrain(this);
-    private Mitsumi slides = new Mitsumi(this);
-    private Launcher launcher = new Launcher(this);
+    private final Intake intake = new Intake(this);
+    private final Drivetrain drive = new Drivetrain(this);
+    private final Mitsumi slides = new Mitsumi(this);
+    private final Launcher launcher = new Launcher(this);
 
-    private LogFiles files = new LogFiles(telemetry);
+    private final LogFiles files = new LogFiles(telemetry);
     @Override
     public void runOpMode() {
         intake.initialize(hardwareMap);

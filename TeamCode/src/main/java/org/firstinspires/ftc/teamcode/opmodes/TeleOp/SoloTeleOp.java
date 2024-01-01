@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ClassUtil;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
@@ -13,12 +12,12 @@ import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
 @TeleOp (name = "Solo TeleOp")
 public class SoloTeleOp extends LinearOpMode {
 
-    private Drivetrain drive = new Drivetrain(this);
-    private Mitsumi slides = new Mitsumi(this);
-    private Intake intake = new Intake(this);
-    private Launcher drone = new Launcher(this);
+    private final Drivetrain drive = new Drivetrain(this);
+    private final Mitsumi slides = new Mitsumi(this);
+    private final Intake intake = new Intake(this);
+    private final Launcher drone = new Launcher(this);
 
-    private LogFiles logFiles = new LogFiles(telemetry);
+    private final LogFiles logFiles = new LogFiles(telemetry);
 
     @Override
     public void runOpMode() {
