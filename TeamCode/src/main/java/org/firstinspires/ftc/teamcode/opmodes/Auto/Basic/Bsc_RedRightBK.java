@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Vision.PropVision;
 import org.firstinspires.ftc.teamcode.common.Hardware.Vision.TFOD;
+import org.firstinspires.ftc.teamcode.common.Util.LogFiles;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous (name = "BASIC_Red Right")
@@ -28,12 +29,13 @@ public class Bsc_RedRightBK extends CommandOpMode {
     // Contraptions
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
-    private final TFOD tfod = new TFOD(this);
+    private final LogFiles files = new LogFiles(telemetry);
 
     // Drivetrain
     private SampleMecanumDrive drive;
 
     // Vision
+    private final TFOD tfod = new TFOD(this);
     private final PropVision propVision = new PropVision(telemetry);
     private Side location;
 
@@ -187,7 +189,7 @@ public class Bsc_RedRightBK extends CommandOpMode {
                                 new IntakeStopCommand(),
 
                                 new InstantCommand(() -> drive.followTrajectorySequence(turningLeft))
-                                        .alongWith(new LiftCommand(1500, 1)),
+                                        .alongWith(new LiftCommand(1250, 1)),
 
                                 new WaitCommand(900),
                                 new OuttakeCommand(),
@@ -214,7 +216,7 @@ public class Bsc_RedRightBK extends CommandOpMode {
                                 new IntakeStopCommand(),
 
                                 new InstantCommand(() -> drive.followTrajectorySequence(turningRight))
-                                        .alongWith(new LiftCommand(1500, 1)),
+                                        .alongWith(new LiftCommand(1250, 1)),
                                 new WaitCommand(900),
                                 new OuttakeCommand(),
 
@@ -231,15 +233,10 @@ public class Bsc_RedRightBK extends CommandOpMode {
         // Run OpMode
         super.run();
 
-        Pose2d poseEstimate = drive.getPoseEstimate();
-
         telemetry.addData("Runtime: ", endTime == 0 ? timer.seconds() : endTime);
         telemetry.addLine();
 
-        // localizer
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", poseEstimate.getHeading());
+        files.Telemetry(telemetry);
         telemetry.update();
 
     }

@@ -22,16 +22,30 @@ public class Launcher extends Contraption {
 
     public static double SHOOT = 0.9;
     public static double LOAD = 0;
+
+    public enum LauncherState {
+        INITIALIZED,
+        LOADED,
+        SHOOTING
+    }
+    public enum LauncherAngle {
+        READY,
+        RESET
+    }
+
+    public static LauncherState droneState = LauncherState.INITIALIZED;
+    public static LauncherAngle droneAngle = LauncherAngle.RESET;
     public Launcher(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
     public void initialize(HardwareMap hwMap) {
 
-        launcher_angle = hwMap.get(Servo.class, "launcher_angle"); // no 4 control
+        launcher_angle = hwMap.get(Servo.class, "launcher_angle");
         droneTrigger = hwMap.get(Servo.class, "droneTrigger");
 
         launcher_angle.setPosition(INIT_POS);
+        droneState = LauncherState.INITIALIZED;
 
     }
 
@@ -40,17 +54,21 @@ public class Launcher extends Contraption {
         if (gamepad2.dpad_up) {
             // shooting angle
             launcher_angle.setPosition(SHOOT_POS);
+            droneAngle = LauncherAngle.READY;
         } else if (gamepad2.dpad_down) {
             // horizontal angle
             launcher_angle.setPosition(HORIZONTAL_POS);
+            droneAngle = LauncherAngle.RESET;
         }
 
         if (gamepad2.dpad_left) {
             // standby
             droneTrigger.setPosition(LOAD);
+            droneState = LauncherState.LOADED;
         } else if (gamepad2.dpad_right) {
             // shoot
             droneTrigger.setPosition(SHOOT);
+            droneState = LauncherState.SHOOTING;
         }
     }
 
@@ -58,5 +76,13 @@ public class Launcher extends Contraption {
         telemetry.addData("Angle", launcher_angle.getPosition());
         telemetry.addData("Trigger", droneTrigger.getPosition());
         telemetry.update();
+    }
+
+    public static LauncherState getState() {
+        return droneState;
+    }
+
+    public static LauncherAngle getAngle() {
+        return droneAngle;
     }
 }

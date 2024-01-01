@@ -18,20 +18,6 @@ public class Mitsumi extends Contraption {
     public static TouchSensor low_Limit;
     public static DcMotor LeftCascade;
     public static DcMotor RightCascade;
-    // public static PIDController controller;
-
-    /**
-     * Sets PID gains to be used by the PIDF controller
-     *
-     * @param kP proportional gain
-     * @param kI integral gain
-     * @param kD derivative gain
-     * @param kF kF
-     */
-    public static double kP = 0.0;
-    public static double kI = 0.0;
-    public static double kD = 0.0;
-    public static double kF = 0.0;
 
     public Mitsumi(LinearOpMode opMode) { this.opMode = opMode; }
     @Override
@@ -48,10 +34,6 @@ public class Mitsumi extends Contraption {
 
         LeftCascade.setDirection(DcMotorSimple.Direction.REVERSE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-       // controller = new PIDController(kP, kI, kD, kF);
-      //  controller.setPIDF(kP, kI, kD, kF);
 
     }
 
@@ -79,6 +61,21 @@ public class Mitsumi extends Contraption {
             RightCascade.setPower(0);
         }
 
+    }
+
+    public void loopSolo(Gamepad gamepad) {
+        if (gamepad.right_bumper && !high_Limit.isPressed() ) {
+            // up
+            LeftCascade.setPower( 0.8);
+            RightCascade.setPower( 0.8);
+        } else if (gamepad.left_bumper && !low_Limit.isPressed()) {
+            // down
+            LeftCascade.setPower(-0.6);
+            RightCascade.setPower(-0.6);
+        } else {
+            LeftCascade.setPower(0);
+            RightCascade.setPower(0);
+        }
     }
 
     public void telemetry(Telemetry telemetry) {

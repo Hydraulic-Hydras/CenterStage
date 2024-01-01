@@ -68,13 +68,13 @@ public class Intake extends Contraption {
         }
     }
 
-    public void outtakeLoop(Gamepad gamepad2) {
+    public void outtakeLoop(Gamepad gamepad) {
 
-        if (gamepad2.a) {
+        if (gamepad.a) {
             // Intake Position
             rotateBucket.setPosition(POS_REST);
             outtakeState = State.REST;
-        } else if (gamepad2.b && !Mitsumi.low_Limit.isPressed()) {
+        } else if (gamepad.b && !Mitsumi.low_Limit.isPressed()) {
             if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0) {
                 // Parallel
                 rotateBucket.setPosition(POS_PANEL);

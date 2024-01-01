@@ -26,8 +26,8 @@ public class LogFiles {
         telemetry.addData("Outtake State ", Intake.getState());
         telemetry.addLine();
 
-        telemetry.addData("Drone Angle", Launcher.launcher_angle.getPosition());
-        telemetry.addData("Drone Trigger", Launcher.droneTrigger.getPosition());
+        telemetry.addData("Drone Angle", Launcher.getAngle());
+        telemetry.addData("Drone Trigger", Launcher.getState());
         telemetry.addLine();
 
         telemetry.addData("Backdrop Distance", Double.parseDouble(
