@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Vision;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;

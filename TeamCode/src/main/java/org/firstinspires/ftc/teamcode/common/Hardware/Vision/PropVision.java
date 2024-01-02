@@ -23,9 +23,7 @@ public class PropVision implements VisionProcessor {
     public float y;
 
     public Telemetry telemetry;
-
-    // Have left side as default
-    public static Side side = Side.LEFT;
+    public static Side side;
 
     public PropVision(Telemetry telemetry) {
         this.telemetry = telemetry;
