@@ -63,19 +63,17 @@ public class Mitsumi extends Contraption {
 
     }
 
-    public void loopSolo(Gamepad gamepad) {
-        if (gamepad.right_bumper && !high_Limit.isPressed() ) {
-            // up
-            LeftCascade.setPower( 0.8);
-            RightCascade.setPower( 0.8);
-        } else if (gamepad.left_bumper && !low_Limit.isPressed()) {
-            // down
-            LeftCascade.setPower(-0.6);
-            RightCascade.setPower(-0.6);
-        } else {
-            LeftCascade.setPower(0);
-            RightCascade.setPower(0);
-        }
+    // For trajectories
+    public void autoMoveTo(int pos, double power) {
+        LeftCascade.setTargetPosition(pos);
+        RightCascade.setTargetPosition(pos);
+
+        LeftCascade.setPower(power);
+        RightCascade.setPower(power);
+
+        LeftCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RightCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
 
     public void telemetry(Telemetry telemetry) {

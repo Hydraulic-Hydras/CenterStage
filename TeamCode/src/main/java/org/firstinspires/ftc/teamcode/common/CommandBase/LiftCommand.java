@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.Commands.Auto;
+package org.firstinspires.ftc.teamcode.common.CommandBase;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
+@Disabled
 @Autonomous (name = "TensorFlowTest", group = "Testers")
 public class TensorFlowTest extends LinearOpMode {
 
@@ -24,6 +26,7 @@ public class TensorFlowTest extends LinearOpMode {
     public int scan_location = 3;
     public float x;
     public float y;
+
     /**
      * This function is executed when this OpMode is selected from the Driver Station.
      */
@@ -39,37 +42,29 @@ public class TensorFlowTest extends LinearOpMode {
 
         telemetry.update();
 
+        while (!isStarted()) {
+            location = Tfod_location();
+            telemetry.addData("location", location);
+            telemetry.addData("Side: ", side);
+        }
+
+        switch (side) {
+            case CENTER:
+                telemetry.addLine("Im in the middle");
+                break;
+            case LEFT:
+                telemetry.addLine("Im on the Left");
+                break;
+            case RIGHT:
+                telemetry.addLine("im on the right");
+        }
+
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
             while (opModeIsActive()) {
-                location = Tfod_location();
-                // Put loop blocks here.
-                telemetry.addData("location", location);
 
-                if (location == 3) {
-                    telemetry.addLine("Side: Right");
-                    side = Side.RIGHT;
-                }   else if (location == 2) {
-                    telemetry.addLine("Side: Center");
-                    side = Side.CENTER;
-                }   else {
-                    telemetry.addLine("Side: Left");
-                    side = Side.LEFT;
-                }
-
-                switch (side) {
-                    case CENTER:
-                        telemetry.addLine("Im in the middle");
-                        break;
-                    case LEFT:
-                        telemetry.addLine("Im on the Left");
-                        break;
-                    case RIGHT:
-                        telemetry.addLine("im on the right");
-                    }
-
-                // Push telemetry to the Driver Station.
+               // Push telemetry to the Driver Station.
                 telemetry.update();
 
                 // Share the CPU.
@@ -138,10 +133,13 @@ public class TensorFlowTest extends LinearOpMode {
                 telemetry.addData("- Position", JavaUtil.formatNumber(x, 0) + ", " + JavaUtil.formatNumber(y, 0));
                 if (x <= 250) {
                     scan_location = 1;
+                    side = Side.LEFT;
                 } else if (x <= 600) {
                     scan_location = 2;
+                    side = Side.CENTER;
                 } else {
                     scan_location = 3;
+                    side = Side.RIGHT;
                 }
                 // Display size
                 // Display the size of detection boundary for the recognition

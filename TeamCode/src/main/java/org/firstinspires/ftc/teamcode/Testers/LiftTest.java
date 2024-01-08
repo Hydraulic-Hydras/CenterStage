@@ -4,12 +4,13 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.Commands.Auto.LiftCommand;
-import org.firstinspires.ftc.teamcode.common.Commands.Auto.OuttakeCommand;
+import org.firstinspires.ftc.teamcode.common.CommandBase.LiftCommand;
+import org.firstinspires.ftc.teamcode.common.CommandBase.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 
@@ -41,7 +42,7 @@ public class LiftTest extends CommandOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(timer::reset),
 
-                        new LiftCommand(1500, 0.9),
+                        new LiftCommand(2000, 1),
 
                         // **Switched with Lift Command loop
                         // new InstantCommand(() -> mitsumi.AutoMoveTo(1500, 0.9)),
@@ -51,10 +52,10 @@ public class LiftTest extends CommandOpMode {
                         // new WaitCommand(1100),
                         // new InstantCommand(() -> Intake.rotateBucket.setPosition(Intake.POS_REST)),
 
+                        new WaitCommand(500),
                         new OuttakeCommand(),
-                        new LiftCommand(0,0.55)
 
-                        // new InstantCommand(() -> mitsumi.AutoMoveTo(0, 0.55))
+                       new LiftCommand(0,1)
 
                 ));
     }

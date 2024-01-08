@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 // TODO: write down a function for finger
@@ -17,22 +18,21 @@ public class Intake extends Contraption {
     public static CRServo Zip;
     public static CRServo Intake;
     public static Servo rotateBucket;
-    public static Servo finger;
 
-    public static double POS_REST = 0;
+    public static double POS_REST = 0.2;
     public static double POS_PANEL = 0.5;
     public static double POS_DUMP = 1;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
 
-    // State is only for telemetry
     public enum State {
         REST,
         PANEL,
         DUMP,
     }
 
+    public static ElapsedTime timer = new ElapsedTime();
     public static State outtakeState = State.REST;
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -51,13 +51,13 @@ public class Intake extends Contraption {
     }
 
     @Override
-    public void loop(Gamepad gamepad1) {
-        if (gamepad1.right_trigger > 0) {
+    public void loop(Gamepad gamepad) {
+        if (gamepad.right_trigger > 0) {
             // Intake
             Wheels.setPower(1);
             Zip.setPower(1);
             Intake.setPower(1);
-        } else if (gamepad1.left_trigger > 0) {
+        } else if (gamepad.left_trigger > 0) {
             // Outtake
             Intake.setPower(-1);
             Wheels.setPower(-1);
@@ -90,6 +90,7 @@ public class Intake extends Contraption {
 
     public static void startIntaking() {
         IS_INTAKING = true;
+        IS_REVERSED = false;
         Wheels.setPower(1);
         Zip.setPower(1);
         Intake.setPower(1);
@@ -97,6 +98,7 @@ public class Intake extends Contraption {
 
     public static void stopIntaking() {
         IS_INTAKING = false;
+        IS_REVERSED = false;
         Wheels.setPower(0);
         Intake.setPower(0);
         Zip.setPower(0);
@@ -104,15 +106,14 @@ public class Intake extends Contraption {
 
     public static void reverseIntake() {
         IS_REVERSED = true;
-        Intake.setPower(-1);
-        Wheels.setPower(-1);
-        Zip.setPower(-1);
+        IS_INTAKING = false;
+        Intake.setPower(-0.7);
+        Wheels.setPower(-0.7);
+        Zip.setPower(-0.7);
     }
 
     public static State getState() {
         return outtakeState;
     }
-
-
 
 }

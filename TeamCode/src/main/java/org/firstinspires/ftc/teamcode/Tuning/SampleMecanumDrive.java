@@ -29,7 +29,9 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.arcrobotics.ftclib.drivebase.RobotDrive;
 import com.hydraulichydras.hydrauliclib.Geometry.Pose;
+import com.hydraulichydras.hydrauliclib.Geometry.Vector2D;
 import com.hydraulichydras.hydrauliclib.Localization.Drivetrain;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -58,7 +60,7 @@ import java.util.List;
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(7, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(7, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 2;
 
@@ -89,8 +91,6 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
-
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
@@ -350,4 +350,5 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
+
 }

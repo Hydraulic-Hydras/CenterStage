@@ -6,8 +6,6 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import sun.security.provider.JavaKeyStore;
-
 public class Right {
 
     public static void main(String[] args) {
@@ -18,11 +16,32 @@ public class Right {
                 .setConstraints(74, 74, Math.toRadians(180), Math.toRadians(180), 16.68)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(12, -62.5, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))
 
                                 /* === RIGHT === */
 
-                                .splineToConstantHeading(new Vector2d(23, -40), Math.toRadians(90))
+                                // Right Prop
+                                //.splineToConstantHeading(new Vector2d(13, 22), Math.toRadians(90))
+                               // .lineToLinearHeading(new Pose2d(50, -40, Math.toRadians(180)))
+                               // .strafeLeft(17)
+                               // .back(10)
+
+
+                                // Center Prop
+                               // .lineTo(new Vector2d(12, -34.5))
+                               // .lineToLinearHeading(new Pose2d(50, -34.5, Math.toRadians(180)))
+                               // .strafeLeft(25)
+                               // .back(10)
+
+                                // Left Prop
+                                //.lineToLinearHeading(new Pose2d(12, -33.5, Math.toRadians(180)))
+                                //.lineTo(new Vector2d(50, -33.5))
+                                //.strafeLeft(27)
+                                // .back(10)
+
+
+                                .splineToConstantHeading(new Vector2d(47, -17), Math.toRadians(-90))
+                                .lineToLinearHeading(new Pose2d(47, -30, Math.toRadians(-270)))
                                 .build()
                 );
 
@@ -33,4 +52,5 @@ public class Right {
                 .start();
 
     }
+
 }

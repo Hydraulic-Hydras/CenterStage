@@ -28,7 +28,7 @@ public class DriveConstants {
 
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 16.8; // in
+    public static double TRACK_WIDTH = 17.5; // in
 
     public static double kV =  0.0141; // / rpmToVelocity(MAX_RPM);
     public static double kA = 0.0029;
@@ -40,8 +40,8 @@ public class DriveConstants {
 
     public static double MAX_VEL = 45; // 65
     public static double MAX_ACCEL = 45; // 65
-    public static double MAX_ANG_VEL = Math.toRadians(264);
-    public static double MAX_ANG_ACCEL = Math.toRadians(264);
+    public static double MAX_ANG_VEL = Math.toRadians(212);
+    public static double MAX_ANG_ACCEL = Math.toRadians(212);
 
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
