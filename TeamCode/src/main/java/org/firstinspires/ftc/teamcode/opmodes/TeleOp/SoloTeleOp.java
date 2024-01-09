@@ -7,9 +7,9 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.common.Util.InfoFiles;
+import org.firstinspires.ftc.teamcode.common.Util.TeleOpInfo;
 
-@TeleOp (name = "SoloTeleOp")
+@TeleOp (name = "SoloTeleOp", group = "TeleOp")
 public class SoloTeleOp extends LinearOpMode {
 
     private final Drivetrain drivetrain = new Drivetrain(this);
@@ -17,7 +17,7 @@ public class SoloTeleOp extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Launcher launcher = new Launcher(this);
 
-    private final InfoFiles files = new InfoFiles(telemetry);
+    private final TeleOpInfo files = new TeleOpInfo(telemetry);
 
     @Override
     public void runOpMode() {
@@ -38,23 +38,23 @@ public class SoloTeleOp extends LinearOpMode {
                 // Slides loop
                 if (gamepad1.right_bumper && !Mitsumi.high_Limit.isPressed()) {
                     // up
-                    Mitsumi.LeftCascade.setPower(0.8);
-                    Mitsumi.RightCascade.setPower(0.8);
+                    Mitsumi.LeftCascade.setPower(0.7);
+                    Mitsumi.RightCascade.setPower(0.7);
                 }   else if (gamepad1.left_bumper && !Mitsumi.low_Limit.isPressed()) {
                     // down
-                    Mitsumi.RightCascade.setPower(-0.6);
-                    Mitsumi.LeftCascade.setPower(-0.6);
+                    Mitsumi.RightCascade.setPower(-0.62);
+                    Mitsumi.LeftCascade.setPower(-0.62);
                 }   else {
                     Mitsumi.LeftCascade.setPower(0);
                     Mitsumi.RightCascade.setPower(0);
                 }
 
                 // Outtake loop
-                if (gamepad1.a) {
+                if (gamepad1.x) {
                     // Intake Position
                     Intake.rotateBucket.setPosition(Intake.POS_REST);
                     Intake.outtakeState = Intake.State.REST;
-                } else if (gamepad1.b && !Mitsumi.low_Limit.isPressed()) {
+                } else if (gamepad1.y && !Mitsumi.low_Limit.isPressed()) {
                     if (Intake.rotateBucket.getPosition() == 1 || Intake.rotateBucket.getPosition() == 0) {
                         // Parallel
                         Intake.rotateBucket.setPosition(Intake.POS_PANEL);

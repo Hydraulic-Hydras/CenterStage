@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 // TODO: write down a function for finger
 @Config
@@ -32,7 +30,6 @@ public class Intake extends Contraption {
         DUMP,
     }
 
-    public static ElapsedTime timer = new ElapsedTime();
     public static State outtakeState = State.REST;
     public Intake(LinearOpMode opMode) {
         this.opMode = opMode;

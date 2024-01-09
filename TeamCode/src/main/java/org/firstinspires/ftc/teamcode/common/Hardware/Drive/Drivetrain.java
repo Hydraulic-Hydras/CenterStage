@@ -23,16 +23,16 @@ public class Drivetrain extends Contraption {
 
     public double powerMultiplier = 1;
     public static SampleMecanumDrive drive;
-    private static DigitalChannel LED_GreenL;
-    private static DigitalChannel LED_RedL;
-    private static DigitalChannel LED_GreenR;
-    private static DigitalChannel LED_RedR;
+    public static DigitalChannel LED_GreenL;
+    public static DigitalChannel LED_RedL;
+    public static DigitalChannel LED_GreenR;
+    public static DigitalChannel LED_RedR;
     public static DistanceSensor distanceBackdrop;
 
-    private DigitalChannel ALED_Green;
-    private DigitalChannel ALED_Red;
-    private DigitalChannel BLED_Green;
-    private DigitalChannel BLED_Red;
+    public static DigitalChannel ALED_Green;
+    public static DigitalChannel ALED_Red;
+    public static DigitalChannel BLED_Green;
+    public static DigitalChannel BLED_Red;
 
     public static int count = 0;
 

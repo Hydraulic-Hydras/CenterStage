@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.Auto;
 
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -72,22 +71,29 @@ public class RedLeft extends LinearOpMode {
             telemetry.update();
         }
 
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
+        Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
         // LEFT
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+                .lineToLinearHeading(new Pose2d(29, 0, Math.toRadians(90)))
+                .forward(3)
+                .waitSeconds(0.1)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
+                .waitSeconds(0.7)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
+                .back(3)
 
                 .build();
 
         // CENTER
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .lineTo(new Vector2d(34, 12))
+                .lineTo(Globals.lineToCenterProp)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(39, 5))
+                .lineTo(Globals.lineToPos)
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
@@ -96,10 +102,10 @@ public class RedLeft extends LinearOpMode {
 
                 .strafeLeft(11)
                 .turn(Math.toRadians(-180))
-                .lineTo(new Vector2d(49, -49))
+                .lineTo(Globals.straightLineToPos)
 
                 // Scoring
-                .splineToConstantHeading(new Vector2d(30, -78.5),  Math.toRadians(-180))
+                .splineToConstantHeading(Globals.curveSplineToBackDrop,  Math.toRadians(-180))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
@@ -127,13 +133,14 @@ public class RedLeft extends LinearOpMode {
                 .waitSeconds(0.9)
                 .back(3)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
+
                 .strafeLeft(5)
-                .splineToConstantHeading(new Vector2d(47, -17), Math.toRadians(-90))
-                .lineToLinearHeading(new Pose2d(47, -30, Math.toRadians(-270)))
+                .splineToConstantHeading(Globals.splineToDoor, Math.toRadians(-90))
+                .lineToLinearHeading(Globals.reversedTransfer)
                 .setReversed(true)
 
                 // Scoring
-                .splineToConstantHeading(new Vector2d(22, -74), Math.toRadians(-270))
+                .splineToConstantHeading(Globals.S_splineToBackDrop, Math.toRadians(-270))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
@@ -142,6 +149,8 @@ public class RedLeft extends LinearOpMode {
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
+
+                // park
                 .strafeRight(20)
                 .back(15)
 
@@ -153,7 +162,6 @@ public class RedLeft extends LinearOpMode {
         myVisionPortal.close();
         telemetry.addData("Side: ", getSide());
         telemetry.addData("Location: ", propLocation);
-
 
         if (isStopRequested()) return;
         // Start is pressed

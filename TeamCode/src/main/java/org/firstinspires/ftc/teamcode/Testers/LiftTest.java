@@ -6,15 +6,12 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.CommandBase.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
-
-@Disabled
 @Autonomous( name = "JAVA-LiftTest")
 public class LiftTest extends CommandOpMode {
 
@@ -42,20 +39,10 @@ public class LiftTest extends CommandOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(timer::reset),
 
-                        new LiftCommand(2000, 1),
+                        new LiftCommand(1300, 1),
 
-                        // **Switched with Lift Command loop
-                        // new InstantCommand(() -> mitsumi.AutoMoveTo(1500, 0.9)),
+                        new OuttakeCommand()
 
-                        // **Switched these commands to Outtake Command loop**
-                        // new InstantCommand(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP)),
-                        // new WaitCommand(1100),
-                        // new InstantCommand(() -> Intake.rotateBucket.setPosition(Intake.POS_REST)),
-
-                        new WaitCommand(500),
-                        new OuttakeCommand(),
-
-                       new LiftCommand(0,1)
 
                 ));
     }
