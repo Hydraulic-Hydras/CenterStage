@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
+import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -253,119 +254,42 @@ public class Traj_Test extends LinearOpMode {
                     side = Side.LEFT;
                 }
             }
+
+            if (location == 3) {
+                Drivetrain.ALED_Green.setState(true);
+                Drivetrain.ALED_Red.setState(true);
+                Drivetrain.BLED_Green.setState(true);
+                Drivetrain.BLED_Red.setState(true);
+                Drivetrain.LED_GreenL.setState(true);
+                Drivetrain.LED_RedL.setState(true);
+                Drivetrain.LED_GreenR.setState(false);
+                Drivetrain.LED_RedR.setState(false);
+            } else if (location == 2) {
+                Drivetrain.ALED_Green.setState(false);
+                Drivetrain.ALED_Red.setState(false);
+                Drivetrain.BLED_Green.setState(false);
+                Drivetrain.BLED_Red.setState(false);
+                Drivetrain.LED_GreenL.setState(true);
+                Drivetrain.LED_RedL.setState(true);
+                Drivetrain.LED_GreenR.setState(true);
+                Drivetrain.LED_RedR.setState(true);
+            } else if (location == 1) {
+                Drivetrain.ALED_Green.setState(true);
+                Drivetrain.ALED_Red.setState(true);
+                Drivetrain.BLED_Green.setState(true);
+                Drivetrain.BLED_Red.setState(true);
+                Drivetrain.LED_GreenL.setState(false);
+                Drivetrain.LED_RedL.setState(false);
+                Drivetrain.LED_GreenR.setState(true);
+                Drivetrain.LED_RedR.setState(true);
+            }
         }
         return location;
-
     }
+
     public Side getSide() {
         return side;
     }
-
 }
-
-/**
- switch (side) {
- case LEFT:
- if (!drive.isBusy() && propLocation == 1) {
- drive.followTrajectorySequence(preloadLeft);
- drive.followTrajectorySequence(turningLeft);
- drive.followTrajectorySequence(toBKLeft);
-
- TrajectorySequence park = drive.trajectorySequenceBuilder(toBKLeft.end())
- .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
- .strafeLeft(20)
- .UNSTABLE_addTemporalMarkerOffset(0, () -> mitsumi.autoMoveTo(0, 0.5))
- .back(9)
-
- .build();
- drive.followTrajectorySequence(park);
- }
-
- side = Side.IDLE;
- break;
-
- case RIGHT:
- if (!drive.isBusy() && propLocation == 3) {
- drive.followTrajectorySequence(preloadRight);
- drive.followTrajectorySequence(turningRight);
- drive.followTrajectorySequence(toBKRight);
-
- TrajectorySequence park = drive.trajectorySequenceBuilder(toBKRight.end())
- .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
- .strafeLeft(10)
- .UNSTABLE_addTemporalMarkerOffset(0, () -> mitsumi.autoMoveTo(0, 0.5))
- .back(9)
-
- .build();
- drive.followTrajectorySequence(park);
- }
-
- side = Side.IDLE;
- break;
-
- case CENTER:
- if (!drive.isBusy() && propLocation == 1) {
- drive.followTrajectorySequence(preloadCenter);
- drive.followTrajectorySequence(turningCenter);
- drive.followTrajectorySequence(toBKCenter);
-
- TrajectorySequence park = drive.trajectorySequenceBuilder(toBKCenter.end())
- .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
- .strafeLeft(14)
- .UNSTABLE_addTemporalMarkerOffset(0, () -> mitsumi.autoMoveTo(0, 0.5))
- .back(9)
-
- .build();
-
- drive.followTrajectorySequence(park);
- }
-
- side = Side.IDLE;
- break;
-
- case IDLE:
- if (timer.seconds() > 1.5) {
- if (!drive.isBusy()) {
- stop();
- }
- }
- }
- }
-
- /*
- CommandScheduler.getInstance().schedule(
- new SequentialCommandGroup(
- new InstantCommand(timer::reset),
-
- new InstantCommand(() -> drive.followTrajectorySequence(preloadLeft)),
-
- new WaitCommand(100),
- new IntakeReverseCommand(),
-
- new WaitCommand(700),
- new IntakeStopCommand(),
-
- new WaitCommand(100),
- new InstantCommand(() -> drive.followTrajectorySequence(turningLeft)),
-
- new InstantCommand(() -> drive.followTrajectorySequence(toBKLeft)),
- new LiftCommand(1450, 1),
-
- new WaitCommand(900),
- new OuttakeCommand(),
-
- new WaitCommand(700),
-
- new InstantCommand(() -> drive.followTrajectorySequence(park))
- .alongWith(new LiftCommand(0, 0.65))
-
-
- ));
-
- **/
-
 
 

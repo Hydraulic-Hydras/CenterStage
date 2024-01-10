@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-// TODO: write down a function for finger
 @Config
 public class Intake extends Contraption {
 
@@ -16,6 +15,7 @@ public class Intake extends Contraption {
     public static CRServo Zip;
     public static CRServo Intake;
     public static Servo rotateBucket;
+    public static Servo pixelRetainer;
 
     public static double POS_REST = 0.2;
     public static double POS_PANEL = 0.5;
@@ -41,6 +41,8 @@ public class Intake extends Contraption {
         Intake = hwMap.get(CRServo.class, "Intake");
 
         rotateBucket = hwMap.get(Servo.class, "rotateBucket");
+        pixelRetainer = hwMap.get(Servo.class, "pixelRetainer");
+
 
         // Default position
         rotateBucket.setPosition(POS_REST);
@@ -64,6 +66,7 @@ public class Intake extends Contraption {
             Intake.setPower(0);
             Zip.setPower(0);
         }
+
     }
 
     public void outtakeLoop(Gamepad gamepad) {
@@ -82,6 +85,14 @@ public class Intake extends Contraption {
                 rotateBucket.setPosition(POS_DUMP);
                 outtakeState = State.DUMP;
             }
+        }
+
+        if (gamepad.x) {
+            // open
+            pixelRetainer.setPosition(0.46);
+        } else if (gamepad.y) {
+            // grab
+            pixelRetainer.setPosition(0.42);
         }
     }
 

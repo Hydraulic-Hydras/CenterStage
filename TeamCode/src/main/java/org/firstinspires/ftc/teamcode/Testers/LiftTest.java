@@ -8,6 +8,9 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeReverseCommand;
+import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeStartCommand;
+import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
@@ -39,10 +42,13 @@ public class LiftTest extends CommandOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(timer::reset),
 
+                        // new IntakeReverseCommand(),
+                        new IntakeStartCommand(),
+                        new WaitCommand(5000),
+                        new IntakeStopCommand(),
+                        new WaitCommand(100),
                         new LiftCommand(1300, 1),
-
                         new OuttakeCommand()
-
 
                 ));
     }
