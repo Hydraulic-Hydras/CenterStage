@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 public class Globals {
 
     // VELOCITY AND ACCELERATION
-
     public static final TrajectoryVelocityConstraint MaxVel = SampleMecanumDrive.getVelocityConstraint(
             100, Math.toRadians(180), Math.toRadians(180));
     public static final TrajectoryAccelerationConstraint MaxAccel = SampleMecanumDrive.getAccelerationConstraint(

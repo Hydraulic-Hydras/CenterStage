@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -29,6 +28,7 @@ public class BlueLeftBk extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
     private SampleMecanumDrive drive;
+    private final Drivetrain sensor = new Drivetrain(this);
 
     // Timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -50,9 +50,10 @@ public class BlueLeftBk extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        // call sensor
+        sensor.SensorInit(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 

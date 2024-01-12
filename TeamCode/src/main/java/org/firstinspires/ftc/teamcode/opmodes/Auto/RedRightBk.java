@@ -28,6 +28,7 @@ public class RedRightBk extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
     private SampleMecanumDrive drive;
+    private final Drivetrain sensor = new Drivetrain(this);
 
     // Timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -51,6 +52,8 @@ public class RedRightBk extends LinearOpMode {
     public void runOpMode() {
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        // call sensor
+        sensor.SensorInit(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 

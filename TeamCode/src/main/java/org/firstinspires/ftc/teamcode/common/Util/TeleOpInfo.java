@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
@@ -33,13 +34,6 @@ public class TeleOpInfo {
         telemetry.addData("Backdrop Distance", Double.parseDouble(
                 JavaUtil.formatNumber(Drivetrain.distanceBackdrop.getDistance(DistanceUnit.CM), 0)));
         telemetry.addLine();
-
-        Drivetrain.drive.update();
-
-        Pose2d poseEstimate = Drivetrain.drive.getPoseEstimate();
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", poseEstimate.getHeading());
 
         telemetry.update();
     }

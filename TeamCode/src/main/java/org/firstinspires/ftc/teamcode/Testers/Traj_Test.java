@@ -29,6 +29,7 @@ public class Traj_Test extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
     private SampleMecanumDrive drive;
+    private Drivetrain sensor = new Drivetrain(this);
 
     // Timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -52,6 +53,9 @@ public class Traj_Test extends LinearOpMode {
     public void runOpMode() {
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        // call sensors
+        sensor.SensorInit(hardwareMap);
+
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -167,7 +171,6 @@ public class Traj_Test extends LinearOpMode {
         myVisionPortal.close();
         telemetry.addData("Side: ", getSide());
         telemetry.addData("Location: ", propLocation);
-
 
         if (isStopRequested()) return;
         // Start is pressed

@@ -1,20 +1,18 @@
 package org.firstinspires.ftc.teamcode.common.Hardware.Drive;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.drive.Drive;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 
@@ -22,27 +20,50 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 public class Drivetrain extends Contraption {
 
     public double powerMultiplier = 1;
-    public static SampleMecanumDrive drive;
+
+    public DcMotorEx leftFront;
+    public DcMotorEx rightFront;
+    public DcMotorEx leftRear;
+    public DcMotorEx rightRear;
+
     public static DigitalChannel LED_GreenL;
     public static DigitalChannel LED_RedL;
     public static DigitalChannel LED_GreenR;
     public static DigitalChannel LED_RedR;
-    public static DistanceSensor distanceBackdrop;
 
     public static DigitalChannel ALED_Green;
     public static DigitalChannel ALED_Red;
     public static DigitalChannel BLED_Green;
     public static DigitalChannel BLED_Red;
 
+    public static DistanceSensor distanceBackdrop;
+
     public static int count = 0;
 
     public Drivetrain(LinearOpMode opMode) {
         this.opMode = opMode;
     }
+
     @Override
     public void initialize(HardwareMap hwMap) {
-        drive = new SampleMecanumDrive(hwMap);
+        leftFront = hwMap.get(DcMotorEx.class, "leftFront");
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        leftRear = hwMap.get(DcMotorEx.class, "leftRear");
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        rightRear = hwMap.get(DcMotorEx.class, "rightRear");
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        rightFront = hwMap.get(DcMotorEx.class, "rightFront");
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void SensorInit(HardwareMap hwMap) {
         LED_GreenL = hwMap.get(DigitalChannel.class, "LED_Green-L");
         LED_RedL = hwMap.get(DigitalChannel.class, "LED_Red-L");
         LED_GreenR = hwMap.get(DigitalChannel.class, "LED_Green-R");
@@ -64,8 +85,6 @@ public class Drivetrain extends Contraption {
         ALED_Red.setMode(DigitalChannel.Mode.OUTPUT);
         BLED_Green.setMode(DigitalChannel.Mode.OUTPUT);
         BLED_Red.setMode(DigitalChannel.Mode.OUTPUT);
-
-
     }
 
     public void RobotCentric(Gamepad gamepad1) {
@@ -102,12 +121,14 @@ public class Drivetrain extends Contraption {
             powerMultiplier = 1;
         }
 
-        drive.setMotorPowers(leftFrontSpeed * powerMultiplier, leftRearSpeed * powerMultiplier,
-                rightRearSpeed * powerMultiplier, rightFrontSpeed * powerMultiplier);
+        leftFront.setPower(leftFrontSpeed * powerMultiplier);
+        leftRear.setPower(leftRearSpeed * powerMultiplier);
+        rightFront.setPower(rightFrontSpeed * powerMultiplier);
+        rightRear.setPower(rightRearSpeed * powerMultiplier);
 
         if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16 && Double.parseDouble(
                 JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22
-                    && Intake.rotateBucket.getPosition() != 0.2) {
+                && Intake.rotateBucket.getPosition() != 0.2) {
             ALED_Green.setState(true);
             ALED_Red.setState(false);
             BLED_Green.setState(true);
@@ -142,16 +163,5 @@ public class Drivetrain extends Contraption {
             BLED_Green.setState(true);
             BLED_Red.setState(true);
         }
-    }
-
-    public void telemetry(Telemetry telemetry) {
-        Pose2d poseEstimate = drive.getPoseEstimate();
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", poseEstimate.getHeading());
-
-        telemetry.addData("Backdrop Distance", Double.parseDouble(
-                JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)));
-        telemetry.update();
     }
 }

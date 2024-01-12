@@ -25,6 +25,10 @@ public class RobotHardware {
     public DcMotorEx LeftCascade;
     public DcMotorEx RightCascade;
 
+    // climber
+    public DcMotorEx climberL;
+    public DcMotorEx climberR;
+
     // Intake
     public Servo rotateBucket;
     public CRServo Zip;
@@ -87,6 +91,15 @@ public class RobotHardware {
         RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // CLIMBER
+        climberL = hardwareMap.get(DcMotorEx.class, "climber-L");
+        climberL.setDirection(DcMotor.Direction.REVERSE);
+        climberL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        climberR = hardwareMap.get(DcMotorEx.class, "climber-R");
+        climberR.setDirection(DcMotor.Direction.REVERSE);
+        climberR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
