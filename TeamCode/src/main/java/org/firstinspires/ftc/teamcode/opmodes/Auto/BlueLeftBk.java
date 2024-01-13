@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -91,10 +92,10 @@ public class BlueLeftBk extends LinearOpMode {
                 // Scoring
                 .back(30.5)
                 .strafeLeft(2)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> mitsumi.autoMoveTo(1300, 1))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> mitsumi.autoMoveTo(1350, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
@@ -107,8 +108,32 @@ public class BlueLeftBk extends LinearOpMode {
                 .build();
 
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+                .forward(30)
+                .waitSeconds(0.1)
+                .turn(Math.toRadians(-90))
+                .forward(3)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
+                .waitSeconds(0.7)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
+                .waitSeconds(0.1)
 
-                .forward(5)
+                // scoring
+                .lineTo(new Vector2d(34, 31))
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1320, 1))
+                .waitSeconds(0.9)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(2)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                .waitSeconds(1.2)
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
+
+                // park
+                .strafeRight(22)
+                .back(10)
+
                 .build();
 
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
@@ -124,12 +149,13 @@ public class BlueLeftBk extends LinearOpMode {
                 .resetConstraints()
                 .turn(Math.toRadians(-90))
                 .lineTo(Globals.BLUE_lineToBackDrop)
+                .forward(7)
 
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1320, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)

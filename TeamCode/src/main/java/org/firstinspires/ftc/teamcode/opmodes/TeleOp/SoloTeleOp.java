@@ -23,6 +23,7 @@ public class SoloTeleOp extends LinearOpMode {
     public void runOpMode() {
         intake.initialize(hardwareMap);
         drivetrain.initialize(hardwareMap);
+        drivetrain.SensorInit(hardwareMap);
         mitsumi.initialize(hardwareMap);
         launcher.initialize(hardwareMap);
 
@@ -33,37 +34,34 @@ public class SoloTeleOp extends LinearOpMode {
             while (opModeIsActive()) {
 
                 drivetrain.RobotCentric(gamepad1);
-                intake.loop(gamepad1);
 
                 // Slides loop
-                if (gamepad1.right_bumper && !Mitsumi.high_Limit.isPressed()) {
+                if (gamepad1.right_trigger > 0 && !Mitsumi.high_Limit.isPressed()) {
                     // up
-                    Mitsumi.LeftCascade.setPower(0.7);
-                    Mitsumi.RightCascade.setPower(0.7);
-                }   else if (gamepad1.left_bumper && !Mitsumi.low_Limit.isPressed()) {
+                    Mitsumi.LeftCascade.setPower(gamepad1.right_trigger * 0.7);
+                    Mitsumi.RightCascade.setPower(gamepad1.right_trigger * 0.7);
+                }   else if (gamepad1.left_trigger > 0 && !Mitsumi.low_Limit.isPressed()) {
                     // down
-                    Mitsumi.RightCascade.setPower(-0.62);
-                    Mitsumi.LeftCascade.setPower(-0.62);
+                    Mitsumi.RightCascade.setPower(gamepad1.left_trigger * -0.62);
+                    Mitsumi.LeftCascade.setPower(gamepad1.left_trigger  * -0.62);
                 }   else {
                     Mitsumi.LeftCascade.setPower(0);
                     Mitsumi.RightCascade.setPower(0);
                 }
 
-                // Outtake loop
+                // Intake loop
                 if (gamepad1.x) {
-                    // Intake Position
-                    Intake.rotateBucket.setPosition(Intake.POS_REST);
-                    Intake.outtakeState = Intake.State.REST;
-                } else if (gamepad1.y && !Mitsumi.low_Limit.isPressed()) {
-                    if (Intake.rotateBucket.getPosition() == 1 || Intake.rotateBucket.getPosition() == 0) {
-                        // Parallel
-                        Intake.rotateBucket.setPosition(Intake.POS_PANEL);
-                        Intake.outtakeState = Intake.State.PANEL;
-                    } else if (Intake.rotateBucket.getPosition() == Intake.POS_PANEL) {
-                        // Drop
-                        Intake.rotateBucket.setPosition(Intake.POS_DUMP);
-                        Intake.outtakeState = Intake.State.DUMP;
-                    }
+                    Intake.Intake.setPower(1);
+                    Intake.Zip.setPower(1);
+                    Intake.Wheels.setPower(1);
+                }   else if (gamepad1.y) {
+                    Intake.Intake.setPower(-1);
+                    Intake.Zip.setPower(-1);
+                    Intake.Wheels.setPower(-1);
+                }   else {
+                    Intake.Intake.setPower(0);
+                    Intake.Zip.setPower(0);
+                    Intake.Wheels.setPower(0);
                 }
 
                 // Launcher loop

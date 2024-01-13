@@ -76,6 +76,33 @@ public class Mitsumi extends Contraption {
 
     }
 
+    public void extendHigh() {
+
+        if (!high_Limit.isPressed()) {
+            LeftCascade.setPower(0.7);
+            RightCascade.setPower(0.7);
+        }   else {
+            LeftCascade.setPower(0);
+            RightCascade.setPower(0);
+        }
+    }
+
+    public void extendLow() {
+
+        if (!low_Limit.isPressed()) {
+            LeftCascade.setPower(-0.65);
+            RightCascade.setPower(-0.65);
+        }   else {
+            LeftCascade.setPower(0);
+            RightCascade.setPower(0);
+        }
+    }
+
+    public void stopSlides() {
+        LeftCascade.setPower(0);
+        RightCascade.setPower(0);
+    }
+
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Left Position: ", LeftCascade.getCurrentPosition());
         telemetry.addData("Right Position: ", RightCascade.getCurrentPosition());

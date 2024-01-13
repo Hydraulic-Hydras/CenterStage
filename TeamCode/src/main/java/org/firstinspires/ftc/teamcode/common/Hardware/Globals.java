@@ -27,19 +27,19 @@ public class Globals {
 
     /* === RED RIGHT BK === */
     public static final Vector2d splineToProp = new Vector2d(19.5, -8.6);
-    public static final Vector2d lineToBackDrop = new Vector2d(17, -27.8);
+    public static final Vector2d lineToBackDrop = new Vector2d(17, -28);
 
     /* === RED LEFT === */
     public static final Vector2d splineToDoor = new Vector2d(47, -17);
-    public static final Pose2d reversedTransfer = new Pose2d(47, -30, Math.toRadians(-270));
+    public static final Pose2d reversedTransfer = new Pose2d(47, -50);
     public static final Vector2d S_splineToBackDrop = new Vector2d(22, -74);
 
     public static final Vector2d lineToCenterProp = new Vector2d(34, 12);
-    public static final Vector2d lineToPos = new Vector2d(39, 5);
-    public static final Vector2d straightLineToPos = new Vector2d(49, -49);
-    public static final Vector2d curveSplineToBackDrop = new Vector2d(30, -78.5);
+    public static final Vector2d lineToPos = new Vector2d(39, 2);
+    public static final Vector2d straightLineToPos = new Vector2d(49, -55);
+    public static final Vector2d curveSplineToBackDrop = new Vector2d(30, -84.2);
 
     /* === BLUE LEFT BK === */
     public static final Vector2d BLUE_splineToLeftProp = new Vector2d(19.5, 9);
-    public static final Vector2d BLUE_lineToBackDrop = new Vector2d(19.5, 33);
+    public static final Vector2d BLUE_lineToBackDrop = new Vector2d(17, 33);
 }

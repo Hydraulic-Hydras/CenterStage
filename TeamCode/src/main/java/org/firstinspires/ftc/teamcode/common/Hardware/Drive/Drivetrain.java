@@ -61,6 +61,9 @@ public class Drivetrain extends Contraption {
         rightFront = hwMap.get(DcMotorEx.class, "rightFront");
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        distanceBackdrop = hwMap.get(DistanceSensor.class, "distanceBackdrop");
+
     }
 
     public void SensorInit(HardwareMap hwMap) {
@@ -68,8 +71,6 @@ public class Drivetrain extends Contraption {
         LED_RedL = hwMap.get(DigitalChannel.class, "LED_Red-L");
         LED_GreenR = hwMap.get(DigitalChannel.class, "LED_Green-R");
         LED_RedR = hwMap.get(DigitalChannel.class, "LED_Red-R");
-
-        distanceBackdrop = hwMap.get(DistanceSensor.class, "distanceBackdrop");
 
         LED_GreenL.setMode(DigitalChannel.Mode.OUTPUT);
         LED_RedL.setMode(DigitalChannel.Mode.OUTPUT);
