@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -27,6 +29,7 @@ public class RedLeft extends LinearOpMode {
     // Hardware
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
+    private final LEDS leds = new LEDS(this);
     private SampleMecanumDrive drive;
 
     // Timer
@@ -48,8 +51,11 @@ public class RedLeft extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO = true;
+
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        leds.initialize(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -57,6 +63,7 @@ public class RedLeft extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
+        leds.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");

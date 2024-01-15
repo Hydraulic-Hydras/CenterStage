@@ -6,15 +6,16 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeStartCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.IntakeStopCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
+@Disabled
 @Autonomous( name = "JAVA-LiftTest", group = "Testers")
 public class LiftTest extends CommandOpMode {
 

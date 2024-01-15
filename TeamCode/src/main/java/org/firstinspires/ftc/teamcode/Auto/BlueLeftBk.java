@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -27,6 +28,7 @@ public class BlueLeftBk extends LinearOpMode {
     // Hardware
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
+    private final LEDS LEDS = new LEDS(this);
     private SampleMecanumDrive drive;
 
     // Timer
@@ -48,8 +50,11 @@ public class BlueLeftBk extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO = true;
+
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        LEDS.initialize(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -57,6 +62,7 @@ public class BlueLeftBk extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
+        LEDS.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");

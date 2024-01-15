@@ -19,7 +19,7 @@ public class TensorFlowTest extends LinearOpMode {
 
     TfodProcessor myTfodProcessor;
     VisionPortal myVisionPortal;
-    Side side = Side.RIGHT;
+    Side side = Side.LEFT;
 
     public double location;
     public boolean USE_WEBCAM;

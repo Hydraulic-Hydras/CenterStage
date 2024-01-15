@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.common.Hardware;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -28,7 +28,9 @@ public class LEDS extends Contraption {
     public static DistanceSensor distanceBackdrop;
     public static int count = 0;
 
-
+    public LEDS(LinearOpMode opMode) {
+        this.opMode = opMode;
+    }
     @Override
     public void initialize(HardwareMap hardwareMap) {
         LED_GreenL = hardwareMap.get(DigitalChannel.class, "LED_Green-L");
@@ -56,11 +58,9 @@ public class LEDS extends Contraption {
         BLED_Red.setMode(DigitalChannel.Mode.OUTPUT);
 
         distanceBackdrop = hardwareMap.get(DistanceSensor.class, "distanceBackdrop");
-
     }
 
-    @Override
-    public void loop(Gamepad gamepad) {
+    public void loop() {
 
         if (Globals.IS_AUTO) {
             if (Globals.LOCATION == 3) {

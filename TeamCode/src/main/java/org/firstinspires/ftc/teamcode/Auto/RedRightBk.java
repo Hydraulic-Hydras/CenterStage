@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -26,6 +27,7 @@ public class RedRightBk extends LinearOpMode {
     // Hardware
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
+    private final LEDS leds = new LEDS(this);
     private SampleMecanumDrive drive;
 
     // Timer
@@ -47,8 +49,11 @@ public class RedRightBk extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO = true;
+
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
+        leds.initialize(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -56,6 +61,7 @@ public class RedRightBk extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
+        leds.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");
@@ -72,7 +78,7 @@ public class RedRightBk extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // CENTER
+        // CENTER (finished)
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(29)
@@ -100,7 +106,7 @@ public class RedRightBk extends LinearOpMode {
                 .back(10)
                 .build();
 
-        // RIGHT
+        // RIGHT (finished)
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .splineToConstantHeading(Globals.splineToProp, Math.toRadians(0))
