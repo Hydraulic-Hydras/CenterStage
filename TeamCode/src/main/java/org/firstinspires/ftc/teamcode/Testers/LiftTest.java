@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.common.CommandBase.LiftCommand;
 import org.firstinspires.ftc.teamcode.common.CommandBase.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
-@Autonomous( name = "JAVA-LiftTest")
+@Autonomous( name = "JAVA-LiftTest", group = "Testers")
 public class LiftTest extends CommandOpMode {
 
     private final Mitsumi mitsumi = new Mitsumi(this);

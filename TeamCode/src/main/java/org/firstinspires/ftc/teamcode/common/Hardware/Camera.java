@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.Hardware.Vision;
+package org.firstinspires.ftc.teamcode.common.Hardware;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;

@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.common.Util;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
-import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
 
 @Config
 public class TeleOpInfo {
@@ -31,9 +28,12 @@ public class TeleOpInfo {
         telemetry.addData("Drone Trigger", Launcher.getState());
         telemetry.addLine();
 
+        /*
+        /** removed Distance sensor telem because OpMode's became too delayed
         telemetry.addData("Backdrop Distance", Double.parseDouble(
-                JavaUtil.formatNumber(Drivetrain.distanceBackdrop.getDistance(DistanceUnit.CM), 0)));
+                JavaUtil.formatNumber(LEDS.distanceBackdrop.getDistance(DistanceUnit.CM), 0)));
         telemetry.addLine();
+         */
 
         telemetry.update();
     }

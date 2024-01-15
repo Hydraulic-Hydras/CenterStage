@@ -26,7 +26,7 @@ public class Launcher extends Contraption {
     public enum LauncherState {
         INITIALIZED,
         LOADED,
-        hasShot
+        HAS_SHOT
     }
     public enum LauncherAngle {
         READY,
@@ -68,7 +68,7 @@ public class Launcher extends Contraption {
         } else if (gamepad2.dpad_right) {
             // shoot
             droneTrigger.setPosition(SHOOT);
-            droneState = LauncherState.hasShot;
+            droneState = LauncherState.HAS_SHOT;
         }
     }
 

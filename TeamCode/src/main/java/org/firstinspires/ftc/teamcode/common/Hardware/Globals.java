@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 @Config
 public class Globals {
 
+    public static boolean IS_AUTO = false;
+    public static int LOCATION;
+
     // VELOCITY AND ACCELERATION
     public static final TrajectoryVelocityConstraint MaxVel = SampleMecanumDrive.getVelocityConstraint(
             100, Math.toRadians(180), Math.toRadians(180));

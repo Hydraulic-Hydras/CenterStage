@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
-import org.firstinspires.ftc.teamcode.common.Hardware.Drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -29,7 +28,6 @@ public class RedLeft extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
     private SampleMecanumDrive drive;
-    private final Drivetrain sensor = new Drivetrain(this);
 
     // Timer
     private final ElapsedTime timer = new ElapsedTime();
@@ -40,7 +38,6 @@ public class RedLeft extends LinearOpMode {
     public TfodProcessor myTfodProcessor;
     public Recognition myTfodRecognition;
     public VisionPortal myVisionPortal;
-    public int location;
     public double propLocation;
     public boolean USE_WEBCAM;
     public double x;
@@ -53,8 +50,6 @@ public class RedLeft extends LinearOpMode {
     public void runOpMode() {
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
-        // call sensor
-        sensor.SensorInit(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -251,7 +246,7 @@ public class RedLeft extends LinearOpMode {
         myTfodRecognitions = myTfodProcessor.getRecognitions();
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
-            location = 1;
+            Globals.LOCATION = 1;
             side = Side.LEFT;
         } else {
             // Iterate through list and call a function to display info for each recognized object.
@@ -272,48 +267,20 @@ public class RedLeft extends LinearOpMode {
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
                 if (x > 460 && x < 600) {
                     // Location 1 : 460 < x < 600
-                    location = 3;
+                    Globals.LOCATION = 3;
                     side = Side.RIGHT;
                 } else if (x > 45 && x < 330) {
                     // Location 2 : 45 < x <330
-                    location = 2;
+                    Globals.LOCATION = 2;
                     side = Side.CENTER;
                 } else {
-                    location = 1;
+                    Globals.LOCATION = 1;
                     side = Side.LEFT;
                 }
             }
 
-            if (location == 3) {
-                Drivetrain.ALED_Green.setState(true);
-                Drivetrain.ALED_Red.setState(true);
-                Drivetrain.BLED_Green.setState(true);
-                Drivetrain.BLED_Red.setState(true);
-                Drivetrain.LED_GreenL.setState(true);
-                Drivetrain.LED_RedL.setState(true);
-                Drivetrain.LED_GreenR.setState(false);
-                Drivetrain.LED_RedR.setState(false);
-            } else if (location == 2) {
-                Drivetrain.ALED_Green.setState(false);
-                Drivetrain.ALED_Red.setState(false);
-                Drivetrain.BLED_Green.setState(false);
-                Drivetrain.BLED_Red.setState(false);
-                Drivetrain.LED_GreenL.setState(true);
-                Drivetrain.LED_RedL.setState(true);
-                Drivetrain.LED_GreenR.setState(true);
-                Drivetrain.LED_RedR.setState(true);
-            } else if (location == 1) {
-                Drivetrain.ALED_Green.setState(true);
-                Drivetrain.ALED_Red.setState(true);
-                Drivetrain.BLED_Green.setState(true);
-                Drivetrain.BLED_Red.setState(true);
-                Drivetrain.LED_GreenL.setState(false);
-                Drivetrain.LED_RedL.setState(false);
-                Drivetrain.LED_GreenR.setState(true);
-                Drivetrain.LED_RedR.setState(true);
-            }
         }
-        return location;
+        return Globals.LOCATION;
 
     }
     public Side getSide() {
