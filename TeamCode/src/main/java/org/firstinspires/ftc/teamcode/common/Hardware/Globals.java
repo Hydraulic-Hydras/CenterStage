@@ -40,6 +40,6 @@ public class Globals {
     public static final Vector2d curveSplineToBackDrop = new Vector2d(30, -84.2);
 
     /* === BLUE LEFT BK === */
-    public static final Vector2d BLUE_splineToLeftProp = new Vector2d(19.5, 9);
-    public static final Vector2d BLUE_lineToBackDrop = new Vector2d(17, 33);
+    public static final Vector2d BLUE_splineToLeftProp = new Vector2d(17, 7);
+    public static final Vector2d BLUE_lineToBackDrop = new Vector2d(17, 31.5);
 }
