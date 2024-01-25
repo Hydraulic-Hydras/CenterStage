@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testers;
 
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -11,11 +12,12 @@ import org.firstinspires.ftc.teamcode.CenterStage.PropVision;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+@Disabled
 @TeleOp (group = "Testers")
 public class VisionTest extends LinearOpMode {
 
     private VisionPortal visionPortal;
-    private PropVision propVision = new PropVision(this.telemetry, true);
+    private PropVision propVision = new PropVision(telemetry, true);
 
     public DigitalChannel LED_GreenL;
     public DigitalChannel LED_RedL;
@@ -27,7 +29,7 @@ public class VisionTest extends LinearOpMode {
     public DigitalChannel BLED_Green;
     public DigitalChannel BLED_Red;
 
-    Side side;
+    Side side = Side.LEFT;
     @Override
     public void runOpMode() {
 
@@ -38,6 +40,35 @@ public class VisionTest extends LinearOpMode {
             side = propVision.getSide();
             telemetry.addData("Side: ", side);
             telemetry.update();
+
+            if (side == Side.RIGHT) {
+                ALED_Green.setState(true);
+                ALED_Red.setState(true);
+                BLED_Green.setState(true);
+                BLED_Red.setState(true);
+                LED_GreenL.setState(true);
+                LED_RedL.setState(true);
+                LED_GreenR.setState(false);
+                LED_RedR.setState(false);
+            }  else if (side == Side.CENTER) {
+                ALED_Green.setState(false);
+                ALED_Red.setState(false);
+                BLED_Green.setState(false);
+                BLED_Red.setState(false);
+                LED_GreenL.setState(true);
+                LED_RedL.setState(true);
+                LED_GreenR.setState(true);
+                LED_RedR.setState(true);
+            }  else {
+                ALED_Green.setState(true);
+                ALED_Red.setState(true);
+                BLED_Green.setState(true);
+                BLED_Red.setState(true);
+                LED_GreenL.setState(false);
+                LED_RedL.setState(false);
+                LED_GreenR.setState(true);
+                LED_RedR.setState(true);
+            }
         }
 
         side = propVision.getSide();
@@ -48,36 +79,6 @@ public class VisionTest extends LinearOpMode {
         visionPortal.close();
 
         if (isStopRequested()) return;
-
-        if (side == Side.RIGHT) {
-            ALED_Green.setState(true);
-            ALED_Red.setState(true);
-            BLED_Green.setState(true);
-            BLED_Red.setState(true);
-            LED_GreenL.setState(true);
-            LED_RedL.setState(true);
-            LED_GreenR.setState(false);
-            LED_RedR.setState(false);
-        }  else if (side == Side.CENTER) {
-            ALED_Green.setState(false);
-            ALED_Red.setState(false);
-            BLED_Green.setState(false);
-            BLED_Red.setState(false);
-            LED_GreenL.setState(true);
-            LED_RedL.setState(true);
-            LED_GreenR.setState(true);
-            LED_RedR.setState(true);
-        }  else {
-            ALED_Green.setState(true);
-            ALED_Red.setState(true);
-            BLED_Green.setState(true);
-            BLED_Red.setState(true);
-            LED_GreenL.setState(false);
-            LED_RedL.setState(false);
-            LED_GreenR.setState(true);
-            LED_RedR.setState(true);
-        }
-
 
     }
 

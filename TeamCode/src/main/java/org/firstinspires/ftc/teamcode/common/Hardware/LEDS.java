@@ -146,4 +146,37 @@ public class LEDS extends Contraption {
         }
 
     }
+
+    public void RightLightUp() {
+        ALED_Green.setState(true);
+        ALED_Red.setState(true);
+        BLED_Green.setState(true);
+        BLED_Red.setState(true);
+        LED_GreenL.setState(true);
+        LED_RedL.setState(true);
+        LED_GreenR.setState(false);
+        LED_RedR.setState(false);
+    }
+
+    public void CenterLightUp() {
+        ALED_Green.setState(false);
+        ALED_Red.setState(false);
+        BLED_Green.setState(false);
+        BLED_Red.setState(false);
+        LED_GreenL.setState(true);
+        LED_RedL.setState(true);
+        LED_GreenR.setState(true);
+        LED_RedR.setState(true);
+    }
+
+    public void LeftLightUp() {
+        ALED_Green.setState(true);
+        ALED_Red.setState(true);
+        BLED_Green.setState(true);
+        BLED_Red.setState(true);
+        LED_GreenL.setState(false);
+        LED_RedL.setState(false);
+        LED_GreenR.setState(true);
+        LED_RedR.setState(true);
+    }
 }

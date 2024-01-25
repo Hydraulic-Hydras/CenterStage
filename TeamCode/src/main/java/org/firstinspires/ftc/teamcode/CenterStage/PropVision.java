@@ -13,39 +13,50 @@ import org.opencv.imgproc.Imgproc;
 
 public class PropVision implements VisionProcessor {
 
-    // bounding lines for the three regions
-    public int height = 480;
-    public int width = 640;
+    // Set resolution
+    public int height = 720;
+    public int width = 1280;
 
-    public int LEFT_LINE = (int)(width / 3);
-    public int RIGHT_LINE = (int)(2 * (width / 3));
+    // Create the dividers
+    public int LEFT_LINE = (width / 3);
+    public int RIGHT_LINE = (2 * (width / 3));
 
+    // Default side and color
     Side side = Side.LEFT;
     public boolean isRed;
 
-    public static final Scalar GREEN = new Scalar(0, 255, 0);
-
-    public static Scalar LOW_HSV = new Scalar(0, 0, 0);
-    public static Scalar HIGH_HSV = new Scalar(0, 0, 0);
-
+    // Telemetry variable
     public Telemetry telemetry;
+
+    // CUSTOM LED LIGHTING HAHAHAHAHHA
+    public static final Scalar COLOR = new Scalar(70, 255, 150);
+
+    public PropVision(Telemetry telemetry) {
+        this.telemetry = telemetry;
+        this.isRed = true;
+    }
 
     public PropVision(Telemetry telemetry, boolean isRed) {
         this.telemetry = telemetry;
         this.isRed = isRed;
     }
+
+
+
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
-        // TODO: Tune the RED and BLUE values
+        Scalar LOW_HSV;
+        Scalar HIGH_HSV;
+        
         if (isRed) {
             // Red Values
-            LOW_HSV = new Scalar(0, 0, 0);
-            HIGH_HSV = new Scalar(0, 0, 0);
+            LOW_HSV = new Scalar(160, 50, 50);
+            HIGH_HSV = new Scalar(180, 255, 255);
         } else {
             // Blue Values
-            LOW_HSV = new Scalar(1, 1, 1);
-            HIGH_HSV = new Scalar(1, 1, 1);
+            LOW_HSV = new Scalar(110, 50, 50);
+            HIGH_HSV = new Scalar(120, 255, 255);
         }
 
         Mat mat = new Mat();
@@ -53,22 +64,26 @@ public class PropVision implements VisionProcessor {
         // Convert to HSV
         Imgproc.cvtColor(frame, mat, Imgproc.COLOR_RGB2HSV);
 
+        // mesh
         Mat mesh = new Mat();
+
         Core.inRange(mat, LOW_HSV,HIGH_HSV, mesh);
+
+        // submat
         Mat LEFT = mesh.submat(height / 2, height,0, LEFT_LINE);
         Mat CENTER = mesh.submat(height / 2,height, LEFT_LINE, RIGHT_LINE);
         Mat RIGHT = mesh.submat(height / 2, height, RIGHT_LINE, width);
 
-        // Draw lines to divide the spike mark
         // Draw left and right line to seperate the spike marks
-        Imgproc.line(frame,new Point(LEFT_LINE,0), new Point(LEFT_LINE,height),GREEN,5);
-        Imgproc.line(frame,new Point(RIGHT_LINE,0), new Point(RIGHT_LINE,height),GREEN,5);
+        Imgproc.line(frame,new Point(LEFT_LINE,0), new Point(LEFT_LINE,height), COLOR,5);
+        Imgproc.line(frame,new Point(RIGHT_LINE,0), new Point(RIGHT_LINE,height), COLOR,5);
 
         // Calculate the coefficient of each
         int LEFT_VAL = Core.countNonZero(LEFT);
         int CENTER_VAL = Core.countNonZero(CENTER);
         int RIGHT_VAL = Core.countNonZero(RIGHT);
 
+        // Display side
         if (RIGHT_VAL > CENTER_VAL && RIGHT_VAL > LEFT_VAL) {
             side = Side.RIGHT;
         } else if (CENTER_VAL > LEFT_VAL && CENTER_VAL > RIGHT_VAL) {

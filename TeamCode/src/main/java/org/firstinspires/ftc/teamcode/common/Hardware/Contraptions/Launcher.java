@@ -49,23 +49,23 @@ public class Launcher extends Contraption {
 
     }
 
-    public void loop(Gamepad gamepad2) {
+    public void loop(Gamepad gamepad1) {
 
-        if (gamepad2.dpad_up) {
+        if (gamepad1.dpad_up) {
             // shooting angle
             launcher_angle.setPosition(SHOOT_POS);
             droneAngle = LauncherAngle.READY;
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad1.dpad_down) {
             // horizontal angle
             launcher_angle.setPosition(HORIZONTAL_POS);
             droneAngle = LauncherAngle.RESET;
         }
 
-        if (gamepad2.dpad_left) {
+        if (gamepad1.dpad_left) {
             // standby
             droneTrigger.setPosition(LOAD);
             droneState = LauncherState.LOADED;
-        } else if (gamepad2.dpad_right) {
+        } else if (gamepad1.share) {
             // shoot
             droneTrigger.setPosition(SHOOT);
             droneState = LauncherState.HAS_SHOT;

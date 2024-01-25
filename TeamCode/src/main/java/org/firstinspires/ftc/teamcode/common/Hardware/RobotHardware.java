@@ -8,10 +8,20 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Climber;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
+
 @Config
 public class RobotHardware {
 
@@ -28,12 +38,14 @@ public class RobotHardware {
     // climber
     public DcMotorEx climberL;
     public DcMotorEx climberR;
+    public Servo Hook;
 
     // Intake
     public Servo rotateBucket;
     public CRServo Zip;
-    public CRServo Intake;
+    public CRServo intake;
     public CRServo Wheels;
+    public Servo pixelRetainer;
 
     // Drone
     public Servo launcher_angle;
@@ -58,6 +70,38 @@ public class RobotHardware {
     public DigitalChannel BLED_Green;
     public DigitalChannel BLED_Red;
 
+    public static int count = 0;
+
+    /**
+     * Variables for Drone
+     */
+    public static double SHOOT_POS = 0.52;
+    public static double HORIZONTAL_POS = 0.35;
+
+    public static double INIT_POS = 0.28;
+
+    public static double SHOOT = 0.9;
+    public static double LOAD = 0;
+
+    /**
+     * Variables for Bucket
+     */
+    public static double POS_REST = 0.2;
+    public static double POS_PANEL = 0.5;
+    public static double POS_DUMP = 1;
+
+    /**
+     * Variables for Hook
+     */
+    public static double HOOK_RELEASE = 0.5;
+    public static double HOOK_ON = 0.7;
+
+    public Launcher.LauncherState droneState = Launcher.LauncherState.INITIALIZED;
+    public Launcher.LauncherAngle droneAngle = Launcher.LauncherAngle.RESET;
+    public Intake.State outtakeState = Intake.State.REST;
+    public Climber.ClimberState climberState = Climber.ClimberState.REST;
+    public Mitsumi.liftState sliderState = Mitsumi.liftState.REST;
+
     public void init(HardwareMap hardwareMap) {
 
         // DRIVETRAIN
@@ -77,12 +121,13 @@ public class RobotHardware {
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-        ));
-        imu.initialize(parameters);
-
+        if (Globals.IS_AUTO) {
+            imu = hardwareMap.get(IMU.class, "imu");
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+            ));
+            imu.initialize(parameters);
+        }
         // SLIDES
         LeftCascade = hardwareMap.get(DcMotorEx.class, "LeftCascade");
         LeftCascade.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -96,20 +141,33 @@ public class RobotHardware {
         climberL = hardwareMap.get(DcMotorEx.class, "climber-L");
         climberL.setDirection(DcMotor.Direction.REVERSE);
         climberL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climberL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climberL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         climberR = hardwareMap.get(DcMotorEx.class, "climber-R");
         climberR.setDirection(DcMotor.Direction.REVERSE);
         climberR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climberR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climberR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        Hook = hardwareMap.get(Servo.class, "hook");
+        Hook.setPosition(HOOK_RELEASE);
 
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
         Zip = hardwareMap.get(CRServo.class, "Zip");
-        Intake = hardwareMap.get(CRServo.class, "Intake");
+        intake = hardwareMap.get(CRServo.class, "Intake");
         rotateBucket = hardwareMap.get(Servo.class, "rotateBucket");
+        pixelRetainer = hardwareMap.get(Servo.class, "pixelRetainer");
+
+        rotateBucket.setPosition(POS_REST);
 
         // DRONE SHOOTER
         launcher_angle = hardwareMap.get(Servo.class, "launcher_angle");
         droneTrigger = hardwareMap.get(Servo.class, "droneTrigger");
+
+        launcher_angle.setPosition(SHOOT_POS);
+        launcher_angle.setPosition(INIT_POS);
 
         // Sensors
         high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
@@ -143,4 +201,202 @@ public class RobotHardware {
         BLED_Red.setMode(DigitalChannel.Mode.OUTPUT);
 
     }
+
+    public void loop(Gamepad gamepad1, Gamepad gamepad2) {
+        // Drivetrain control (ROBOT CENTRIC)
+        double powerMultiplier;
+        double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+        double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = gamepad1.right_stick_x;
+
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio, but only when
+        // at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double leftFrontSpeed = (y + x + rx) / denominator;
+        double leftRearSpeed = (y - x + rx) / denominator;
+        double rightFrontSpeed = (y - x - rx) / denominator;
+        double rightRearSpeed = (y + x - rx) / denominator;
+
+        if (gamepad1.left_bumper) {
+            powerMultiplier = 0.4;
+        } else {
+            powerMultiplier = 1;
+        }
+
+        leftFront.setPower(leftFrontSpeed * powerMultiplier);
+        leftRear.setPower(leftRearSpeed * powerMultiplier);
+        rightFront.setPower(rightFrontSpeed * powerMultiplier);
+        rightRear.setPower(rightRearSpeed * powerMultiplier);
+
+        // Slides
+        if (gamepad2.right_trigger > 0 && !high_Limit.isPressed() ) {
+            // up
+            LeftCascade.setPower(gamepad2.right_trigger * 0.8);
+            RightCascade.setPower(gamepad2.right_trigger * 0.8);
+        } else if (gamepad2.left_trigger > 0 && !low_Limit.isPressed()) {
+            // down
+            LeftCascade.setPower(gamepad2.left_trigger * -0.6);
+            RightCascade.setPower(gamepad2.left_trigger * -0.6);
+        } else {
+            LeftCascade.setPower(0);
+            RightCascade.setPower(0);
+        }
+
+
+        if (low_Limit.isPressed()) {
+            sliderState = Mitsumi.liftState.REST;
+        }   else if (high_Limit.isPressed()) {
+            sliderState = Mitsumi.liftState.EXTENDED;
+        }   else {
+            sliderState = Mitsumi.liftState.RAMPING;
+        }
+
+        // Angle adjusting
+        if (gamepad1.dpad_up) {
+            // shooting angle
+            launcher_angle.setPosition(SHOOT_POS);
+            droneAngle = Launcher.LauncherAngle.READY;
+        } else if (gamepad1.dpad_down) {
+            // horizontal angle
+            launcher_angle.setPosition(HORIZONTAL_POS);
+            droneAngle = Launcher.LauncherAngle.RESET;
+        }
+
+        // Trigger controls
+        if (gamepad1.dpad_left) {
+            // standby
+            droneTrigger.setPosition(LOAD);
+            droneState = Launcher.LauncherState.LOADED;
+        } else if (gamepad1.share) {
+            // shoot
+            droneTrigger.setPosition(SHOOT);
+            droneState = Launcher.LauncherState.HAS_SHOT;
+        }
+
+        // Intake controls
+        if (gamepad1.right_trigger > 0) {
+            // Intake
+            Wheels.setPower(1);
+            Zip.setPower(1);
+            intake.setPower(1);
+        } else if (gamepad1.left_trigger > 0) {
+            // Outtake
+            intake.setPower(-1);
+            Wheels.setPower(-1);
+            Zip.setPower(-1);
+        } else {
+            Wheels.setPower(0);
+            intake.setPower(0);
+            Zip.setPower(0);
+        }
+
+        // Bucket controls
+        if (gamepad2.a) {
+            // bucket Position
+            rotateBucket.setPosition(POS_REST);
+            outtakeState = Intake.State.REST;
+        } else if (gamepad2.b && !low_Limit.isPressed()) {
+            if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0) {
+                // Parallel
+                rotateBucket.setPosition(POS_PANEL);
+                outtakeState = Intake.State.PANEL;
+            } else if (rotateBucket.getPosition() == POS_PANEL) {
+                // Drop
+                rotateBucket.setPosition(POS_DUMP);
+                outtakeState = Intake.State.DUMP;
+            }
+        }
+
+        // Pixel retainer controls
+        if (gamepad2.x) {
+            // open
+            pixelRetainer.setPosition(0.46);
+        } else if (gamepad2.y) {
+            // grab
+            pixelRetainer.setPosition(0.42);
+        }
+
+        // Climber and Hook controls
+        double power = gamepad2.right_stick_y;
+        double speedDec = 0.6;
+
+        climberL.setPower(power * speedDec);
+        climberR.setPower(power * speedDec);
+
+        if (high_Limit.isPressed() && Hook.getPosition() == HOOK_ON) {
+            climberState = Climber.ClimberState.EXTENDED;
+        }   else if (!high_Limit.isPressed()) {
+            climberState = Climber.ClimberState.RAMPING;
+        }   else if (low_Limit.isPressed()) {
+            climberState = Climber.ClimberState.REST;
+        }
+
+        if (gamepad2.dpad_up) {
+            Hook.setPosition(HOOK_RELEASE);
+        }   else if (gamepad2.dpad_down) {
+            Hook.setPosition(HOOK_ON);
+        }
+
+        // LED INPUTS
+        if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16
+                && Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22) {
+            LED_RedL.setState(false);
+            LED_GreenL.setState(true);
+            LED_RedR.setState(false);
+            LED_GreenR.setState(true);
+        } else {
+            LED_GreenL.setState(false);
+            LED_RedL.setState(true);
+            LED_GreenR.setState(false);
+            LED_RedR.setState(true);
+        }
+
+
+        if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16 && Double.parseDouble(
+                JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22
+                && rotateBucket.getPosition() != 0.2) {
+            ALED_Green.setState(true);
+            ALED_Red.setState(false);
+            BLED_Green.setState(true);
+            BLED_Red.setState(false);
+        } else if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 40) {
+            ALED_Green.setState(false);
+            ALED_Red.setState(true);
+            BLED_Green.setState(false);
+            BLED_Red.setState(true);
+        } else if (launcher_angle.getPosition() < 0.4) {
+            if (droneTrigger.getPosition() > 0.5) {
+                ALED_Green.setState(true);
+                ALED_Red.setState(false);
+                BLED_Green.setState(true);
+                BLED_Red.setState(false);
+            } else if (count == 1) {
+                ALED_Green.setState(false);
+                ALED_Red.setState(true);
+                BLED_Green.setState(false);
+                BLED_Red.setState(true);
+                count = 0;
+            } else {
+                ALED_Green.setState(true);
+                ALED_Red.setState(true);
+                BLED_Green.setState(true);
+                BLED_Red.setState(true);
+                count = 1;
+            }
+        } else {
+            ALED_Green.setState(true);
+            ALED_Red.setState(true);
+            BLED_Green.setState(true);
+            BLED_Red.setState(true);
+        }
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Left Position: ", LeftCascade.getCurrentPosition());
+        telemetry.addData("Right Position: ", RightCascade.getCurrentPosition());
+        telemetry.addLine();
+
+    }
+
 }

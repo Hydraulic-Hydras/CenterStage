@@ -13,7 +13,7 @@ public class Intake extends Contraption {
 
     public static CRServo Wheels;
     public static CRServo Zip;
-    public static CRServo Intake;
+    public static CRServo intake;
     public static Servo rotateBucket;
     public static Servo pixelRetainer;
 
@@ -38,11 +38,10 @@ public class Intake extends Contraption {
     public void initialize(HardwareMap hwMap) {
         Wheels = hwMap.get(CRServo.class, "Wheels");
         Zip = hwMap.get(CRServo.class, "Zip");
-        Intake = hwMap.get(CRServo.class, "Intake");
+        intake = hwMap.get(CRServo.class, "Intake");
 
         rotateBucket = hwMap.get(Servo.class, "rotateBucket");
         pixelRetainer = hwMap.get(Servo.class, "pixelRetainer");
-
 
         // Default position
         rotateBucket.setPosition(POS_REST);
@@ -55,15 +54,15 @@ public class Intake extends Contraption {
             // Intake
             Wheels.setPower(1);
             Zip.setPower(1);
-            Intake.setPower(1);
+            intake.setPower(1);
         } else if (gamepad.left_trigger > 0) {
             // Outtake
-            Intake.setPower(-1);
+            intake.setPower(-1);
             Wheels.setPower(-1);
             Zip.setPower(-1);
         } else {
             Wheels.setPower(0);
-            Intake.setPower(0);
+            intake.setPower(0);
             Zip.setPower(0);
         }
 
@@ -101,21 +100,21 @@ public class Intake extends Contraption {
         IS_REVERSED = false;
         Wheels.setPower(1);
         Zip.setPower(1);
-        Intake.setPower(1);
+        intake.setPower(1);
     }
 
     public static void stopIntaking() {
         IS_INTAKING = false;
         IS_REVERSED = false;
         Wheels.setPower(0);
-        Intake.setPower(0);
+        intake.setPower(0);
         Zip.setPower(0);
     }
 
     public static void reverseIntake() {
         IS_REVERSED = true;
         IS_INTAKING = false;
-        Intake.setPower(-0.7);
+        intake.setPower(-0.7);
         Wheels.setPower(-0.7);
         Zip.setPower(-0.7);
     }

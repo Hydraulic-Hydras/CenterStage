@@ -17,8 +17,13 @@ public abstract class Contraption {
     /**
      * OpMode circumstance for a Contraption class.
      */
-    protected LinearOpMode opMode;
 
+    protected LinearOpMode opMode;
+    /**
+     * Telemetry circumstance for a Contraption class.
+     */
+
+    protected Telemetry telemetry;
     /**
      * Initiates the robot's hardware by obtaining and storing references to the robot configuration.
      * It also establishes the initial positions for motors and servos.

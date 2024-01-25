@@ -19,8 +19,8 @@ public class Camera extends Contraption {
     private OpenCvCamera camera;
     private String deviceName;
 
-    private static final int WIDTH = 640;
-    private static final int HEIGHT = 480;
+    private static int WIDTH = 640;
+    private static int HEIGHT = 480;
 
     public Camera(LinearOpMode opMode, String deviceName) {
         this.opMode = opMode;
@@ -29,6 +29,17 @@ public class Camera extends Contraption {
 
     public Camera (String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public Camera (LinearOpMode opMode, String deviceName, boolean isC920) {
+        this.opMode = opMode;
+        this.deviceName = deviceName;
+
+        if (isC920) {
+            WIDTH = 1280;
+            HEIGHT = 720;
+        }
+
     }
 
     public void initialize(HardwareMap hwMap) {
@@ -42,7 +53,7 @@ public class Camera extends Contraption {
             @Override
             public void onOpened() {
                 camera.startStreaming(WIDTH, HEIGHT, OpenCvCameraRotation.UPRIGHT); // 864, 480
-                FtcDashboard.getInstance().startCameraStream(camera, 30);
+                FtcDashboard.getInstance().startCameraStream(camera, 0);
             }
 
             @Override
@@ -58,7 +69,7 @@ public class Camera extends Contraption {
     public void telemetry(Telemetry telemetry) {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        FtcDashboard.getInstance().startCameraStream(camera, 60);
+        FtcDashboard.getInstance().startCameraStream(camera, 0);
         telemetry.update();
 
     }
