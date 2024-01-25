@@ -7,7 +7,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
+import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
@@ -24,15 +26,19 @@ public class TensorFlowTest extends LinearOpMode {
     public VisionPortal myVisionPortal;
     public double propLocation;
     public boolean USE_WEBCAM;
-    public double x;
-    public float y;
+    public static double x;
+    public static float y;
 
+    private final LEDS leds = new LEDS(this);
     // ** Useful **
     public Side side = Side.LEFT;
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO  = true;
+
         USE_WEBCAM = true;
+        leds.initialize(hardwareMap);
         initTfod();
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");
@@ -119,7 +125,27 @@ public class TensorFlowTest extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-                if (x > 460 && x < 600) {
+
+                if (x < 90 && x > 35) {
+                    Globals.LOCATION = 1;
+                    side = Side.LEFT;
+                    leds.LeftLightUp();
+                } else if (x > 275 && x < 370) {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
+                } else if (x > 500 && x < 620) {
+                    Globals.LOCATION = 3;
+                    side = Side.RIGHT;
+                    leds.RightLightUp();
+                }
+
+                if (side == null) {
+                    side = Side.LEFT;
+                    leds.LeftLightUp();
+                }
+
+                /*if (x > 460 && x < 600) {
                     // Location 1 : 460 < x < 600
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
@@ -127,15 +153,16 @@ public class TensorFlowTest extends LinearOpMode {
                     // Location 2 : 45 < x <330
                     Globals.LOCATION = 2;
                     side = Side.CENTER;
-                } else {
+                } else if (x > 0 && x < 350) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                 }
+
+                 */
+
             }
-
         }
-        return Globals.LOCATION;
-
+            return Globals.LOCATION;
     }
     public Side getSide() {
         return side;

@@ -24,7 +24,6 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Disabled
 @Autonomous (name = "RedLeft", group = "Qual 4")
 public class RedLeft extends LinearOpMode {
 
@@ -65,7 +64,6 @@ public class RedLeft extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
-        leds.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");
@@ -82,7 +80,7 @@ public class RedLeft extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // LEFT
+        // LEFT (finished) 1/25/2024
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(30)
@@ -96,12 +94,13 @@ public class RedLeft extends LinearOpMode {
                 .back(2)
 
                 // scoring
-                .strafeRight(13)
+                .strafeRight(25)
                 .splineToConstantHeading(new Vector2d(42, -50), Math.toRadians(90))
+                .waitSeconds(0.01)
                 .back(29)
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(29, -77))
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1400, 1))
+                .lineTo(new Vector2d(18, -76.2))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -111,7 +110,7 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeRight(15)
+                .strafeRight(30)
                 .back(10)
 
                 .build();
@@ -119,10 +118,10 @@ public class RedLeft extends LinearOpMode {
         // CENTER
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .lineTo(Globals.lineToCenterProp)
+                //.lineTo(Globals.lineToCenterProp)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(0.1)
-                .lineTo(Globals.lineToPos)
+               // .lineTo(Globals.lineToPos)
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
@@ -132,11 +131,11 @@ public class RedLeft extends LinearOpMode {
                 .strafeLeft(11)
                 .turn(Math.toRadians(-180))
                 .waitSeconds(0.5)
-                .lineTo(Globals.straightLineToPos)
+                //.lineTo(Globals.straightLineToPos)
 
                 // Scoring
-                .splineToConstantHeading(Globals.curveSplineToBackDrop,  Math.toRadians(-180))
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1400, 1))
+                //.splineToConstantHeading(Globals.curveSplineToBackDrop,  Math.toRadians(-180))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -146,12 +145,11 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeRight(17)
-                .back(10)
+                .strafeRight(30)
 
                 .build();
 
-        // RIGHT
+        // RIGHT (finished) 1/25/2024
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(29)
@@ -160,26 +158,27 @@ public class RedLeft extends LinearOpMode {
                 .waitSeconds(0.1)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(0.1)
-                .forward(3)
+                .forward(5)
                 .waitSeconds(0.1)
                 .addTemporalMarker(Intake::reverseIntake)
                 .waitSeconds(0.9)
-                .back(3)
+                .back(5)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
 
-                .strafeLeft(12)
+                .strafeLeft(30)
                 .resetConstraints()
 
                 .setConstraints(Globals.HalfVel, Globals.HalfAccel)
                 .forward(73)
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(23, -78.3))
+                .lineTo(new Vector2d(17, -75))
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(180))
+                .back(2)
                 .waitSeconds(0.5)
 
                 // Scoring
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1400, 1))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -189,8 +188,7 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeLeft(13)
-                .back(12)
+                .strafeRight(30)
 
                 .build();
 
@@ -274,18 +272,25 @@ public class RedLeft extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-                if (x > 460 && x < 600) {
-                    // Location 1 : 460 < x < 600
-                    Globals.LOCATION = 3;
-                    side = Side.RIGHT;
-                } else if (x > 45 && x < 330) {
-                    // Location 2 : 45 < x <330
-                    Globals.LOCATION = 2;
-                    side = Side.CENTER;
-                } else {
+                if (x < 90 && x > 35) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
+                    leds.LeftLightUp();
+                } else if (x > 275 && x < 370) {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
+                } else if (x > 500 && x < 620) {
+                    Globals.LOCATION = 3;
+                    side = Side.RIGHT;
+                    leds.RightLightUp();
                 }
+
+                if (side == null) {
+                    side = Side.LEFT;
+                    leds.LeftLightUp();
+                }
+
             }
 
         }

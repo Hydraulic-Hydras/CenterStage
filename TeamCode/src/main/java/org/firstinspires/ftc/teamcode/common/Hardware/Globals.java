@@ -28,19 +28,4 @@ public class Globals {
     // Start Position
     public static final Pose2d StartPose = new Pose2d(0, 0, Math.toRadians(0));
 
-    /* === RED RIGHT BK === */
-    public static final Vector2d splineToProp = new Vector2d(19.5, -8.6);
-    public static final Vector2d lineToBackDrop = new Vector2d(17, -28);
-
-    /* === RED LEFT === */
-    // need to add more paths
-
-    public static final Vector2d lineToCenterProp = new Vector2d(34, 12);
-    public static final Vector2d lineToPos = new Vector2d(39, 2);
-    public static final Vector2d straightLineToPos = new Vector2d(49, -55);
-    public static final Vector2d curveSplineToBackDrop = new Vector2d(30, -84.2);
-
-    /* === BLUE LEFT BK === */
-    public static final Vector2d BLUE_splineToLeftProp = new Vector2d(17, 7);
-    public static final Vector2d BLUE_lineToBackDrop = new Vector2d(17, 31.5);
 }

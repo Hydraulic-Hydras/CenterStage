@@ -23,14 +23,14 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Disabled
+
 @Autonomous (name = "BlueLeftBk", group = "Qual 4")
 public class BlueLeftBk extends LinearOpMode {
 
     // Hardware
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
-    private final LEDS LEDS = new LEDS(this);
+    private final LEDS leds = new LEDS(this);
     private SampleMecanumDrive drive;
 
     // Timer
@@ -56,7 +56,7 @@ public class BlueLeftBk extends LinearOpMode {
 
         // Put initialization blocks here.
         drive = new SampleMecanumDrive(hardwareMap);
-        LEDS.initialize(hardwareMap);
+        leds.initialize(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
 
@@ -64,7 +64,6 @@ public class BlueLeftBk extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
-        LEDS.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");
@@ -81,6 +80,7 @@ public class BlueLeftBk extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
+        // Center (finished) 1/25/2024
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(29)
@@ -93,25 +93,26 @@ public class BlueLeftBk extends LinearOpMode {
                 .turn(Math.toRadians(-90))
 
                 // Scoring
-                .back(31.5)
+                .back(32)
                 .strafeLeft(3)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> mitsumi.autoMoveTo(1350, 1))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2)
+                .waitSeconds(2.1)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
 
                 // park
-                .strafeRight(15)
+                .strafeRight(35)
 
                 .build();
 
+        // Right (finished) 1/25/2024
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .forward(30)
+                .forward(29)
                 .waitSeconds(0.1)
                 .turn(Math.toRadians(-90))
                 .forward(4)
@@ -121,26 +122,32 @@ public class BlueLeftBk extends LinearOpMode {
                 .waitSeconds(0.1)
 
                 // scoring
-                .lineTo(new Vector2d(32, 31))
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(32, 29), Math.toRadians(-90))
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1320, 1))
+
+                .back(1.5)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-200, 1))
+                .addTemporalMarker(Intake::reverseIntake)
+                .setReversed(false)
 
                 // park
-                .strafeRight(18.5)
-                .back(10)
+                .strafeRight(40)
+                .addTemporalMarker(Intake::stopIntaking)
 
                 .build();
 
+        // Left (finished) 1/25/2024
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .splineToConstantHeading(Globals.BLUE_splineToLeftProp, Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(22, 15.6), Math.toRadians(0))
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
@@ -150,21 +157,20 @@ public class BlueLeftBk extends LinearOpMode {
 
                 .resetConstraints()
                 .turn(Math.toRadians(-90))
-                .lineTo(Globals.BLUE_lineToBackDrop)
+                .lineToLinearHeading(new Pose2d(23.5, 39.5, Math.toRadians(-90)))
 
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1320, 1))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2)
+                .waitSeconds(2.1)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
 
                 // park
-                .strafeRight(13)
-                .back(10)
+                .strafeRight(30)
 
                 .build();
 
@@ -248,18 +254,25 @@ public class BlueLeftBk extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-                if (x > 460 && x < 700) {
-                    // Location 1 : 460 < x < 600
-                    Globals.LOCATION = 3;
-                    side = Side.RIGHT;
-                } else if (x > 45 && x < 330) {
-                    // Location 2 : 45 < x <330
-                    Globals.LOCATION = 2;
-                    side = Side.CENTER;
-                } else {
+                if (x < 90 && x > 35) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
+                    leds.LeftLightUp();
+                } else if (x > 275 && x < 370) {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
+                } else if (x > 500 && x < 620) {
+                    Globals.LOCATION = 3;
+                    side = Side.RIGHT;
+                    leds.RightLightUp();
                 }
+
+                if (side == null) {
+                    side = Side.LEFT;
+                    leds.LeftLightUp();
+                }
+
             }
 
         }

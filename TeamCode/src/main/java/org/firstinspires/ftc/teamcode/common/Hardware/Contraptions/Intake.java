@@ -17,9 +17,9 @@ public class Intake extends Contraption {
     public static Servo rotateBucket;
     public static Servo pixelRetainer;
 
-    public static double POS_REST = 0.2;
-    public static double POS_PANEL = 0.5;
-    public static double POS_DUMP = 1;
+    public static double POS_REST = 0.4;
+    public static double POS_PANEL = 0.73;
+    public static double POS_DUMP = 0.9;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;

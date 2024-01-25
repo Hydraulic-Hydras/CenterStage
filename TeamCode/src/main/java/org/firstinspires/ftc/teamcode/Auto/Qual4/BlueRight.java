@@ -244,18 +244,25 @@ public class BlueRight extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-                if (x > 460 && x < 600) {
-                    // Location 1 : 460 < x < 600
-                    Globals.LOCATION = 3;
-                    side = Side.RIGHT;
-                } else if (x > 45 && x < 330) {
-                    // Location 2 : 45 < x <330
-                    Globals.LOCATION = 2;
-                    side = Side.CENTER;
-                } else {
+                if (x < 90 && x > 35) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
+                    leds.LeftLightUp();
+                } else if (x > 275 && x < 370) {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
+                } else if (x > 500 && x < 620) {
+                    Globals.LOCATION = 3;
+                    side = Side.RIGHT;
+                    leds.RightLightUp();
                 }
+
+                if (side == null) {
+                    side = Side.LEFT;
+                    leds.LeftLightUp();
+                }
+
             }
         }
         return Globals.LOCATION;
