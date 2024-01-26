@@ -16,12 +16,12 @@ public class Globals {
 
     // VELOCITY AND ACCELERATION
     public static final TrajectoryVelocityConstraint MaxVel = SampleMecanumDrive.getVelocityConstraint(
-            100, Math.toRadians(180), Math.toRadians(180));
+            100, Math.toRadians(229), Math.toRadians(229));
     public static final TrajectoryAccelerationConstraint MaxAccel = SampleMecanumDrive.getAccelerationConstraint(
             100);
 
     public static final TrajectoryVelocityConstraint HalfVel = SampleMecanumDrive.getVelocityConstraint(
-            74, Math.toRadians(180), Math.toRadians(180));
+            74, Math.toRadians(229), Math.toRadians(229));
     public static final TrajectoryAccelerationConstraint HalfAccel = SampleMecanumDrive.getAccelerationConstraint
             (74);
 

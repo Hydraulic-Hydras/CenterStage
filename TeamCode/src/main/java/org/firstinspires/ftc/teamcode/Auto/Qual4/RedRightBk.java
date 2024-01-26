@@ -80,37 +80,68 @@ public class RedRightBk extends LinearOpMode {
         // CENTER (finished 2 pixel, 2 + 2 needs tuning) 1/25/2024
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
                 .forward(29)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
                 .UNSTABLE_addTemporalMarkerOffset(1, Intake::stopIntaking)
                 .waitSeconds(0.1)
                 .back(5)
-                .waitSeconds(0.1)
+                .waitSeconds(0.2)
                 .turn(Math.toRadians(90))
-                .waitSeconds(0.1)
+                .waitSeconds(0.2)
                 .back(31.2)
 
                 // Scoring
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> mitsumi.autoMoveTo(1300, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP)) // changed from 0.8 to 0.4
                 .waitSeconds(2.1)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.65))
                 .addTemporalMarker(Intake::reverseIntake)
 
-                .resetConstraints()
-                .setConstraints(Globals.HalfVel, Globals.HalfAccel)
-
                  // 1st cycle
                 .splineToConstantHeading(new Vector2d(65.5, -25), Math.toRadians(90))
-                .waitSeconds(0.1)
+                .waitSeconds(0.2)
                 .forward(75)
+                .addTemporalMarker(Intake::stopIntaking)
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(55, 70), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(56.5, 62), Math.toRadians(180))
+                .waitSeconds(0.01)
+                .forward(1.6)
+                .waitSeconds(0.01)
+                .strafeRight(1.7)
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(1.2)
+                .back(7.5)
+                .addTemporalMarker(Intake::startIntaking)
+                .addTemporalMarker(Intake::fingerReset)
+                .forward(7.5)
+                .waitSeconds(1)
+                .back(5)
+                .forward(7.5)
+
+                .lineToLinearHeading(new Pose2d(65.5, -7, Math.toRadians(90)))
+                .setReversed(true)
+                .waitSeconds(0.1)
+                .splineToConstantHeading(new Vector2d(27, -31), Math.toRadians(90))
+                .addTemporalMarker(Intake::stopIntaking)
+                .back(4)
+
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
+                .waitSeconds(0.9)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP)) // changed from 0.8 to 0.4
+                .waitSeconds(2.1)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                .waitSeconds(1.2)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1450, 0.75))
+                .addTemporalMarker(Intake::reverseIntake)
+
+                /*
                 .forward(7)
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(1, Intake::reverseIntake)
@@ -147,6 +178,7 @@ public class RedRightBk extends LinearOpMode {
                 .forward(3)
                 .strafeLeft(5)
 
+                 */
                 .build();
 
         // RIGHT (finished) 1/25/2024

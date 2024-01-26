@@ -16,13 +16,20 @@ public class Intake extends Contraption {
     public static CRServo intake;
     public static Servo rotateBucket;
     public static Servo pixelRetainer;
+    public static Servo DWAYNE;
 
     public static double POS_REST = 0.4;
     public static double POS_PANEL = 0.73;
-    public static double POS_DUMP = 0.9;
+    public static double POS_DUMP = 0.91;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
+
+    public static double DWAYNE_CLOSE = 1.0;
+    public static double DWAYNE_OVERLOAD_EXTEND = 0.46;
+
+    public static double retainerOpen = 0.17;
+    public static double retainerClose = 0.35;
 
     public enum State {
         REST,
@@ -42,10 +49,11 @@ public class Intake extends Contraption {
 
         rotateBucket = hwMap.get(Servo.class, "rotateBucket");
         pixelRetainer = hwMap.get(Servo.class, "pixelRetainer");
+        DWAYNE = hwMap.get(Servo.class, "claw");
 
         // Default position
         rotateBucket.setPosition(POS_REST);
-
+        DWAYNE.setPosition(DWAYNE_CLOSE);
     }
 
     @Override
@@ -117,6 +125,22 @@ public class Intake extends Contraption {
         intake.setPower(-0.7);
         Wheels.setPower(-0.7);
         Zip.setPower(-0.7);
+    }
+
+    public static void fingerDown() {
+        DWAYNE.setPosition(DWAYNE_OVERLOAD_EXTEND);
+    }
+
+    public static void fingerReset() {
+        DWAYNE.setPosition(DWAYNE_CLOSE);
+    }
+
+    public static void retainerOpen() {
+        pixelRetainer.setPosition(retainerOpen);
+    }
+
+    public static void retainerClose() {
+        pixelRetainer.setPosition(retainerClose);
     }
 
     public static State getState() {
