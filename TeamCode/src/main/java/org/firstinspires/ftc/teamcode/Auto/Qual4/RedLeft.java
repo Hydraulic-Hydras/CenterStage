@@ -118,16 +118,18 @@ public class RedLeft extends LinearOpMode {
         // CENTER
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                //.lineTo(Globals.lineToCenterProp)
+                .strafeLeft(12)
+                .forward(35.5)
+                .waitSeconds(0.1)
                 .turn(Math.toRadians(-90))
-                .waitSeconds(0.1)
-               // .lineTo(Globals.lineToPos)
-                .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
                 .back(5)
+                .strafeLeft(17)
+                .waitSeconds(0.1)
 
+                /*
                 .strafeLeft(11)
                 .turn(Math.toRadians(-180))
                 .waitSeconds(0.5)
@@ -146,7 +148,8 @@ public class RedLeft extends LinearOpMode {
 
                 // park
                 .strafeRight(30)
-
+\
+                 */
                 .build();
 
         // RIGHT (finished) 1/25/2024
