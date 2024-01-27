@@ -96,10 +96,10 @@ public class Intake extends Contraption {
 
         if (gamepad.x) {
             // open
-            pixelRetainer.setPosition(0.46);
+            pixelRetainer.setPosition(retainerOpen);
         } else if (gamepad.y) {
             // grab
-            pixelRetainer.setPosition(0.42);
+            pixelRetainer.setPosition(retainerClose);
         }
     }
 

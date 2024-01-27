@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class DriveConstants {
 
     // Switched from 15:1 to 20:1 to have more torque
+    // Switched back to 15:1
 
     public static final double TICKS_PER_REV = 420;
     public static final double MAX_RPM = 400;

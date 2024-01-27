@@ -13,35 +13,45 @@ public class Right {
 
         RoadRunnerBotEntity blueRight = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(74, 74, Math.toRadians(180), Math.toRadians(180), 16.68)
+                .setConstraints(100, 100, Math.toRadians(229), Math.toRadians(229), 17.67)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))
-
-                                /* === RIGHT === */
-
-                                // Right Prop
-                                //.splineToConstantHeading(new Vector2d(13, 22), Math.toRadians(90))
-                               // .lineToLinearHeading(new Pose2d(50, -40, Math.toRadians(180)))
-                               // .strafeLeft(17)
-                               // .back(10)
+                        drive.trajectorySequenceBuilder(new Pose2d(12.5, -62, Math.toRadians(90)))
 
 
-                                // Center Prop
-                               // .lineTo(new Vector2d(12, -34.5))
-                               // .lineToLinearHeading(new Pose2d(50, -34.5, Math.toRadians(180)))
-                               // .strafeLeft(25)
-                               // .back(10)
+                                .lineTo(new Vector2d(12.5, -33))
+                                .back(5)
+                                .turn(Math.toRadians(90))
 
-                                // Left Prop
-                                //.lineToLinearHeading(new Pose2d(12, -33.5, Math.toRadians(180)))
-                                //.lineTo(new Vector2d(50, -33.5))
-                                //.strafeLeft(27)
-                                // .back(10)
+                                .lineTo(new Vector2d(43.7, -38))
 
+                                .waitSeconds(0.5)
+                                .splineToConstantHeading(new Vector2d(35.5, -7), Math.toRadians(180))
+                                .lineTo(new Vector2d(-31.3, -7))
 
-                                .splineToConstantHeading(new Vector2d(47, -17), Math.toRadians(-90))
-                                .lineToLinearHeading(new Pose2d(47, -30, Math.toRadians(-270)))
+                                .splineToConstantHeading(new Vector2d(-55, -11.6), Math.toRadians(180))
+                                .forward(1.2)
+
+                                .lineToLinearHeading(new Pose2d(35, -11, Math.toRadians(180)))
+                                .waitSeconds(0.5)
+
+                                .splineToConstantHeading(new Vector2d(43.7, -35), Math.toRadians(180))
+
+                                .waitSeconds(0.5)
+                                .splineToConstantHeading(new Vector2d(35.5, -7), Math.toRadians(180))
+                                .lineTo(new Vector2d(-31.3, -7))
+
+                                .splineToConstantHeading(new Vector2d(-55, -11.6), Math.toRadians(180))
+                                .forward(1.2)
+
+                                .lineToLinearHeading(new Pose2d(35, -11, Math.toRadians(180)))
+                                .waitSeconds(0.5)
+
+                                .splineToConstantHeading(new Vector2d(43.7, -35), Math.toRadians(180))
+
+                                .waitSeconds(5.02)
+
+                                // 2 + 2 uses 15.02 extra seconds
                                 .build()
                 );
 

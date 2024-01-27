@@ -148,44 +148,6 @@ public class RedRightBk extends LinearOpMode {
                 .addTemporalMarker(Intake::reverseIntake)
                 .forward(4)
 
-                /*
-                .forward(7)
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(1, Intake::reverseIntake)
-                .back(10)
-                .waitSeconds(0.01)
-                .strafeLeft(3)
-                .waitSeconds(0.01)
-                .forward(10)
-                .addTemporalMarker(Intake::startIntaking)
-                .waitSeconds(0.01)
-                .back(10)
-                .waitSeconds(0.01)
-                .forward(10)
-                .waitSeconds(0.01)
-
-                .resetConstraints()
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .lineToLinearHeading(new Pose2d(65.5, -7, Math.toRadians(90)))
-                .setReversed(true)
-                .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(29, -31), Math.toRadians(90))
-                .addTemporalMarker(Intake::stopIntaking)
-                .back(3.5)
-
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1350, 1))
-                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 1))
-                .waitSeconds(0.1)
-
-                // park
-                .forward(3)
-                .strafeLeft(5)
-
-                 */
                 .build();
 
         // RIGHT (finished) 1/25/2024
