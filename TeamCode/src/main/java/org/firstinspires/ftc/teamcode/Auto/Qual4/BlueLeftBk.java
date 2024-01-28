@@ -33,10 +33,6 @@ public class BlueLeftBk extends LinearOpMode {
     private final LEDS leds = new LEDS(this);
     private SampleMecanumDrive drive;
 
-    // Timer
-    private final ElapsedTime timer = new ElapsedTime();
-    private double endTime = 0;
-
     // Vision
     public List<Recognition> myTfodRecognitions;
     public TfodProcessor myTfodProcessor;
@@ -186,19 +182,13 @@ public class BlueLeftBk extends LinearOpMode {
         // Start is pressed
 
         if (propLocation == 3) {
-            telemetry.addLine("Running Path for Right Prop");
             drive.followTrajectorySequence(preloadRight);
-        }   else if (propLocation == 2) {
-            telemetry.addLine("Running Path for Center Prop");
+        } else if (propLocation == 2) {
             drive.followTrajectorySequence(preloadCenter);
-        }   else {
-            telemetry.addLine("No Prop detected, Running default Path for Left Prop");
+        } else {
             drive.followTrajectorySequence(preloadLeft);
         }
 
-        telemetry.addLine();
-        telemetry.addData("Runtime: ", endTime == 0 ? timer.seconds() : endTime);
-        telemetry.update();
     }
 
     private void initTfod() {

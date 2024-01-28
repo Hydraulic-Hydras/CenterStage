@@ -25,8 +25,8 @@ public class Intake extends Contraption {
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
 
-    public static double DWAYNE_CLOSE = 1.0;
-    public static double DWAYNE_OVERLOAD_EXTEND = 0.46;
+    public static double DWAYNE_CLOSE = 0.55;
+    public static double DWAYNE_OVERLOAD_EXTEND = 0;
 
     public static double retainerOpen = 0.17;
     public static double retainerClose = 0.35;

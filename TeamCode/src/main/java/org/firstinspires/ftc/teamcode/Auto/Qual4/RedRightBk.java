@@ -31,10 +31,6 @@ public class RedRightBk extends LinearOpMode {
     private final LEDS leds = new LEDS(this);
     private SampleMecanumDrive drive;
 
-    // Timer
-    private final ElapsedTime timer = new ElapsedTime();
-    private double endTime = 0;
-
     // Vision
     public List<Recognition> myTfodRecognitions;
     public TfodProcessor myTfodProcessor;
@@ -229,10 +225,6 @@ public class RedRightBk extends LinearOpMode {
         }   else {
             drive.followTrajectorySequence(preloadLeft);
         }
-
-        telemetry.addLine();
-        telemetry.addData("Runtime: ", endTime == 0 ? timer.seconds() : endTime);
-        telemetry.update();
     }
 
     private void initTfod() {
