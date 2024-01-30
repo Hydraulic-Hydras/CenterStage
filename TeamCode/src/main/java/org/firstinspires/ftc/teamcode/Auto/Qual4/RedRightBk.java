@@ -86,7 +86,7 @@ public class RedRightBk extends LinearOpMode {
                 .back(31.2)
 
                 // Scoring
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> mitsumi.autoMoveTo(1300, 1))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(0.4, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP)) // changed from 0.8 to 0.4
