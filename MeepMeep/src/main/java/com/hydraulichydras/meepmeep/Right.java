@@ -16,42 +16,19 @@ public class Right {
                 .setConstraints(100, 100, Math.toRadians(229), Math.toRadians(229), 17.67)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(12.5, -62, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-35, 62.5, Math.toRadians(270)))
 
-
-                                .lineTo(new Vector2d(12.5, -33))
-                                .back(5)
+                                .forward(29)
                                 .turn(Math.toRadians(90))
+                                .forward(4)
+                                .addTemporalMarker(() -> { })
+                                .back(4)
+                                .addTemporalMarker(() -> { })
 
-                                .lineTo(new Vector2d(43.7, -38))
+                                .setTangent(Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-55, 11.6, Math.toRadians(0)), Math.toRadians(0))
 
-                                .waitSeconds(0.5)
-                                .splineToConstantHeading(new Vector2d(35.5, -7), Math.toRadians(180))
-                                .lineTo(new Vector2d(-31.3, -7))
 
-                                .splineToConstantHeading(new Vector2d(-55, -11.6), Math.toRadians(180))
-                                .forward(1.2)
-
-                                .lineToLinearHeading(new Pose2d(35, -11, Math.toRadians(180)))
-                                .waitSeconds(0.5)
-
-                                .splineToConstantHeading(new Vector2d(43.7, -35), Math.toRadians(180))
-
-                                .waitSeconds(0.5)
-                                .splineToConstantHeading(new Vector2d(35.5, -7), Math.toRadians(180))
-                                .lineTo(new Vector2d(-31.3, -7))
-
-                                .splineToConstantHeading(new Vector2d(-55, -11.6), Math.toRadians(180))
-                                .forward(1.2)
-
-                                .lineToLinearHeading(new Pose2d(35, -11, Math.toRadians(180)))
-                                .waitSeconds(0.5)
-
-                                .splineToConstantHeading(new Vector2d(43.7, -35), Math.toRadians(180))
-
-                                .waitSeconds(5.02)
-
-                                // 2 + 2 uses 15.02 extra seconds
                                 .build()
                 );
 

@@ -16,8 +16,8 @@ public class localizerTest extends LinearOpMode {
 
     /**
      * This Class is being used to eliminate the 12.72
-     *  -> New calculation theorizes that there is a 15.02 second wait time during the whole auto
-     *  cut down to only 5.02 seconds and a 2 + 4 can be achieved
+     * -> New calculation theorizes that there is a 15.02 second wait time during the whole auto
+     * cut down to only 5.02 seconds and a 2 + 4 can be achieved
      */
     @Override
     public void runOpMode() {
@@ -38,8 +38,7 @@ public class localizerTest extends LinearOpMode {
         TrajectorySequence localize = drive.trajectorySequenceBuilder(new Pose2d(12.5, -62, Math.toRadians(90)))
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .lineTo(new Vector2d(12.5, -33))
-                .back(5)
+                .lineTo(new Vector2d(12.5, -33)).back(5)
                 .turn(Math.toRadians(90))
 
                 .lineTo(new Vector2d(43.7, -38))
@@ -74,13 +73,10 @@ public class localizerTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySequence(localize);
-
-        while (!isStopRequested() && opModeIsActive()) ;
-
-
+        while (opModeIsActive()) {
+            drive.followTrajectorySequence(localize);
+        }
 
 
-
-           }
+    }
 }

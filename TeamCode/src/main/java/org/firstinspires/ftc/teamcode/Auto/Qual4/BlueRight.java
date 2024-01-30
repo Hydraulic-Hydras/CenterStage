@@ -78,17 +78,29 @@ public class BlueRight extends LinearOpMode {
 
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
                 .forward(29)
                 .addTemporalMarker(Intake::reverseIntake)
-
                 .back(4)
                 .strafeRight(16.5)
                 .turn(Math.toRadians(-90))
                 .addTemporalMarker(Intake::stopIntaking)
-                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
+
+                // Theoretically this should work
+                .forward(4)
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(1)
+                .back(8)
+                .addTemporalMarker(Intake::fingerReset)
+                .forward(9.5)
+                .addTemporalMarker(Intake::startIntaking)
+                .waitSeconds(0.5)
+
+                // Lets see if i can make this into a 2 + 1 as well for funsies yk
                 .lineTo(new Vector2d(58, 65))
-                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
-                 .splineToConstantHeading(new Vector2d(18.5, 70), Math.toRadians(0))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
+                .splineToConstantHeading(new Vector2d(18.5, 70), Math.toRadians(-90))
 
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -99,19 +111,30 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(0, 0.55))
                 .back(10)
 
-
-
                 .build();
 
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .forward(29)
+                .turn(Math.toRadians(90))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(10)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                .splineToConstantHeading(new Vector2d(58, -15), Math.toRadians(90))
+                .lineTo(new Vector2d(58, 65))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
+                .splineToConstantHeading(new Vector2d(12.5, 70), Math.toRadians(90))
+
+
                 .build();
 
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
+                // Purple Pixel
                 .forward(29)
                 .turn(Math.toRadians(-90))
                 .forward(4)
@@ -119,6 +142,7 @@ public class BlueRight extends LinearOpMode {
                 .back(4)
                 .addTemporalMarker(Intake::stopIntaking)
 
+                // Pick up from stack
                 .strafeLeft(29)
                 .forward(21)
                 .addTemporalMarker(Intake::fingerDown)
@@ -129,6 +153,8 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarker(Intake::startIntaking)
                 .waitSeconds(0.5)
                 .back(85)
+
+                // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1450, 0.65))
                 .splineToConstantHeading(new Vector2d(26, 74.5), Math.toRadians(-90))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
@@ -140,7 +166,9 @@ public class BlueRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .forward(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> mitsumi.autoMoveTo(-200, 0.65))
+
+                // Park
                 .strafeLeft(15)
                 .back(7)
 

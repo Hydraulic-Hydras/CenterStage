@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+
 @Config
 public class Intake extends Contraption {
 
@@ -20,7 +22,8 @@ public class Intake extends Contraption {
 
     public static double POS_REST = 0.4;
     public static double POS_PANEL = 0.73;
-    public static double POS_DUMP = 0.91;
+    public static double POS_DUMP = 0.9;
+    public static double POS_DOUBLE_DUMP = 1;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
@@ -53,7 +56,11 @@ public class Intake extends Contraption {
 
         // Default position
         rotateBucket.setPosition(POS_REST);
-        DWAYNE.setPosition(DWAYNE_CLOSE);
+        if (Globals.IS_AUTO) {
+            DWAYNE.setPosition(DWAYNE_CLOSE);
+        }   else {
+            DWAYNE.setPosition(0.48);
+        }
     }
 
     @Override
