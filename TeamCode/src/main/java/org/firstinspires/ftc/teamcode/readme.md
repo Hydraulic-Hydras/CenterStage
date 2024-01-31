@@ -1,9 +1,3 @@
-## TODO 
-1.  Make motion profiled class for climber so it has different incremented states
-    starts off with 25% power then it can increase to more power but also if the button is let go off 
-    the state doesn't reset. 
-2.  Fix camera code. 
-
 ## TeamCode Module
 
 Welcome!
