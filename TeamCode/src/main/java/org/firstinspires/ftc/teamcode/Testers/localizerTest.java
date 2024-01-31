@@ -26,8 +26,9 @@ public class localizerTest extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(new Pose2d(12.5, -62, Math.toRadians(90)));
 
+        Pose2d poseEstimate = drive.getPoseEstimate();
+
         while (!isStopRequested()) {
-            Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
