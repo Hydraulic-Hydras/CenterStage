@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto.FourPixel;
+package org.firstinspires.ftc.teamcode.OpModes.Auto.TwoPixel;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -21,8 +21,8 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous (name = "RedLeft", group = "Qual 4")
-public class RedLeft extends LinearOpMode {
+@Autonomous (name = "2 Pixel Red Left", group = "2 Pixel")
+public class TwoPixelRedLeft extends LinearOpMode {
 
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
@@ -44,9 +44,8 @@ public class RedLeft extends LinearOpMode {
 
     // ** Useful **
     public Side side = Side.LEFT;
-
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         Globals.IS_AUTO = true;
 
         // Put initialization blocks here.
@@ -75,7 +74,7 @@ public class RedLeft extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // LEFT (finished) 1/25/2024
+
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(30)
@@ -90,12 +89,13 @@ public class RedLeft extends LinearOpMode {
 
                 // scoring
                 .strafeRight(25)
-                .splineToConstantHeading(new Vector2d(42, -50), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(52, -50), Math.toRadians(90))
                 .waitSeconds(0.01)
                 .back(29)
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(18, -76.2))
+                .lineTo(new Vector2d(29, -76.2))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
+                .back(1.5)
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -105,7 +105,7 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeRight(30)
+                .strafeRight(27)
                 .back(10)
 
                 .build();
@@ -113,17 +113,8 @@ public class RedLeft extends LinearOpMode {
         // CENTER
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .strafeLeft(12)
-                .forward(35.5)
-                .waitSeconds(0.1)
-                .turn(Math.toRadians(-90))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .back(5)
-                .strafeLeft(17)
-                .waitSeconds(0.1)
 
+                .forward(29)
                 /*
                 .strafeLeft(11)
                 .turn(Math.toRadians(-180))
@@ -147,7 +138,7 @@ public class RedLeft extends LinearOpMode {
                  */
                 .build();
 
-        // RIGHT (finished) 1/25/2024
+        // TUNED
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(29)
@@ -164,9 +155,6 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
 
                 .strafeLeft(30)
-                .resetConstraints()
-
-                .setConstraints(Globals.HalfVel, Globals.HalfAccel)
                 .forward(73)
                 .waitSeconds(0.1)
                 .lineTo(new Vector2d(17, -75))
@@ -177,6 +165,7 @@ public class RedLeft extends LinearOpMode {
 
                 // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
+                .back(4.5)
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -186,7 +175,7 @@ public class RedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeRight(30)
+                .strafeRight(39)
 
                 .build();
 
@@ -244,6 +233,7 @@ public class RedLeft extends LinearOpMode {
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
+            leds.LeftLightUp();
             side = Side.LEFT;
         } else {
             // Iterate through list and call a function to display info for each recognized object.
@@ -275,12 +265,6 @@ public class RedLeft extends LinearOpMode {
                     side = Side.RIGHT;
                     leds.RightLightUp();
                 }
-
-                if (side == null) {
-                    side = Side.LEFT;
-                    leds.LeftLightUp();
-                }
-
             }
 
         }

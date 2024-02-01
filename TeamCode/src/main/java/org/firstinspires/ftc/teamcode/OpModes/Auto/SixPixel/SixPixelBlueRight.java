@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.Auto.TwoPixel;
+package org.firstinspires.ftc.teamcode.OpModes.Auto.SixPixel;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -15,14 +14,16 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous (name = "2 Pixel Blue Left Backdrop", group = "2 Pixel")
-public class TwoPixelBlueLeftBK extends LinearOpMode {
+@Disabled
+@Autonomous (name = "4 Pixel Blue Right APR", group = " 2 + 4 ")
+public class SixPixelBlueRight extends LinearOpMode {
 
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
@@ -42,10 +43,14 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
     public double x;
     public float y;
 
+    // AprilTags
+    public boolean USE_TAGS;
+    public AprilTagProcessor aprilTagProcessor;
+
     // ** Useful **
     public Side side = Side.LEFT;
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         Globals.IS_AUTO = true;
 
         // Initialize hardware
@@ -58,10 +63,6 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
         USE_WEBCAM = true;
         initTfod();
 
-        // Telemetry warning
-        telemetry.addLine("Robot initialization in process...");
-        telemetry.addLine("Do not press or move anything as Robot will move!!!");
-
         while (!isStarted()) {
             propLocation = scanLocation();
             telemetry.addData("Team Prop Location", propLocation);
@@ -69,123 +70,17 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
             telemetry.update();
         }
 
-        Pose2d startPose = Globals.StartPose;
-        drive.setPoseEstimate(startPose);
-
-        TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .forward(29)
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-                .back(5)
-                .turn(Math.toRadians(-90))
-
-                // Scoring
-                .back(32)
-                .strafeLeft(3)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
-
-                // park
-                .strafeRight(35)
-
-                .build();
-
-        TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .forward(29)
-                .waitSeconds(0.1)
-                .turn(Math.toRadians(-90))
-                .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-
-                // scoring
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(32, 29), Math.toRadians(-90))
-                .waitSeconds(0.5)
-
-                .back(1.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-200, 1))
-                .addTemporalMarker(Intake::reverseIntake)
-                .setReversed(false)
-
-                // park
-                .strafeRight(40)
-                .addTemporalMarker(Intake::stopIntaking)
-
-                .build();
-
-        TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .splineToConstantHeading(new Vector2d(22, 15.6), Math.toRadians(0))
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-                .back(5)
-
-                .resetConstraints()
-                .turn(Math.toRadians(-90))
-                .lineToLinearHeading(new Pose2d(23.5, 39.5, Math.toRadians(-90)))
-
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
-
-                // park
-                .strafeRight(30)
-
-                .build();
-
-
         waitForStart();
-        // Put run blocks here.
         // Save computing resources by closing the camera stream, if no longer needed.
         myVisionPortal.close();
-        telemetry.addData("Side: ", getSide());
-        telemetry.addData("Location: ", propLocation);
 
-        if (isStopRequested()) return;
-        // Start is pressed
-
-        if (propLocation == 3) {
-            drive.followTrajectorySequence(preloadRight);
-        } else if (propLocation == 2) {
-            drive.followTrajectorySequence(preloadCenter);
-        } else {
-            drive.followTrajectorySequence(preloadLeft);
-        }
+        USE_TAGS = true;
+        initAprilTag();
+        telemetryAprilTag();
 
     }
 
+    // Team Prop Cam (front c920)
     private void initTfod() {
         TfodProcessor.Builder myTfodProcessorBuilder;
         VisionPortal.Builder myVisionPortalBuilder;
@@ -214,13 +109,13 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
         // Create a VisionPortal by calling build.
         myVisionPortal = myVisionPortalBuilder.build();
     }
-
     private int scanLocation() {
         // Get a list of recognitions from TFOD.
         myTfodRecognitions = myTfodProcessor.getRecognitions();
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
+            leds.LeftLightUp();
             side = Side.LEFT;
         } else {
             // Iterate through list and call a function to display info for each recognized object.
@@ -252,21 +147,63 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                     side = Side.RIGHT;
                     leds.RightLightUp();
                 }
-
-                if (side == null) {
-                    side = Side.LEFT;
-                    leds.LeftLightUp();
-                }
-
             }
-
         }
         return Globals.LOCATION;
-
     }
+
+    private void initAprilTag() {
+        aprilTagProcessor = AprilTagProcessor.easyCreateWithDefaults();
+        if (USE_TAGS) {
+            myVisionPortal = VisionPortal.easyCreateWithDefaults(
+                    hardwareMap.get(WebcamName.class, "Webcam AprilTag"), aprilTagProcessor);
+        } else {
+            myVisionPortal = VisionPortal.easyCreateWithDefaults(BuiltinCameraDirection.BACK, aprilTagProcessor);
+        }
+    }
+
+    private void telemetryAprilTag() {
+        List<AprilTagDetection> myAprilTagDetections;
+        AprilTagDetection aprilTagDetection;
+
+        // Grab list of AprilTag Detections
+        myAprilTagDetections = aprilTagProcessor.getDetections();
+        telemetry.addData("# AprilTags Detected", JavaUtil.listLength(myAprilTagDetections));
+
+        // Iterate through the list
+        for (AprilTagDetection myAprilTagDetection_item : myAprilTagDetections) {
+            aprilTagDetection = myAprilTagDetection_item;
+
+            // Display info for Tags
+            telemetry.addLine("");
+            if (aprilTagDetection.metadata != null) {
+                telemetry.addLine("==== (ID " + aprilTagDetection.id +") " + aprilTagDetection.metadata.name);
+                telemetry.addLine("XYZ " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.x,6,1)
+                        + " " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.y,6,1) + " " +
+                        JavaUtil.formatNumber(aprilTagDetection.ftcPose.z,6,1) + "  (inch)");
+
+                telemetry.addLine("PRY " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.pitch,6,1)
+                        + " " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.roll,6,1) + " " +
+                        JavaUtil.formatNumber(aprilTagDetection.ftcPose.yaw,6,1) + "  (deg)");
+
+                telemetry.addLine("RBE " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.range,6,1)
+                        + " " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.bearing,6,1) + " " +
+                        JavaUtil.formatNumber(aprilTagDetection.ftcPose.elevation,6,1) + "  (inch, deg, deg)");
+            } else {
+                telemetry.addLine("==== (ID " + aprilTagDetection.id + " ) Unknown");
+                telemetry.addLine("Center " + JavaUtil.formatNumber(aprilTagDetection.center.x,6,0)
+                        + " " + JavaUtil.formatNumber(aprilTagDetection.center.y,6,0)+" (pixels)");
+            }
+        }
+
+        telemetry.addLine("");
+        telemetry.addLine("Key: ");
+        telemetry.addLine("XYZ = X (Right), Y (Forward), Z (Up) dist.");
+        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+        telemetry.addLine("RBE = Range, Bearing & Elevation");
+    }
+
     public Side getSide() {
         return side;
     }
-
 }
-
