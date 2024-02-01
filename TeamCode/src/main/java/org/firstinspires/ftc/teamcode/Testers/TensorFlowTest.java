@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Testers;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 
+@Disabled
 @Autonomous (name = "TensorFlowTest", group = "Testers")
 public class TensorFlowTest extends LinearOpMode {
 
@@ -106,6 +108,7 @@ public class TensorFlowTest extends LinearOpMode {
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
+            leds.LeftLightUp();
             side = Side.LEFT;
         } else {
             // Iterate through list and call a function to display info for each recognized object.

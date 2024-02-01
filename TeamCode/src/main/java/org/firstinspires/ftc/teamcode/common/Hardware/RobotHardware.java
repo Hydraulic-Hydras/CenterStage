@@ -50,6 +50,7 @@ public class RobotHardware {
     // Drone
     public Servo launcher_angle;
     public Servo droneTrigger;
+    public Servo Dwayne;
 
     // Imu
     public IMU imu;
@@ -159,6 +160,7 @@ public class RobotHardware {
         intake = hardwareMap.get(CRServo.class, "Intake");
         rotateBucket = hardwareMap.get(Servo.class, "rotateBucket");
         pixelRetainer = hardwareMap.get(Servo.class, "pixelRetainer");
+        Dwayne = hardwareMap.get(Servo.class, "claw");
 
         rotateBucket.setPosition(POS_REST);
 

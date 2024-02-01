@@ -68,9 +68,9 @@ public class Mitsumi extends Contraption {
             RightCascade.setPower(0);
         }
 
-        if (low_Limit.isPressed()) {
+        if (low_Limit.isPressed() && !high_Limit.isPressed()) {
             liftstate = liftState.REST;
-        }   else if (high_Limit.isPressed()) {
+        }   else if (high_Limit.isPressed() && !low_Limit.isPressed()) {
             liftstate = liftState.EXTENDED;
         }   else {
             liftstate = liftState.RAMPING;
@@ -109,20 +109,6 @@ public class Mitsumi extends Contraption {
         }   else {
             LeftCascade.setPower(0);
             RightCascade.setPower(0);
-        }
-    }
-
-    public void scoringM() {
-
-        if (!high_Limit.isPressed()) {
-            LeftCascade.setPower(0.75);
-            RightCascade.setPower(0.75);
-        }   else {
-            LeftCascade.setPower(0);
-            RightCascade.setPower(0);
-
-            Intake.rotateBucket.setPosition(Intake.POS_PANEL);
-            Intake.rotateBucket.setPosition(Intake.POS_DUMP);
         }
     }
 

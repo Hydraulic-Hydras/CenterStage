@@ -101,7 +101,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
