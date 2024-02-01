@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto.FourPixel;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -21,8 +22,9 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
+@Disabled
 @Autonomous (name = "RedLeft", group = "Qual 4")
-public class RedLeft extends LinearOpMode {
+public class FourPixelRedLeft extends LinearOpMode {
 
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
@@ -246,6 +248,7 @@ public class RedLeft extends LinearOpMode {
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
             side = Side.LEFT;
+            leds.LeftLightUp();
         } else {
             // Iterate through list and call a function to display info for each recognized object.
             for (Recognition myTfodRecognition_item2 : myTfodRecognitions) {
@@ -276,14 +279,7 @@ public class RedLeft extends LinearOpMode {
                     side = Side.RIGHT;
                     leds.RightLightUp();
                 }
-
-                if (side == null) {
-                    side = Side.LEFT;
-                    leds.LeftLightUp();
-                }
-
             }
-
         }
         return Globals.LOCATION;
 

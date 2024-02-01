@@ -23,8 +23,8 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 @Disabled
-@Autonomous (name = "2 + 2 BlueLeftBk", group = "2 + 2")
-public class BlueLeftBk extends LinearOpMode {
+@Autonomous (name = "2 + 2 BlueRight", group = "2 + 2")
+public class FourPixelBlueRight extends LinearOpMode {
 
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
@@ -61,6 +61,7 @@ public class BlueLeftBk extends LinearOpMode {
 
         USE_WEBCAM = true;
         initTfod();
+        leds.loop();
 
         // Telemetry warning
         telemetry.addLine("Robot initialization in process...");
@@ -77,120 +78,122 @@ public class BlueLeftBk extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // Center (finished) 1/25/2024
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
                 .forward(29)
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-                .back(5)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .strafeRight(16.5)
                 .turn(Math.toRadians(-90))
+                .addTemporalMarker(Intake::stopIntaking)
+                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
 
-                // Scoring
-                .back(32)
-                .strafeLeft(3)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
-
-                // park
-                .strafeRight(35)
-
-                .build();
-
-        // Right (finished) 1/25/2024
-        TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .forward(29)
-                .waitSeconds(0.1)
-                .turn(Math.toRadians(-90))
+                // Theoretically this should work
                 .forward(4)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-
-                // scoring
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(32, 29), Math.toRadians(-90))
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(1)
+                .back(8)
+                .addTemporalMarker(Intake::fingerReset)
+                .forward(9.5)
+                .addTemporalMarker(Intake::startIntaking)
                 .waitSeconds(0.5)
 
-                .back(1.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
+                // Lets see if i can make this into a 2 + 1 as well for funsies yk
+                .lineTo(new Vector2d(58, 65))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
+                .splineToConstantHeading(new Vector2d(18.5, 70), Math.toRadians(-90))
+
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-200, 1))
-                .addTemporalMarker(Intake::reverseIntake)
-                .setReversed(false)
-
-                // park
-                .strafeRight(40)
-                .addTemporalMarker(Intake::stopIntaking)
+                .forward(3)
+                .strafeLeft(29)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(0, 0.55))
+                .back(10)
 
                 .build();
 
-        // Left (finished) 1/25/2024
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .splineToConstantHeading(new Vector2d(22, 15.6), Math.toRadians(0))
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
-                .back(5)
 
-                .resetConstraints()
-                .turn(Math.toRadians(-90))
-                .lineToLinearHeading(new Pose2d(23.5, 39.5, Math.toRadians(-90)))
+                .forward(29)
+                .turn(Math.toRadians(90))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(10)
+                .addTemporalMarker(Intake::stopIntaking)
 
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
+                .splineToConstantHeading(new Vector2d(58, -15), Math.toRadians(90))
+                .lineTo(new Vector2d(58, 65))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
+                .splineToConstantHeading(new Vector2d(12.5, 70), Math.toRadians(90))
 
-                // park
-                .strafeRight(30)
 
                 .build();
 
+        TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-        waitForStart();
-        // Put run blocks here.
-        // Save computing resources by closing the camera stream, if no longer needed.
+                // Purple Pixel
+                .forward(29)
+                .turn(Math.toRadians(-90))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                // Pick up from stack
+                .strafeLeft(29)
+                .forward(21)
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(1)
+                .back(8)
+                .addTemporalMarker(Intake::fingerReset)
+                .forward(9.5)
+                .addTemporalMarker(Intake::startIntaking)
+                .waitSeconds(0.5)
+                .back(85)
+
+                // Scoring
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1450, 0.65))
+                .splineToConstantHeading(new Vector2d(26, 74.5), Math.toRadians(-90))
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .addTemporalMarker(Intake::stopIntaking)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(2)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .back(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(1)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> mitsumi.autoMoveTo(-200, 0.65))
+
+                // Park
+                .strafeLeft(15)
+                .back(7)
+
+                .build();
+
+    waitForStart();
+    // Put run blocks here.
+    // Save computing resources by closing the camera stream, if no longer needed.
         myVisionPortal.close();
         telemetry.addData("Side: ", getSide());
         telemetry.addData("Location: ", propLocation);
 
         if (isStopRequested()) return;
-        // Start is pressed
+    // Start is pressed
 
         if (propLocation == 3) {
-            drive.followTrajectorySequence(preloadRight);
-        } else if (propLocation == 2) {
-            drive.followTrajectorySequence(preloadCenter);
-        } else {
-            drive.followTrajectorySequence(preloadLeft);
-        }
-
+        drive.followTrajectorySequence(preloadRight);
+    }   else if (propLocation == 2) {
+        drive.followTrajectorySequence(preloadCenter);
+    }   else {
+        drive.followTrajectorySequence(preloadLeft);
     }
+}
 
     private void initTfod() {
         TfodProcessor.Builder myTfodProcessorBuilder;
@@ -228,6 +231,7 @@ public class BlueLeftBk extends LinearOpMode {
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
             side = Side.LEFT;
+            leds.LeftLightUp();
         } else {
             // Iterate through list and call a function to display info for each recognized object.
             for (Recognition myTfodRecognition_item2 : myTfodRecognitions) {
@@ -258,14 +262,7 @@ public class BlueLeftBk extends LinearOpMode {
                     side = Side.RIGHT;
                     leds.RightLightUp();
                 }
-
-                if (side == null) {
-                    side = Side.LEFT;
-                    leds.LeftLightUp();
-                }
-
             }
-
         }
         return Globals.LOCATION;
 
@@ -275,4 +272,3 @@ public class BlueLeftBk extends LinearOpMode {
     }
 
 }
-

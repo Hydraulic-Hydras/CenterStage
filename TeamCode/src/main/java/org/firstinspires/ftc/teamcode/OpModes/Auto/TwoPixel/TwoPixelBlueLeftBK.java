@@ -24,6 +24,7 @@ import java.util.List;
 @Autonomous (name = "2 Pixel Blue Left Backdrop", group = "2 Pixel")
 public class TwoPixelBlueLeftBK extends LinearOpMode {
 
+    // FINALIZED N DONE
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
@@ -72,9 +73,10 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
                 .forward(29)
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
@@ -101,7 +103,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
 
                 .build();
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
@@ -138,7 +140,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .build();
 
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 

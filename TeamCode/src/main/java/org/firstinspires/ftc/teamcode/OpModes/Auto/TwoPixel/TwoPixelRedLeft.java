@@ -74,7 +74,7 @@ public class TwoPixelRedLeft extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-
+        // STILL WORKING ON IT
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(30)
@@ -110,11 +110,16 @@ public class TwoPixelRedLeft extends LinearOpMode {
 
                 .build();
 
-        // CENTER
+        // STILL WORKING ON IT
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .forward(29)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .addTemporalMarker(Intake::stopIntaking)
+                .strafeLeft(16.5)
+
                 /*
                 .strafeLeft(11)
                 .turn(Math.toRadians(-180))
@@ -138,9 +143,10 @@ public class TwoPixelRedLeft extends LinearOpMode {
                  */
                 .build();
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
                 .forward(29)
                 .waitSeconds(0.1)
                 .strafeLeft(2)

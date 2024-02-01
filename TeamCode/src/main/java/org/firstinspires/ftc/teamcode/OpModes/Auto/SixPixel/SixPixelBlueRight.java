@@ -19,6 +19,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
+import java.lang.invoke.VolatileCallSite;
 import java.util.List;
 
 @Disabled
@@ -37,7 +38,7 @@ public class SixPixelBlueRight extends LinearOpMode {
     public List<Recognition> myTfodRecognitions;
     public TfodProcessor myTfodProcessor;
     public Recognition myTfodRecognition;
-    public VisionPortal myVisionPortal;
+    public VisionPortal Cam1Portal;
     public double propLocation;
     public boolean USE_WEBCAM;
     public double x;
@@ -46,6 +47,7 @@ public class SixPixelBlueRight extends LinearOpMode {
     // AprilTags
     public boolean USE_TAGS;
     public AprilTagProcessor aprilTagProcessor;
+    public VisionPortal AprilTagPortal;
 
     // ** Useful **
     public Side side = Side.LEFT;
@@ -72,7 +74,7 @@ public class SixPixelBlueRight extends LinearOpMode {
 
         waitForStart();
         // Save computing resources by closing the camera stream, if no longer needed.
-        myVisionPortal.close();
+        Cam1Portal.close();
 
         USE_TAGS = true;
         initAprilTag();
@@ -107,7 +109,7 @@ public class SixPixelBlueRight extends LinearOpMode {
         // Add myTfodProcessor to the VisionPortal.Builder.
         myVisionPortalBuilder.addProcessor(myTfodProcessor);
         // Create a VisionPortal by calling build.
-        myVisionPortal = myVisionPortalBuilder.build();
+        Cam1Portal = myVisionPortalBuilder.build();
     }
     private int scanLocation() {
         // Get a list of recognitions from TFOD.
@@ -155,10 +157,10 @@ public class SixPixelBlueRight extends LinearOpMode {
     private void initAprilTag() {
         aprilTagProcessor = AprilTagProcessor.easyCreateWithDefaults();
         if (USE_TAGS) {
-            myVisionPortal = VisionPortal.easyCreateWithDefaults(
+            AprilTagPortal = VisionPortal.easyCreateWithDefaults(
                     hardwareMap.get(WebcamName.class, "Webcam AprilTag"), aprilTagProcessor);
         } else {
-            myVisionPortal = VisionPortal.easyCreateWithDefaults(BuiltinCameraDirection.BACK, aprilTagProcessor);
+            AprilTagPortal = VisionPortal.easyCreateWithDefaults(BuiltinCameraDirection.BACK, aprilTagProcessor);
         }
     }
 

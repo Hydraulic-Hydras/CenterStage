@@ -24,6 +24,7 @@ import java.util.List;
 @Autonomous (name = "2 Pixel Blue Right", group = "2 Pixel")
 public class TwoPixelBlueRight extends LinearOpMode {
 
+    // FINALIZED N DONE
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
@@ -76,7 +77,7 @@ public class TwoPixelBlueRight extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
@@ -103,7 +104,7 @@ public class TwoPixelBlueRight extends LinearOpMode {
 
                 .build();
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
@@ -139,7 +140,7 @@ public class TwoPixelBlueRight extends LinearOpMode {
 
                 .build();
 
-        // TUNED
+        // TUNED AND FINISHED
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
