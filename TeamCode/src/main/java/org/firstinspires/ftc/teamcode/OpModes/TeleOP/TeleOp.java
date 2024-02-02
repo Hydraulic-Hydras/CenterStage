@@ -77,7 +77,6 @@ public class TeleOp extends LinearOpMode {
         launcher_angle = hardwareMap.get(Servo.class, "launcher_angle");
         droneTrigger = hardwareMap.get(Servo.class, "droneTrigger");
 
-        launcher_angle.setPosition(0.52);
         launcher_angle.setPosition(0.28);
 
         // Sensors
