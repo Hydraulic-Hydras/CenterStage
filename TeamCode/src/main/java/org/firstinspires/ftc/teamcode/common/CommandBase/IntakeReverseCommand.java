@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 public class IntakeReverseCommand extends InstantCommand {
     public IntakeReverseCommand() {
         super(
-                (() -> Intake.reverseIntake())
+                (Intake::reverseIntake)
         );
     }
 }

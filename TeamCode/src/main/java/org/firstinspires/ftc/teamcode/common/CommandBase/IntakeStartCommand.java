@@ -11,7 +11,7 @@ public class IntakeStartCommand extends InstantCommand {
     public IntakeStartCommand() {
         super(
 
-                (() -> Intake.startIntaking())
+                (Intake::startIntaking)
         );
 
     }

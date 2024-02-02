@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 public class IntakeStopCommand extends InstantCommand {
     public IntakeStopCommand() {
         super(
-                (() -> Intake.stopIntaking())
+                (Intake::stopIntaking)
         );
     }
 }
