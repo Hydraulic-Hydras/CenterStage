@@ -189,7 +189,6 @@ public class TwoPixelRedLeft extends LinearOpMode {
         // Put run blocks here.
         // Save computing resources by closing the camera stream, if no longer needed.
         myVisionPortal.close();
-        telemetry.addData("Location: ", propLocation);
 
         if (isStopRequested()) return;
         // Start is pressed

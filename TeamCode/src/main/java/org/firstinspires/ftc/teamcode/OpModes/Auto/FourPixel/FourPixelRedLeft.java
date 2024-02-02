@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto.FourPixel;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -61,18 +60,6 @@ public class FourPixelRedLeft extends LinearOpMode {
         USE_WEBCAM = true;
         initTfod();
 
-        // Telemetry warning
-        telemetry.addLine("Robot initialization in process...");
-        telemetry.addLine("Do not press or move anything as Robot will move!!!");
-        telemetry.update();
-
-        while (!isStarted()) {
-            propLocation = scanLocation();
-            telemetry.addData("Team Prop Location", propLocation);
-            telemetry.addData("Side: ", getSide());
-            telemetry.update();
-        }
-
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
@@ -86,6 +73,7 @@ public class FourPixelRedLeft extends LinearOpMode {
                 .back(6)
                 .addTemporalMarker(Intake::stopIntaking)
 
+                // 1st cycle
                 .lineTo(new Vector2d(63.1, 0))
                 .waitSeconds(0.1)
                 .lineTo(new Vector2d(63.1, 20))
@@ -100,16 +88,33 @@ public class FourPixelRedLeft extends LinearOpMode {
                 .addTemporalMarker(Intake::stopIntaking)
                 .lineTo(new Vector2d(63.1, -67))
 
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.65))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
+                .splineToConstantHeading(new Vector2d(28.5, -77.5), Math.toRadians(0))
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .waitSeconds(0.9)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP) )
+                .waitSeconds(1)
+
+                // 2nd cycle
+                .splineToConstantHeading(new Vector2d(63.1, -67), Math.toRadians(0))
+
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 1))
+
+                // grab from stack
+                .lineTo(new Vector2d(63.1, 20))
+                .addTemporalMarker(Intake::startIntaking)
+                .waitSeconds(1)
+
+                .lineTo(new Vector2d(63.1, -67))
+                .addTemporalMarker(Intake::stopIntaking)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1550, 1))
                 .splineToConstantHeading(new Vector2d(28.5, -77.5), Math.toRadians(0))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .waitSeconds(0.9)
                 .UNSTABLE_addTemporalMarkerOffset(0.9, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(1.5)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .waitSeconds(1)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
+                // park (if second cycle is removed)
                 .lineTo(new Vector2d(62, -77.5))
 
                 .build();
@@ -117,13 +122,30 @@ public class FourPixelRedLeft extends LinearOpMode {
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
+                .lineTo(new Vector2d(30, 0))
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(6)
+                .addTemporalMarker(Intake::stopIntaking)
 
                 .build();
 
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
+                .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(-90)))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(6)
+                .addTemporalMarker(Intake::stopIntaking)
+
                 .build();
+
+        while (!isStarted()) {
+            propLocation = scanLocation();
+            telemetry.addData("Team Prop Location", propLocation);
+            telemetry.addData("Side: ", getSide());
+            telemetry.update();
+        }
 
         waitForStart();
         // Put run blocks here.
