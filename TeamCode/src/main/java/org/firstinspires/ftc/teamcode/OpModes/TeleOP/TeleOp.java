@@ -27,7 +27,7 @@ public class TeleOp extends LinearOpMode {
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
@@ -68,7 +68,7 @@ public class TeleOp extends LinearOpMode {
         Zip = hardwareMap.get(CRServo.class, "Zip");
         intake = hardwareMap.get(CRServo.class, "Intake");
         pixelRetainer = hardwareMap.get(Servo.class, "pixelRetainer");
-        Dwayne = hardwareMap.get(Servo.class, "Dwayne");
+        Dwayne = hardwareMap.get(Servo.class, "claw");
 
         rotateBucket = hardwareMap.get(Servo.class, "rotateBucket");
         rotateBucket.setPosition(0.2);

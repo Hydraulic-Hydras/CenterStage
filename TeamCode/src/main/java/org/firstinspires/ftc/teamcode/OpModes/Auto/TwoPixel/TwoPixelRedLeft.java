@@ -24,6 +24,7 @@ import java.util.List;
 @Autonomous (name = "2 Pixel Red Left", group = "2 Pixel")
 public class TwoPixelRedLeft extends LinearOpMode {
 
+    // FINALIZED N DONE
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
@@ -74,7 +75,7 @@ public class TwoPixelRedLeft extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // STILL WORKING ON IT
+        // TUNED AND FINISHED
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
                 .forward(30)
@@ -85,7 +86,7 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .back(2)
+                .back(5)
 
                 // scoring
                 .strafeRight(25)
@@ -93,11 +94,13 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .waitSeconds(0.01)
                 .back(29)
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(29, -76.2))
+                .lineTo(new Vector2d(25, -76.2))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .back(1.5)
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .waitSeconds(0.5)
+                .back(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2.1)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
@@ -105,12 +108,12 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
 
                 // park
-                .strafeRight(27)
+                .strafeRight(23)
                 .back(10)
 
                 .build();
 
-        // STILL WORKING ON IT
+        // TUNED AND FINISHED
         TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
@@ -118,29 +121,26 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .addTemporalMarker(Intake::reverseIntake)
                 .back(4)
                 .addTemporalMarker(Intake::stopIntaking)
-                .strafeLeft(16.5)
-
-                /*
-                .strafeLeft(11)
-                .turn(Math.toRadians(-180))
+                .strafeLeft(17)
+                .forward(30)
                 .waitSeconds(0.5)
-                //.lineTo(Globals.straightLineToPos)
+                .turn(Math.toRadians(90))
+                .waitSeconds(1)
+                .back(70)
 
-                // Scoring
-                //.splineToConstantHeading(Globals.curveSplineToBackDrop,  Math.toRadians(-180))
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .waitSeconds(0.9)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.65))
+                .splineToConstantHeading(new Vector2d(5, -68), Math.toRadians(90))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .waitSeconds(2.1)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .waitSeconds(1.2)
-                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-150, 0.55))
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                .waitSeconds(0.9)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.65))
 
                 // park
-                .strafeRight(30)
-\
-                 */
+                .strafeRight(20)
+
                 .build();
 
         // TUNED AND FINISHED
@@ -189,7 +189,6 @@ public class TwoPixelRedLeft extends LinearOpMode {
         // Put run blocks here.
         // Save computing resources by closing the camera stream, if no longer needed.
         myVisionPortal.close();
-        telemetry.addData("Side: ", getSide());
         telemetry.addData("Location: ", propLocation);
 
         if (isStopRequested()) return;

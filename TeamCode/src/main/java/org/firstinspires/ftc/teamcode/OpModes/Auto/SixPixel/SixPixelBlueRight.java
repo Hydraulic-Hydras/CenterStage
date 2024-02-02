@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto.SixPixel;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,12 +16,12 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-import java.lang.invoke.VolatileCallSite;
 import java.util.List;
 
 @Disabled
@@ -49,8 +51,41 @@ public class SixPixelBlueRight extends LinearOpMode {
     public AprilTagProcessor aprilTagProcessor;
     public VisionPortal AprilTagPortal;
 
+    public Runnable ScoringBackdrop = () -> {
+        try {
+            mitsumi.autoMoveTo(1250, 1);
+            Intake.rotateBucket.setPosition(Intake.POS_PANEL);
+            Thread.sleep(500);
+            Intake.rotateBucket.setPosition(Intake.POS_DUMP);
+            Thread.sleep(1000);
+            Intake.rotateBucket.setPosition(Intake.POS_PANEL);
+            Thread.sleep(100);
+            Intake.rotateBucket.setPosition(Intake.POS_REST);
+            mitsumi.autoMoveTo(-200, 0.75);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    };
+    public void runThread(Thread thread) {
+        try {
+            thread.start();
+        } catch (IllegalThreadStateException ignored) {}
+    }
+
+    private enum AutoState {
+        SPIKEMARK,
+        ONE_STACK,
+        BACKDROP_SCORE,
+        SECOND_STACK,
+        BACKDROP_SECOND_SCORE,
+        PARK,
+        IDLE
+    }
+
+    public static double PARK;
     // ** Useful **
     public Side side = Side.LEFT;
+    AutoState autoState = AutoState.SPIKEMARK;
     @Override
     public void runOpMode() throws InterruptedException {
         Globals.IS_AUTO = true;
@@ -72,14 +107,166 @@ public class SixPixelBlueRight extends LinearOpMode {
             telemetry.update();
         }
 
+        Thread BackdropScoreThread = new Thread(ScoringBackdrop);
+
+        drive.setPoseEstimate(Globals.StartPose);
+
+        TrajectorySequence spikemarkRight = drive.trajectorySequenceBuilder(Globals.StartPose)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .forward(29)
+                .turn(Math.toRadians(-90))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .addTemporalMarker(Intake::stopIntaking)
+                .strafeLeft(29)
+                .forward(21)
+
+                .build();
+
+        TrajectorySequence spikemarkLeft = drive.trajectorySequenceBuilder(Globals.StartPose)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .forward(29)
+                .turn(Math.toRadians(90))
+                .forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(10)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                .setTurnConstraint(360, 360)
+                .turn(Math.toRadians(180))
+                .resetTurnConstraint()
+
+                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
+
+                .build();
+
+        TrajectorySequence spikemarkCenter = drive.trajectorySequenceBuilder(Globals.StartPose)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .forward(29)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .strafeRight(16.5)
+                .turn(Math.toRadians(-90))
+                .addTemporalMarker(Intake::stopIntaking)
+
+                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
+                .forward(4)
+
+                .build();
+
+        TrajectorySequence One_stack = drive.trajectorySequenceBuilder(spikemarkRight.end())
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(1)
+                .back(8)
+                .addTemporalMarker(Intake::fingerReset)
+                .forward(9.5)
+                .addTemporalMarker(Intake::startIntaking)
+                .waitSeconds(1) // changed from 0.5 to 1
+                .back(20)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                .build();
+
+        TrajectorySequence Backdrop_score = drive.trajectorySequenceBuilder(One_stack.end())
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .back(65)
+                .splineToConstantHeading(new Vector2d(26, 74.5), Math.toRadians(-90))
+                .back(1)
+
+                .build();
+
+        TrajectorySequence Secondstack = drive.trajectorySequenceBuilder(Backdrop_score.end())
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+                .build();
+
+        TrajectorySequence backdropScoreTwo = drive.trajectorySequenceBuilder(Secondstack.end())
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+
+
+                .build();
+
+        TrajectorySequence park = drive.trajectorySequenceBuilder(Secondstack.end())
+
+                .strafeLeft(PARK)
+                .back(7)
+
+                .build();
+
         waitForStart();
-        // Save computing resources by closing the camera stream, if no longer needed.
+        // Save computing resources by closing the main stream, since it's no longer needed.
         Cam1Portal.close();
 
         USE_TAGS = true;
         initAprilTag();
         telemetryAprilTag();
 
+        while (opModeIsActive() && !isStopRequested()) {
+            drive.update();
+
+            switch (autoState) {
+                case SPIKEMARK:
+
+                    switch (side) {
+                        case RIGHT:
+                            if (!drive.isBusy()) {
+                                drive.followTrajectorySequence(spikemarkRight);
+                                autoState = AutoState.ONE_STACK;
+                            }
+                            break;
+                        case LEFT:
+                            if (!drive.isBusy()) {
+                                drive.followTrajectorySequence(spikemarkLeft);
+                                autoState = AutoState.ONE_STACK;
+                            }
+                            break;
+                        case CENTER:
+                            if (!drive.isBusy()) {
+                                drive.followTrajectorySequence(spikemarkCenter);
+                                autoState = AutoState.ONE_STACK;
+                            }
+                            break;
+                    }
+                case ONE_STACK:
+                    if (!drive.isBusy()) {
+                        drive.followTrajectorySequence(One_stack);
+                        autoState = AutoState.BACKDROP_SCORE;
+                    }
+                    break;
+                case BACKDROP_SCORE:
+                    if (!drive.isBusy()) {
+                        Pose2d currentPose = drive.getPoseEstimate();
+                        drive.setPoseEstimate(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
+                        drive.followTrajectorySequence(Backdrop_score);
+                    }
+                    runThread(BackdropScoreThread);
+                    break;
+                case SECOND_STACK:
+
+                case BACKDROP_SECOND_SCORE:
+
+                case PARK:
+                    if (!drive.isBusy()) {
+                        drive.followTrajectorySequence(park);
+                    }
+                    autoState = AutoState.IDLE;
+                    break;
+
+                case IDLE:
+                    if (!drive.isBusy()) {
+                        stop();
+                    }
+                    break;
+            }
+
+        }
     }
 
     // Team Prop Cam (front c920)
@@ -140,14 +327,17 @@ public class SixPixelBlueRight extends LinearOpMode {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
+                    PARK = 30;
                 } else if (x > 275 && x < 370) {
                     Globals.LOCATION = 2;
                     side = Side.CENTER;
+                    PARK = 25;
                     leds.CenterLightUp();
                 } else if (x > 500 && x < 620) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();
+                    PARK = 20;
                 }
             }
         }
@@ -195,6 +385,14 @@ public class SixPixelBlueRight extends LinearOpMode {
                 telemetry.addLine("==== (ID " + aprilTagDetection.id + " ) Unknown");
                 telemetry.addLine("Center " + JavaUtil.formatNumber(aprilTagDetection.center.x,6,0)
                         + " " + JavaUtil.formatNumber(aprilTagDetection.center.y,6,0)+" (pixels)");
+            }
+
+            if (aprilTagDetection.id == 3 && Globals.LOCATION == 3) {
+                leds.RightLightUp();
+            }   else if (aprilTagDetection.id == 2 && Globals.LOCATION == 2) {
+                leds.CenterLightUp();
+            }   else {
+                leds.LeftLightUp();
             }
         }
 
