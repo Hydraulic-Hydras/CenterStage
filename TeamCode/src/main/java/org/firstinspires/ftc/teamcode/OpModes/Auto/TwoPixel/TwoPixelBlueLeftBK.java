@@ -152,8 +152,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .waitSeconds(0.1)
                 .back(5)
 
-                .resetConstraints()
-                .turn(Math.toRadians(-90))
+                // .turn(Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(23.5, 39.5, Math.toRadians(-90)))
 
                 .waitSeconds(0.5)

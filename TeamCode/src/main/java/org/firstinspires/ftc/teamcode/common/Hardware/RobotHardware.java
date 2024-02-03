@@ -35,11 +35,6 @@ public class RobotHardware {
     public DcMotorEx LeftCascade;
     public DcMotorEx RightCascade;
 
-    // climber
-    public DcMotorEx climberL;
-    public DcMotorEx climberR;
-    public Servo Hook;
-
     // Intake
     public Servo rotateBucket;
     public CRServo Zip;
@@ -91,17 +86,9 @@ public class RobotHardware {
     public static double POS_PANEL = 0.5;
     public static double POS_DUMP = 1;
 
-    /**
-     * Variables for Hook
-     */
-    public static double HOOK_RELEASE = 0.5;
-    public static double HOOK_ON = 0.7;
-
     public Launcher.LauncherState droneState = Launcher.LauncherState.INITIALIZED;
     public Launcher.LauncherAngle droneAngle = Launcher.LauncherAngle.RESET;
     public Intake.State outtakeState = Intake.State.REST;
-    public Climber.ClimberState climberState = Climber.ClimberState.REST;
-    public Mitsumi.liftState sliderState = Mitsumi.liftState.REST;
 
     public void init(HardwareMap hardwareMap) {
 
@@ -137,22 +124,6 @@ public class RobotHardware {
         RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        // CLIMBER
-        climberL = hardwareMap.get(DcMotorEx.class, "climber-L");
-        climberL.setDirection(DcMotor.Direction.REVERSE);
-        climberL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climberL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        climberL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        climberR = hardwareMap.get(DcMotorEx.class, "climber-R");
-        climberR.setDirection(DcMotor.Direction.REVERSE);
-        climberR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climberR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        climberR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        Hook = hardwareMap.get(Servo.class, "hook");
-        Hook.setPosition(HOOK_RELEASE);
 
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
@@ -245,15 +216,6 @@ public class RobotHardware {
             RightCascade.setPower(0);
         }
 
-
-        if (low_Limit.isPressed()) {
-            sliderState = Mitsumi.liftState.REST;
-        }   else if (high_Limit.isPressed()) {
-            sliderState = Mitsumi.liftState.EXTENDED;
-        }   else {
-            sliderState = Mitsumi.liftState.RAMPING;
-        }
-
         // Angle adjusting
         if (gamepad1.dpad_up) {
             // shooting angle
@@ -319,27 +281,6 @@ public class RobotHardware {
             pixelRetainer.setPosition(0.42);
         }
 
-        // Climber and Hook controls
-        double power = gamepad2.right_stick_y;
-        double speedDec = 0.6;
-
-        climberL.setPower(power * speedDec);
-        climberR.setPower(power * speedDec);
-
-        if (high_Limit.isPressed() && Hook.getPosition() == HOOK_ON) {
-            climberState = Climber.ClimberState.EXTENDED;
-        }   else if (!high_Limit.isPressed()) {
-            climberState = Climber.ClimberState.RAMPING;
-        }   else if (low_Limit.isPressed()) {
-            climberState = Climber.ClimberState.REST;
-        }
-
-        if (gamepad2.dpad_up) {
-            Hook.setPosition(HOOK_RELEASE);
-        }   else if (gamepad2.dpad_down) {
-            Hook.setPosition(HOOK_ON);
-        }
-
         // LED INPUTS
         if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16
                 && Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) <= 22) {
@@ -393,12 +334,4 @@ public class RobotHardware {
             BLED_Red.setState(true);
         }
     }
-
-    public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Left Position: ", LeftCascade.getCurrentPosition());
-        telemetry.addData("Right Position: ", RightCascade.getCurrentPosition());
-        telemetry.addLine();
-
-    }
-
 }

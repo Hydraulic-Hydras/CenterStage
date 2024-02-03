@@ -56,6 +56,7 @@ public class Intake extends Contraption {
 
         // Default position
         rotateBucket.setPosition(POS_REST);
+
         if (Globals.IS_AUTO) {
             DWAYNE.setPosition(DWAYNE_CLOSE);
         }   else {
@@ -139,7 +140,7 @@ public class Intake extends Contraption {
     }
 
     public static void fingerReset() {
-        DWAYNE.setPosition(DWAYNE_CLOSE);
+        DWAYNE.setPosition(0.4);
     }
 
     public static void retainerOpen() {

@@ -86,7 +86,7 @@ public class TwoPixelRedRightBK extends LinearOpMode {
                 .waitSeconds(0.7)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
                 .waitSeconds(0.1)
-                .back(34.5)
+                .back(35.5)
                 .strafeRight(3)
 
                 // Scoring
@@ -116,7 +116,7 @@ public class TwoPixelRedRightBK extends LinearOpMode {
                 .addTemporalMarker(Intake::stopIntaking)
                 .turn(Math.toRadians(90))
                 .waitSeconds(0.2)
-                .back(31.5)
+                .back(33.5)
 
                 // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
@@ -139,7 +139,7 @@ public class TwoPixelRedRightBK extends LinearOpMode {
         TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .splineToConstantHeading(new Vector2d(22,-15.6), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(22,-14.5), Math.toRadians(0))
                 .waitSeconds(0.1)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
                 .waitSeconds(0.7)
@@ -151,7 +151,7 @@ public class TwoPixelRedRightBK extends LinearOpMode {
 
                 .turn(Math.toRadians(90))
                 .waitSeconds(0.01)
-                .lineToLinearHeading(new Pose2d(23.5, -36.9, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(23.5, -39, Math.toRadians(90)))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
@@ -162,7 +162,7 @@ public class TwoPixelRedRightBK extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(-200, 0.55))
 
                 // park
-                .lineTo(new Vector2d(5, -38))
+                .lineTo(new Vector2d(1, -38))
                 .back(5)
 
                 .build();

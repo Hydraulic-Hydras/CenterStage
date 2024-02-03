@@ -18,7 +18,7 @@ public class Launcher extends Contraption {
     public static double SHOOT_POS = 0.52;
     public static double HORIZONTAL_POS = 0.35;
 
-    public static double INIT_POS = 0.28;
+    public static double INIT_POS = 0.5;
 
     public static double SHOOT = 0.9;
     public static double LOAD = 0;

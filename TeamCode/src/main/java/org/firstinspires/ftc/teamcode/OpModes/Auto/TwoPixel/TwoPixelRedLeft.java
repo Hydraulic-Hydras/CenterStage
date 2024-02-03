@@ -60,11 +60,6 @@ public class TwoPixelRedLeft extends LinearOpMode {
         USE_WEBCAM = true;
         initTfod();
 
-        // Telemetry warning
-        telemetry.addLine("Robot initialization in process...");
-        telemetry.addLine("Do not press or move anything as Robot will move!!!");
-        telemetry.update();
-
         while (!isStarted()) {
             propLocation = scanLocation();
             telemetry.addData("Team Prop Location", propLocation);
@@ -88,15 +83,16 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
                 .back(5)
 
+                /*
                 // scoring
                 .strafeRight(25)
                 .splineToConstantHeading(new Vector2d(52, -50), Math.toRadians(90))
                 .waitSeconds(0.01)
                 .back(29)
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(25, -76.2))
+                .lineTo(new Vector2d(27, -76.2))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .back(1.5)
+                .back(6)
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .waitSeconds(0.5)
@@ -110,6 +106,8 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 // park
                 .strafeRight(23)
                 .back(10)
+
+                 */
 
                 .build();
 
@@ -126,10 +124,13 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
+
+                /*
                 .back(70)
 
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.65))
                 .splineToConstantHeading(new Vector2d(5, -68), Math.toRadians(90))
+                .back(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -141,6 +142,8 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 // park
                 .strafeRight(20)
 
+
+                 */
                 .build();
 
         // TUNED AND FINISHED
@@ -160,18 +163,21 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 .back(5)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
 
+                /*
                 .strafeLeft(30)
                 .forward(73)
                 .waitSeconds(0.1)
                 .lineTo(new Vector2d(17, -75))
                 .waitSeconds(0.5)
-                .turn(Math.toRadians(180))
+                .turn(Math.toRadians(90))
+                .waitSeconds(0.5)
+                .turn(Math.toRadians(90))
                 .back(2)
                 .waitSeconds(0.5)
 
                 // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
-                .back(4.5)
+                .back(8.5)
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(1.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -183,6 +189,7 @@ public class TwoPixelRedLeft extends LinearOpMode {
                 // park
                 .strafeRight(39)
 
+                 */
                 .build();
 
         waitForStart();

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -8,12 +9,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "Java TeleOp, No Sensors")
-public class TeleOp extends LinearOpMode {
+@TeleOp (name = "Solo TeleOp" )
+public class SoloTeleOp extends LinearOpMode {
 
     private DcMotorEx leftFront, rightRear, leftRear, rightFront;
     private DcMotorEx LeftCascade, RightCascade;
-
     public Servo rotateBucket, pixelRetainer, Dwayne, droneTrigger, launcher_angle;
     public CRServo Zip, intake, Wheels;
     public TouchSensor high_Limit, low_Limit;
@@ -93,7 +93,7 @@ public class TeleOp extends LinearOpMode {
                 }
 
                 // Slides
-                if (gamepad2.right_trigger > 0 && !high_Limit.isPressed() ) {
+                if (gamepad2.right_trigger > 0 && !high_Limit.isPressed()) {
                     // up
                     LeftCascade.setPower(gamepad2.right_trigger * 0.8);
                     RightCascade.setPower(gamepad2.right_trigger * 0.8);

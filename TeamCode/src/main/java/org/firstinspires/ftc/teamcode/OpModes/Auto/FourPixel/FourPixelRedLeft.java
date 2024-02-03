@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
@@ -28,6 +29,7 @@ public class FourPixelRedLeft extends LinearOpMode {
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
     private SampleMecanumDrive drive;
+    private final Launcher launcher = new Launcher(this);
 
     // Led
     private final LEDS leds = new LEDS(this);
@@ -56,6 +58,7 @@ public class FourPixelRedLeft extends LinearOpMode {
         mitsumi.autoInit();
 
         intake.initialize(hardwareMap);
+        launcher.initialize(hardwareMap);
 
         USE_WEBCAM = true;
         initTfod();
@@ -63,59 +66,71 @@ public class FourPixelRedLeft extends LinearOpMode {
         Pose2d startPose = Globals.StartPose;
         drive.setPoseEstimate(startPose);
 
-        // LEFT
+        // LEFT ( Testing for a 2 + 3 PLEASE WORK )
         TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(90)))
-                .forward(4)
                 .addTemporalMarker(Intake::reverseIntake)
-                .back(6)
+                .back(4)
                 .addTemporalMarker(Intake::stopIntaking)
 
                 // 1st cycle
-                .lineTo(new Vector2d(63.1, 0))
+                // Try to see if I can convert these first 2 LineTo's into one spline movement with no wait
+                .lineTo(new Vector2d(62.5, 0))
                 .waitSeconds(0.1)
-                .lineTo(new Vector2d(63.1, 20))
+                .lineTo(new Vector2d(62.5, 20))
+
+                // Test
+                // .lineTo(new Vector2d(54, 0))
+                // .splineToConstantHeading(new Vector2d(63.1, 20), Math.toRadians(0))
+
                 .addTemporalMarker(Intake::fingerDown)
                 .waitSeconds(0.7)
-                .lineTo(new Vector2d(63.1, 12))
+                .lineTo(new Vector2d(62.5, 12))
                 .addTemporalMarker(Intake::fingerReset)
-                .lineTo(new Vector2d(63.1, 21.5))
+                .lineTo(new Vector2d(62.5, 28))
                 .addTemporalMarker(Intake::startIntaking)
                 .waitSeconds(1)
-                .lineTo(new Vector2d(63.1, -10))
+                .lineTo(new Vector2d(62.5, -10))
                 .addTemporalMarker(Intake::stopIntaking)
-                .lineTo(new Vector2d(63.1, -67))
+                .lineTo(new Vector2d(62.5, -67))
 
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
-                .splineToConstantHeading(new Vector2d(28.5, -77.5), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(31, -76.9), Math.toRadians(0))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .waitSeconds(0.9)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP) )
-                .waitSeconds(1)
+                .waitSeconds(0.6)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP))
+                .waitSeconds(0.7)
+                // Remove these 2 markers if going for a 2 + 3*-/
+                // .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+                // .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.75))
 
                 // 2nd cycle
-                .splineToConstantHeading(new Vector2d(63.1, -67), Math.toRadians(0))
+                .addTemporalMarker(() -> Launcher.launcher_angle.setPosition(0.5))
+                .splineToConstantHeading(new Vector2d(70, -67), Math.toRadians(90))
 
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 1))
-
-                // grab from stack
-                .lineTo(new Vector2d(63.1, 20))
                 .addTemporalMarker(Intake::startIntaking)
-                .waitSeconds(1)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.75))
 
-                .lineTo(new Vector2d(63.1, -67))
+                .waitSeconds(0.5)
+                // grab from stack
+                .lineTo(new Vector2d(63.5, 23.5))
+                .waitSeconds(0.8)
+
+                .lineTo(new Vector2d(77, -67))
                 .addTemporalMarker(Intake::stopIntaking)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1550, 1))
-                .splineToConstantHeading(new Vector2d(28.5, -77.5), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(35, -74.5), Math.toRadians(0))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .waitSeconds(0.9)
-                .UNSTABLE_addTemporalMarkerOffset(0.9, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(0.6)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP))
 
                 // park (if second cycle is removed)
-                .lineTo(new Vector2d(62, -77.5))
+
+                // .lineTo(new Vector2d(62, -77.5))
 
                 .build();
 
