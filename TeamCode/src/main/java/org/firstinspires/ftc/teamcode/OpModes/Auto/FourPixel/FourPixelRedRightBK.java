@@ -86,7 +86,7 @@ public class FourPixelRedRightBK extends LinearOpMode {
                 .addTemporalMarker(Intake::stopIntaking)
                 .turn(Math.toRadians(90))
                 .waitSeconds(0.2)
-                .back(31.2)
+                .back(31.5)
 
                 // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))

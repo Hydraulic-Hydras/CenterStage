@@ -88,12 +88,14 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .addTemporalMarker(Intake::stopIntaking)
 
+                /*
                 .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
                 .lineTo(new Vector2d(58, 65))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 0.85))
                 .splineToConstantHeading(new Vector2d(18.5, 70), Math.toRadians(-90))
 
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .back(4)
                 .UNSTABLE_addTemporalMarkerOffset(0.2, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
@@ -101,6 +103,7 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .strafeLeft(29)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(0, 0.55))
                 .back(10)
+                 */
 
                 .build();
 
@@ -115,15 +118,15 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .back(10)
                 .addTemporalMarker(Intake::stopIntaking)
 
-                .strafeRight(30)
+                /*.strafeRight(30)
                 .splineToConstantHeading(new Vector2d(61, 15), Math.toRadians(90))
                 .forward(52)
                 .turn(Math.toRadians(180))
 
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(18.5, 75), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(20, 75), Math.toRadians(-90))
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.85))
-                .back(3.5)
+                .back(4)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1.7)
@@ -138,6 +141,8 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .strafeLeft(35)
                 .back(5)
 
+                 */
+
                 .build();
 
         // TUNED AND FINISHED
@@ -145,20 +150,34 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 // Purple Pixel
-                .forward(29)
-                .turn(Math.toRadians(-90))
+                /*.forward(4)
+                .addTemporalMarker(Intake::reverseIntake)
+                .back(4)
+                .addTemporalMarker(Intake::stopIntaking)
+                 */
+
+                .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(-90)))
                 .forward(4)
                 .addTemporalMarker(Intake::reverseIntake)
                 .back(4)
                 .addTemporalMarker(Intake::stopIntaking)
-
+/*
+                .waitSeconds(0.5)
                 .strafeLeft(29)
-                .back(75)
+                .waitSeconds(5)
+                .back(62)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.85))
+
+
+ */
+                /*
+                .strafeLeft(29)
+                .back(65)
 
                 // Scoring
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 0.85))
                 .splineToConstantHeading(new Vector2d(23.5, 65), Math.toRadians(-90))
-                .back(3.5)
+                .back(4)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .addTemporalMarker(Intake::stopIntaking)
                 .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
@@ -172,6 +191,8 @@ public class TwoPixelBlueRight extends LinearOpMode {
                 .strafeLeft(24)
                 .back(7)
 
+
+                 */
                 .build();
 
         waitForStart();

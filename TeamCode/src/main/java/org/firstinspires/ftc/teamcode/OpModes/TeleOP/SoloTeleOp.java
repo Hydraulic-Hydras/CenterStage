@@ -17,8 +17,6 @@ public class SoloTeleOp extends LinearOpMode {
     public Servo rotateBucket, pixelRetainer, Dwayne, droneTrigger, launcher_angle;
     public CRServo Zip, intake, Wheels;
     public TouchSensor high_Limit, low_Limit;
-    public double powerMultiplier;
-
     @Override
     public void runOpMode() {
         // DRIVETRAIN
@@ -61,7 +59,7 @@ public class SoloTeleOp extends LinearOpMode {
         launcher_angle = hardwareMap.get(Servo.class, "launcher_angle");
         droneTrigger = hardwareMap.get(Servo.class, "droneTrigger");
 
-        launcher_angle.setPosition(0.28);
+        launcher_angle.setPosition(0.5);
 
         // Sensors
         high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
@@ -81,26 +79,20 @@ public class SoloTeleOp extends LinearOpMode {
                 double leftFrontSpeed = (vertical + horizontal + pivot);
                 double leftRearSpeed = ((vertical - horizontal) + pivot);
 
-                leftFront.setPower(leftFrontSpeed * powerMultiplier);
-                rightFront.setPower(rightFrontSpeed * powerMultiplier);
-                leftRear.setPower(leftRearSpeed * powerMultiplier);
-                rightRear.setPower(rightRearSpeed * powerMultiplier);
-
-                if (gamepad1.left_bumper) {
-                    powerMultiplier = 0.4;
-                } else {
-                    powerMultiplier = 1;
-                }
+                leftFront.setPower(leftFrontSpeed);
+                rightFront.setPower(rightFrontSpeed);
+                leftRear.setPower(leftRearSpeed);
+                rightRear.setPower(rightRearSpeed);
 
                 // Slides
-                if (gamepad2.right_trigger > 0 && !high_Limit.isPressed()) {
+                if (gamepad1.right_bumper && !high_Limit.isPressed()) {
                     // up
-                    LeftCascade.setPower(gamepad2.right_trigger * 0.8);
-                    RightCascade.setPower(gamepad2.right_trigger * 0.8);
-                } else if (gamepad2.left_trigger > 0 && !low_Limit.isPressed()) {
+                    LeftCascade.setPower(0.85);
+                    RightCascade.setPower(0.85);
+                } else if (gamepad1.left_bumper && !low_Limit.isPressed()) {
                     // down
-                    LeftCascade.setPower(gamepad2.left_trigger * -0.6);
-                    RightCascade.setPower(gamepad2.left_trigger * -0.6);
+                    LeftCascade.setPower(-0.6);
+                    RightCascade.setPower(-0.6);
                 } else {
                     LeftCascade.setPower(0);
                     RightCascade.setPower(0);
@@ -109,10 +101,10 @@ public class SoloTeleOp extends LinearOpMode {
                 // Angle adjusting
                 if (gamepad1.dpad_up) {
                     // shooting angle
-                    launcher_angle.setPosition(0.52);
+                    launcher_angle.setPosition(0.28);
                 } else if (gamepad1.dpad_down) {
                     // horizontal angle
-                    launcher_angle.setPosition(0.35);
+                    launcher_angle.setPosition(0.5);
                 }
 
                 // Trigger controls
@@ -141,27 +133,24 @@ public class SoloTeleOp extends LinearOpMode {
                     Zip.setPower(0);
                 }
 
-                // Bucket controls
-                if (gamepad2.a) {
-                    // bucket Position
-                    rotateBucket.setPosition(0.2);
-                } else if (gamepad2.b && !low_Limit.isPressed()) {
-                    if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0) {
-                        // Parallel
-                        rotateBucket.setPosition(0.5);
-                    } else if (rotateBucket.getPosition() == 0.5) {
-                        // Drop
-                        rotateBucket.setPosition(1);
-                    }
+                if (gamepad1.cross) {
+                    // Reset
+                    rotateBucket.setPosition(0.4);
+                } else if (gamepad1.square && !low_Limit.isPressed()) {
+                    // Panel
+                    rotateBucket.setPosition(0.7);
+                } else if (gamepad1.circle && !low_Limit.isPressed()) {
+                    // Drop
+                    rotateBucket.setPosition(0.84);
                 }
 
                 // Pixel retainer controls
                 if (gamepad2.x) {
                     // open
-                    pixelRetainer.setPosition(0.46);
+                    pixelRetainer.setPosition(0.15);
                 } else if (gamepad2.y) {
                     // grab
-                    pixelRetainer.setPosition(0.42);
+                    pixelRetainer.setPosition(0.05);
                 }
 
             }

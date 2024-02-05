@@ -97,33 +97,33 @@ public class FourPixelRedLeft extends LinearOpMode {
                 .lineTo(new Vector2d(62.5, -67))
 
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
-                .splineToConstantHeading(new Vector2d(31, -76.9), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(31, -75.5), Math.toRadians(0))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .waitSeconds(0.6)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP))
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(0.4))
                 .waitSeconds(0.7)
                 // Remove these 2 markers if going for a 2 + 3*-/
                 // .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 // .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.75))
 
                 // 2nd cycle
-                .addTemporalMarker(() -> Launcher.launcher_angle.setPosition(0.5))
+                .addTemporalMarker(() -> Launcher.launcher_angle.setPosition(0.6))
                 .splineToConstantHeading(new Vector2d(70, -67), Math.toRadians(90))
 
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
                 .addTemporalMarker(Intake::startIntaking)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.75))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 1))
 
                 .waitSeconds(0.5)
                 // grab from stack
-                .lineTo(new Vector2d(63.5, 23.5))
+                .lineTo(new Vector2d(62.5, 23.5))
                 .waitSeconds(0.8)
 
                 .lineTo(new Vector2d(77, -67))
                 .addTemporalMarker(Intake::stopIntaking)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1550, 1))
-                .splineToConstantHeading(new Vector2d(35, -74.5), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(35, -75.5), Math.toRadians(0))
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .waitSeconds(0.6)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP))

@@ -21,8 +21,8 @@ public class Intake extends Contraption {
     public static Servo DWAYNE;
 
     public static double POS_REST = 0.4;
-    public static double POS_PANEL = 0.73;
-    public static double POS_DUMP = 0.9;
+    public static double POS_PANEL = 0.65;
+    public static double POS_DUMP = 0.84;
     public static double POS_DOUBLE_DUMP = 1;
 
     public static boolean IS_INTAKING = false;

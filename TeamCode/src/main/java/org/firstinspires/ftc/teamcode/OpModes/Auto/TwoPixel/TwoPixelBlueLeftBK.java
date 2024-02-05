@@ -78,16 +78,13 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .forward(29)
-                .waitSeconds(0.1)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::reverseIntake)
-                .waitSeconds(0.7)
-                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::stopIntaking)
-                .waitSeconds(0.1)
+                .addTemporalMarker(Intake::reverseIntake)
                 .back(5)
+                .addTemporalMarker(Intake::stopIntaking)
                 .turn(Math.toRadians(-90))
 
                 // Scoring
-                .back(32)
+                .back(32.7)
                 .strafeLeft(3)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
@@ -99,7 +96,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
 
                 // park
-                .strafeRight(35)
+                .strafeRight(30)
 
                 .build();
 
@@ -117,11 +114,9 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .waitSeconds(0.1)
 
                 // scoring
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(32, 29), Math.toRadians(-90))
+                .back(35.5)
                 .waitSeconds(0.5)
 
-                .back(1.5)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
                 .waitSeconds(0.9)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
@@ -134,7 +129,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .setReversed(false)
 
                 // park
-                .strafeRight(40)
+                .strafeRight(35)
                 .addTemporalMarker(Intake::stopIntaking)
 
                 .build();
@@ -153,7 +148,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .back(5)
 
                 // .turn(Math.toRadians(-90))
-                .lineToLinearHeading(new Pose2d(23.5, 39.5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(23.5, 39, Math.toRadians(-90)))
 
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
@@ -166,7 +161,7 @@ public class TwoPixelBlueLeftBK extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> mitsumi.autoMoveTo(0, 1))
 
                 // park
-                .strafeRight(30)
+                .strafeRight(25)
 
                 .build();
 
