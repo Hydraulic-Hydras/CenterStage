@@ -24,7 +24,7 @@ public class Left {
                                 .waitSeconds(1)
 
                                 // white stack
-                                .strafeRight(1)
+                                .strafeRight(10)
                                 .splineToConstantHeading(new Vector2d(-59.00, -11.60), Math.toRadians(180.00))
                                 .waitSeconds(1)
 

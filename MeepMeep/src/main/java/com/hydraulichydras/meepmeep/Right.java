@@ -13,22 +13,21 @@ public class Right {
 
         RoadRunnerBotEntity blueRight = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(100, 100, Math.toRadians(229), Math.toRadians(229), 17.67)
+                .setConstraints(100, 50, Math.toRadians(229), Math.toRadians(229), 17.67)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-35, 62.5, Math.toRadians(270)))
+                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))
 
-                                .forward(29)
-                                .turn(Math.toRadians(90))
-                                .forward(4)
-                                .addTemporalMarker(() -> { })
-                                .back(4)
-                                .addTemporalMarker(() -> { })
+                                .lineTo(new Vector2d(30, 0))
+                                .setReversed(true)
 
-                                .setTangent(Math.toRadians(180))
-                                .splineToSplineHeading(new Pose2d(-55, 11.6, Math.toRadians(0)), Math.toRadians(0))
+                                .lineTo(new Vector2d(25, 0))
 
+                                .splineTo(new Vector2d(30, -39), Math.toRadians(-90))
 
+                                .lineTo(new Vector2d(10, -35))
+
+                                .lineTo(new Vector2d(10, -37))
                                 .build()
                 );
 
