@@ -1,21 +1,23 @@
-package org.firstinspires.ftc.teamcode.OpModes.Auto.SixPixel;
+package org.firstinspires.ftc.teamcode.Testers;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
+import org.firstinspires.ftc.teamcode.CenterStage.Tag;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
-import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -25,13 +27,13 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 @Disabled
-@Autonomous (name = "4 Pixel Blue Right APR", group = " 2 + 4 ")
-public class SixPixelBlueRight extends LinearOpMode {
+@Autonomous (name = "APR Red Right APR", group = " 2 + 4")
+public class AprilTagTrajectoryTest extends LinearOpMode {
 
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
-    private SampleMecanumDrive drive;
+    public SampleMecanumDrive drive;
 
     // Led
     private final LEDS leds = new LEDS(this);
@@ -50,6 +52,8 @@ public class SixPixelBlueRight extends LinearOpMode {
     public boolean USE_TAGS;
     public AprilTagProcessor aprilTagProcessor;
     public VisionPortal AprilTagPortal;
+    public double TagLocation;
+    public boolean tagFound = false;
 
     public Runnable ScoringBackdrop = () -> {
         try {
@@ -58,34 +62,47 @@ public class SixPixelBlueRight extends LinearOpMode {
             Thread.sleep(500);
             Intake.rotateBucket.setPosition(Intake.POS_DUMP);
             Thread.sleep(1000);
-            Intake.rotateBucket.setPosition(Intake.POS_PANEL);
-            Thread.sleep(100);
-            Intake.rotateBucket.setPosition(Intake.POS_REST);
-            mitsumi.autoMoveTo(-200, 0.75);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     };
+
+    public Runnable retract = () -> {
+      try {
+          Intake.rotateBucket.setPosition(Intake.POS_PANEL);
+          Thread.sleep(100);
+          Intake.rotateBucket.setPosition(Intake.POS_REST);
+          mitsumi.autoMoveTo(-200, 0.75);
+      } catch (InterruptedException e) {
+          e.printStackTrace();
+      }
+    };
+
     public void runThread(Thread thread) {
         try {
             thread.start();
         } catch (IllegalThreadStateException ignored) {}
     }
 
-    private enum AutoState {
-        SPIKEMARK,
-        ONE_STACK,
-        BACKDROP_SCORE,
-        SECOND_STACK,
-        BACKDROP_SECOND_SCORE,
-        PARK,
-        IDLE
-    }
-
-    public static double PARK;
     // ** Useful **
     public Side side = Side.LEFT;
-    AutoState autoState = AutoState.SPIKEMARK;
+    public Tag tag = Tag.ONE;
+
+    public enum Movement {
+        SpikeMark,
+        Backdrop,
+        Park,
+        Idle
+    }
+
+    public Movement movement = Movement.SpikeMark;
+
+    public double X, Y, H;
+    public double parkX;
+    public double parkY;
+    public double parkH;
+
+    public ElapsedTime timer = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
         Globals.IS_AUTO = true;
@@ -108,164 +125,132 @@ public class SixPixelBlueRight extends LinearOpMode {
         }
 
         Thread BackdropScoreThread = new Thread(ScoringBackdrop);
+        Thread Retraction = new Thread(retract);
 
+        // RED RIGHT
         drive.setPoseEstimate(Globals.StartPose);
 
-        TrajectorySequence spikemarkRight = drive.trajectorySequenceBuilder(Globals.StartPose)
+        TrajectorySequence Right = drive.trajectorySequenceBuilder(Globals.StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .forward(29)
-                .turn(Math.toRadians(-90))
-                .forward(4)
+                .splineToConstantHeading(new Vector2d(19.5, -15), Math.toRadians(0))
                 .addTemporalMarker(Intake::reverseIntake)
-                .back(4)
+
+                .lineTo(new Vector2d(15.5, -15))
                 .addTemporalMarker(Intake::stopIntaking)
-                .strafeLeft(29)
-                .forward(21)
+
+                // Temp Park
+                .setReversed(true)
+                .splineTo(new Vector2d(29, -25), Math.toRadians(90))
 
                 .build();
 
-        TrajectorySequence spikemarkLeft = drive.trajectorySequenceBuilder(Globals.StartPose)
+        TrajectorySequence Center = drive.trajectorySequenceBuilder(Globals.StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .forward(29)
-                .turn(Math.toRadians(90))
-                .forward(4)
+                .lineTo(new Vector2d(29, 0))
                 .addTemporalMarker(Intake::reverseIntake)
-                .back(10)
+
+                .lineTo(new Vector2d(25, 0))
                 .addTemporalMarker(Intake::stopIntaking)
 
-                .setTurnConstraint(360, 360)
-                .turn(Math.toRadians(180))
-                .resetTurnConstraint()
-
-                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
+                // Temp Park
+                .setReversed(true)
+                .splineTo(new Vector2d(29, -25), Math.toRadians(90))
 
                 .build();
 
-        TrajectorySequence spikemarkCenter = drive.trajectorySequenceBuilder(Globals.StartPose)
+        TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .forward(29)
+                .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(90)))
                 .addTemporalMarker(Intake::reverseIntake)
-                .back(4)
-                .strafeRight(16.5)
-                .turn(Math.toRadians(-90))
+
+                .lineTo(new Vector2d(36, -10))
                 .addTemporalMarker(Intake::stopIntaking)
 
-                .splineToConstantHeading(new Vector2d(58, -18), Math.toRadians(-90))
-                .forward(4)
+                // Temp Park
+                .setReversed(true)
+                .splineTo(new Vector2d(29, -25), Math.toRadians(90))
 
                 .build();
 
-        TrajectorySequence One_stack = drive.trajectorySequenceBuilder(spikemarkRight.end())
+        TrajectorySequence backDropDisplacement = drive.trajectorySequenceBuilder(new Pose2d())
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .addTemporalMarker(Intake::fingerDown)
-                .waitSeconds(1)
-                .back(8)
-                .addTemporalMarker(Intake::fingerReset)
-                .forward(9.5)
-                .addTemporalMarker(Intake::startIntaking)
-                .waitSeconds(1) // changed from 0.5 to 1
-                .back(20)
-                .addTemporalMarker(Intake::stopIntaking)
+                .setTangent(0)
+                .splineToConstantHeading(new Vector2d(X, Y), H)
 
                 .build();
 
-        TrajectorySequence Backdrop_score = drive.trajectorySequenceBuilder(One_stack.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
+        TrajectorySequence park = drive.trajectorySequenceBuilder(new Pose2d())
 
-                .back(65)
-                .splineToConstantHeading(new Vector2d(26, 74.5), Math.toRadians(-90))
-                .back(1)
+                // Based on Prop Location values change
+                .lineToLinearHeading(new Pose2d(parkX, parkY, parkH))
 
                 .build();
-
-        TrajectorySequence Secondstack = drive.trajectorySequenceBuilder(Backdrop_score.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .build();
-
-        TrajectorySequence backdropScoreTwo = drive.trajectorySequenceBuilder(Secondstack.end())
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-
-                .build();
-
-        TrajectorySequence park = drive.trajectorySequenceBuilder(Secondstack.end())
-
-                .strafeLeft(PARK)
-                .back(7)
-
-                .build();
-
         waitForStart();
         // Save computing resources by closing the main stream, since it's no longer needed.
         Cam1Portal.close();
 
         USE_TAGS = true;
+
         initAprilTag();
-        telemetryAprilTag();
+        TagLocation = telemetryAprilTag();
 
-        while (opModeIsActive() && !isStopRequested()) {
+        while (!isStopRequested() && opModeIsActive()) {
             drive.update();
+            telemetry.update();
 
-            switch (autoState) {
-                case SPIKEMARK:
-
-                    switch (side) {
-                        case RIGHT:
-                            if (!drive.isBusy()) {
-                                drive.followTrajectorySequence(spikemarkRight);
-                                autoState = AutoState.ONE_STACK;
-                            }
-                            break;
-                        case LEFT:
-                            if (!drive.isBusy()) {
-                                drive.followTrajectorySequence(spikemarkLeft);
-                                autoState = AutoState.ONE_STACK;
-                            }
-                            break;
-                        case CENTER:
-                            if (!drive.isBusy()) {
-                                drive.followTrajectorySequence(spikemarkCenter);
-                                autoState = AutoState.ONE_STACK;
-                            }
-                            break;
-                    }
-                case ONE_STACK:
-                    if (!drive.isBusy()) {
-                        drive.followTrajectorySequence(One_stack);
-                        autoState = AutoState.BACKDROP_SCORE;
+            switch (movement) {
+                case SpikeMark:
+                    if (propLocation == 3) {
+                        drive.followTrajectorySequence(Right);
+                        movement = Movement.Backdrop;
+                    } else if (propLocation == 2) {
+                        drive.followTrajectorySequence(Center);
+                        movement = Movement.Backdrop;
+                    } else {
+                        drive.followTrajectorySequence(Left);
+                        movement = Movement.Backdrop;
                     }
                     break;
-                case BACKDROP_SCORE:
+
+                case Backdrop:
                     if (!drive.isBusy()) {
-                        Pose2d currentPose = drive.getPoseEstimate();
-                        drive.setPoseEstimate(new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getHeading()));
-                        drive.followTrajectorySequence(Backdrop_score);
+                        if (getSide() == Side.RIGHT && TagLocation == 3) {
+                            tag = Tag.THREE;
+                            drive.followTrajectorySequence(backDropDisplacement);
+                            runThread(BackdropScoreThread);
+                            movement = Movement.Park;
+                        } else if (getSide() == Side.CENTER && TagLocation == 2) {
+                            tag = Tag.TWO;
+                            drive.followTrajectorySequence(backDropDisplacement);
+                            runThread(BackdropScoreThread);
+                            movement = Movement.Park;
+                        } else {
+                            tag = Tag.ONE;
+                            drive.followTrajectorySequence(backDropDisplacement);
+                            runThread(BackdropScoreThread);
+                            movement = Movement.Park;
+                        }
+
                     }
-                    runThread(BackdropScoreThread);
                     break;
-                case SECOND_STACK:
 
-                case BACKDROP_SECOND_SCORE:
-
-                case PARK:
+                case Park:
                     if (!drive.isBusy()) {
+                        runThread(Retraction);
                         drive.followTrajectorySequence(park);
+                        movement = Movement.Idle;
                     }
-                    autoState = AutoState.IDLE;
                     break;
 
-                case IDLE:
-                    if (!drive.isBusy()) {
+                case Idle:
+                    if (!drive.isBusy() && timer.seconds() > 1.5) {
                         stop();
                     }
-                    break;
             }
-
         }
     }
 
@@ -306,6 +291,10 @@ public class SixPixelBlueRight extends LinearOpMode {
             Globals.LOCATION = 1;
             leds.LeftLightUp();
             side = Side.LEFT;
+
+            parkX = -1;
+            parkY = 30;
+            parkH = Math.toRadians(0);
         } else {
             // Iterate through list and call a function to display info for each recognized object.
             for (Recognition myTfodRecognition_item2 : myTfodRecognitions) {
@@ -323,25 +312,40 @@ public class SixPixelBlueRight extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
+
                 if (x < 90 && x > 35) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
-                    PARK = 30;
+
+                    parkX = -1;
+                    parkY = 30;
+                    parkH = Math.toRadians(0);
+
                 } else if (x > 275 && x < 370) {
                     Globals.LOCATION = 2;
                     side = Side.CENTER;
-                    PARK = 25;
                     leds.CenterLightUp();
+
+                    parkX = -1;
+                    parkY = 25;
+                    parkH = Math.toRadians(0);
+
                 } else if (x > 500 && x < 620) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();
-                    PARK = 20;
+
+                    parkX = -1;
+                    parkY = 15;
+                    parkH = Math.toRadians(0);
                 }
+
             }
         }
+
         return Globals.LOCATION;
+
     }
 
     private void initAprilTag() {
@@ -354,7 +358,7 @@ public class SixPixelBlueRight extends LinearOpMode {
         }
     }
 
-    private void telemetryAprilTag() {
+    private int telemetryAprilTag() {
         List<AprilTagDetection> myAprilTagDetections;
         AprilTagDetection aprilTagDetection;
 
@@ -369,6 +373,7 @@ public class SixPixelBlueRight extends LinearOpMode {
             // Display info for Tags
             telemetry.addLine("");
             if (aprilTagDetection.metadata != null) {
+                tagFound = true;
                 telemetry.addLine("==== (ID " + aprilTagDetection.id +") " + aprilTagDetection.metadata.name);
                 telemetry.addLine("XYZ " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.x,6,1)
                         + " " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.y,6,1) + " " +
@@ -382,18 +387,28 @@ public class SixPixelBlueRight extends LinearOpMode {
                         + " " + JavaUtil.formatNumber(aprilTagDetection.ftcPose.bearing,6,1) + " " +
                         JavaUtil.formatNumber(aprilTagDetection.ftcPose.elevation,6,1) + "  (inch, deg, deg)");
             } else {
+                tagFound = false;
+                telemetry.addLine("==== (Tag ID not Found");
                 telemetry.addLine("==== (ID " + aprilTagDetection.id + " ) Unknown");
                 telemetry.addLine("Center " + JavaUtil.formatNumber(aprilTagDetection.center.x,6,0)
                         + " " + JavaUtil.formatNumber(aprilTagDetection.center.y,6,0)+" (pixels)");
             }
 
-            if (aprilTagDetection.id == 3 && Globals.LOCATION == 3) {
-                leds.RightLightUp();
-            }   else if (aprilTagDetection.id == 2 && Globals.LOCATION == 2) {
-                leds.CenterLightUp();
-            }   else {
-                leds.LeftLightUp();
-            }
+            Globals.TAG = aprilTagDetection.id;
+        }
+
+        if (Globals.TAG == 3) {
+            X = 0;
+            Y = 0;
+            H = Math.toRadians(0);
+        }   else if (Globals.TAG == 2) {
+            X = 0;
+            Y = 0;
+            H = Math.toRadians(0);
+        }   else {
+            X = 0;
+            Y = 0;
+            H = Math.toRadians(0);
         }
 
         telemetry.addLine("");
@@ -401,6 +416,8 @@ public class SixPixelBlueRight extends LinearOpMode {
         telemetry.addLine("XYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+
+        return Globals.TAG;
     }
 
     public Side getSide() {

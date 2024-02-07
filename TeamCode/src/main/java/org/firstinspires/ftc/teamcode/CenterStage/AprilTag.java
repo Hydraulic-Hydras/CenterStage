@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.CenterStage;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -35,6 +36,7 @@ public class AprilTag implements VisionProcessor {
                 .build();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
@@ -72,7 +74,7 @@ public class AprilTag implements VisionProcessor {
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
-        return null;
+        return Globals.LOCATION;
     }
 
     @Override

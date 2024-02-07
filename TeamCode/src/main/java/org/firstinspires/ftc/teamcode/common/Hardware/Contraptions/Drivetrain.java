@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.Hardware;
+package org.firstinspires.ftc.teamcode.common.Hardware.Contraptions;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
