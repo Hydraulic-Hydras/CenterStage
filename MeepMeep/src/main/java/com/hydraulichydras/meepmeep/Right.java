@@ -16,18 +16,54 @@ public class Right {
                 .setConstraints(100, 50, Math.toRadians(229), Math.toRadians(229), 17.67)
                 .setDimensions(17.5,17.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))
+                        drive.trajectorySequenceBuilder(new Pose2d(12.5, -62.5, Math.toRadians(90)))
 
-                                .lineTo(new Vector2d(30, 0))
-                                .setReversed(true)
+                                // Right Prop
+                                /*
+                                .splineToConstantHeading(new Vector2d(22.5, -38), Math.toRadians(90))
+                                .waitSeconds(0.1)
 
-                                .lineTo(new Vector2d(25, 0))
+                                .lineTo(new Vector2d(22.5, -45))
+                                .splineTo(new Vector2d(49, -43.5), Math.toRadians(0))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(45, -40))
+                                .lineToLinearHeading(new Pose2d(45, -59))
 
-                                .splineTo(new Vector2d(30, -39), Math.toRadians(-90))
+                                .lineTo(new Vector2d(50, -59))
 
-                                .lineTo(new Vector2d(10, -35))
+                                 */
 
-                                .lineTo(new Vector2d(10, -37))
+                                // Center Prop
+                                /*
+                                .lineTo(new Vector2d(12.5, -33.5))
+                                .waitSeconds(0.1)
+
+                                .lineTo(new Vector2d(12.5, -40))
+                                .splineTo(new Vector2d(49, -37.5), Math.toRadians(0))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(45, -37.5))
+                                .lineToLinearHeading(new Pose2d(45, -59))
+
+                                .lineTo(new Vector2d(50, -59))
+
+                                 */
+
+                                // Left Prop
+
+                                /*
+                                .lineToLinearHeading(new Pose2d(12.5, -29.5, Math.toRadians(180)))
+                                .lineTo(new Vector2d(11, -29.5))
+                                .waitSeconds(0.1)
+
+                                .lineTo(new Vector2d(49, -29.5))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(45, -29.5))
+                                .lineToLinearHeading(new Pose2d(45, -59))
+
+                                .lineTo(new Vector2d(50, -59))
+
+                                 */
+
                                 .build()
                 );
 
