@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
-import org.firstinspires.ftc.teamcode.common.Hardware.LEDS;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -77,7 +77,7 @@ public class AprilTagTest extends LinearOpMode {
         }
     }
 
-    private int  telemetryAprilTag() {
+    private int telemetryAprilTag() {
         List<AprilTagDetection> myAprilTagDetections;
         AprilTagDetection aprilTagDetection;
 
@@ -129,8 +129,6 @@ public class AprilTagTest extends LinearOpMode {
                 leds.LeftLightUp();
                 tagLocation = 4;
             }
-
-
 
         }
 

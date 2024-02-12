@@ -20,13 +20,6 @@ public class Mitsumi extends Contraption {
     public static DcMotor RightCascade;
 
     public Mitsumi(LinearOpMode opMode) { this.opMode = opMode; }
-    public enum liftState {
-        REST,
-        RAMPING,
-        EXTENDED
-    }
-
-    liftState liftstate = liftState.REST;
     @Override
     public void initialize(HardwareMap hwMap) {
 
@@ -68,14 +61,6 @@ public class Mitsumi extends Contraption {
             RightCascade.setPower(0);
         }
 
-        if (low_Limit.isPressed() && !high_Limit.isPressed()) {
-            liftstate = liftState.REST;
-        }   else if (high_Limit.isPressed() && !low_Limit.isPressed()) {
-            liftstate = liftState.EXTENDED;
-        }   else {
-            liftstate = liftState.RAMPING;
-        }
-
     }
 
     public void autoMoveTo(int pos, double power) {
@@ -88,28 +73,6 @@ public class Mitsumi extends Contraption {
         LeftCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RightCascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    }
-
-    public void extendHigh() {
-
-        if (!high_Limit.isPressed()) {
-            LeftCascade.setPower(0.7);
-            RightCascade.setPower(0.7);
-        }   else {
-            LeftCascade.setPower(0);
-            RightCascade.setPower(0);
-        }
-    }
-
-    public void extendLow() {
-
-        if (!low_Limit.isPressed()) {
-            LeftCascade.setPower(-0.65);
-            RightCascade.setPower(-0.65);
-        }   else {
-            LeftCascade.setPower(0);
-            RightCascade.setPower(0);
-        }
     }
 
     public void telemetry(Telemetry telemetry) {

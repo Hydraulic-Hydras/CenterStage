@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.Hardware;
+package org.firstinspires.ftc.teamcode.common.Hardware.Contraptions;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.hydraulichydras.hydrauliclib.Util.Contraption;
@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
+import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 
 @Config
 public class LEDS extends Contraption {

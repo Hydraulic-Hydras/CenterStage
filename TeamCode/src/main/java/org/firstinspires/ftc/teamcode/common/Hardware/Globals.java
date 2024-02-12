@@ -12,15 +12,16 @@ public class Globals {
 
     public static boolean IS_AUTO = false;
     public static int LOCATION;
+    public static int TAG;
 
     // VELOCITY AND ACCELERATION
     public static final TrajectoryVelocityConstraint MaxVel = SampleMecanumDrive.getVelocityConstraint(
-            100, Math.toRadians(229), Math.toRadians(229));
+            100, Math.toRadians(180), Math.toRadians(180));
     public static final TrajectoryAccelerationConstraint MaxAccel = SampleMecanumDrive.getAccelerationConstraint(
             100);
 
     public static final TrajectoryVelocityConstraint HalfVel = SampleMecanumDrive.getVelocityConstraint(
-            74, Math.toRadians(229), Math.toRadians(229));
+            74, Math.toRadians(180), Math.toRadians(180));
     public static final TrajectoryAccelerationConstraint HalfAccel = SampleMecanumDrive.getAccelerationConstraint
             (74);
 
