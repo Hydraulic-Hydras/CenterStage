@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.CenterStage.Tag;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -200,6 +200,7 @@ public class AprilTagTrajectoryTest extends LinearOpMode {
 
         while (!isStopRequested() && opModeIsActive()) {
             drive.update();
+            telemetry.addData("Tag: ", getTag());
             telemetry.update();
 
             switch (movement) {
@@ -397,11 +398,11 @@ public class AprilTagTrajectoryTest extends LinearOpMode {
             Globals.TAG = aprilTagDetection.id;
         }
 
-        if (Globals.TAG == 3) {
+        if (Globals.TAG == 3 && Globals.LOCATION == 3) {
             X = 0;
             Y = 0;
             H = Math.toRadians(0);
-        }   else if (Globals.TAG == 2) {
+        }   else if (Globals.TAG == 2 && Globals.LOCATION == 2) {
             X = 0;
             Y = 0;
             H = Math.toRadians(0);
@@ -422,5 +423,9 @@ public class AprilTagTrajectoryTest extends LinearOpMode {
 
     public Side getSide() {
         return side;
+    }
+
+    public Tag getTag() {
+        return tag;
     }
 }
