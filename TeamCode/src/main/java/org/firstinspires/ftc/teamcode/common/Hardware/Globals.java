@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 
@@ -27,5 +28,11 @@ public class Globals {
 
     // Start Position
     public static final Pose2d StartPose = new Pose2d(0, 0, Math.toRadians(0));
+
+    // New StartPose
+    public static final Pose2d RedRight_StartPoseBK = new Pose2d(12.5, -62.5, Math.toRadians(90));
+    public static final Pose2d RedLeft_StartPose = new Pose2d(-35.5, -62.5, Math.toRadians(90));
+    public static final Pose2d BlueRight_StartPose = new Pose2d(-35.5, 62.5, Math.toRadians(270));
+    public static final Pose2d BlueLeft_StartPoseBK = new Pose2d(12.5, 62.5, Math.toRadians(270));
 
 }

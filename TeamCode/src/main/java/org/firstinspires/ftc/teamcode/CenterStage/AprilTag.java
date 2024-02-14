@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -21,7 +20,6 @@ public class AprilTag implements VisionProcessor {
     public AprilTagProcessor aprilTagProcessor;
     public AprilTagDetection desiredTag = null;
     public Telemetry telemetry;
-    public boolean tagFound;
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -45,12 +43,12 @@ public class AprilTag implements VisionProcessor {
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
-        tagFound = false;
         desiredTag = null;
 
         for (AprilTagDetection detection : currentDetections) {
 
             if (detection.metadata != null) {
+                telemetry.addData("Found?", true);
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
                 telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
@@ -58,13 +56,6 @@ public class AprilTag implements VisionProcessor {
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-            }
-
-            if (detection.id == Globals.LOCATION) {
-                tagFound = true;
-                desiredTag = detection;
-                break;
-            } else {
                 // This tag is in the library, but we do not want to track it right now.
                 telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
             }
@@ -74,7 +65,7 @@ public class AprilTag implements VisionProcessor {
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
-        return Globals.LOCATION;
+        return null;
     }
 
     @Override
