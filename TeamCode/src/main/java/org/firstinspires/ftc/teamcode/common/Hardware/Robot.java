@@ -4,6 +4,7 @@ import com.hydraulichydras.hydrauliclib.Util.Contraption;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Climber;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
@@ -12,6 +13,7 @@ public class Robot extends Contraption {
     public Mitsumi mitsumi = new Mitsumi(opMode);
     public Intake intake = new Intake(opMode);
     public LEDS leds = new LEDS(opMode);
+    public Climber climber = new Climber(opMode);
     public SampleMecanumDrive drive;
 
     public Robot(LinearOpMode opMode) { this.opMode = opMode; }
@@ -24,6 +26,7 @@ public class Robot extends Contraption {
         mitsumi.autoInit();
         intake.initialize(hwMap);
         leds.initialize(hwMap);
+        climber.initialize(hwMap);
 
     }
 }

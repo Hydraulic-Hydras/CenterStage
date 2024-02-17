@@ -15,12 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Climber;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 
 @Config
 public class RobotHardware {
@@ -34,6 +29,10 @@ public class RobotHardware {
     // Slides
     public DcMotorEx LeftCascade;
     public DcMotorEx RightCascade;
+
+    // Climber
+    public DcMotorEx leftHook;
+    public DcMotorEx rightHook;
 
     // Intake
     public Servo rotateBucket;
@@ -86,10 +85,6 @@ public class RobotHardware {
     public static double POS_PANEL = 0.5;
     public static double POS_DUMP = 1;
 
-    public Launcher.LauncherState droneState = Launcher.LauncherState.INITIALIZED;
-    public Launcher.LauncherAngle droneAngle = Launcher.LauncherAngle.RESET;
-    public Intake.State outtakeState = Intake.State.REST;
-
     public void init(HardwareMap hardwareMap) {
 
         // DRIVETRAIN
@@ -124,6 +119,15 @@ public class RobotHardware {
         RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // CLIMBER
+        leftHook = hardwareMap.get(DcMotorEx.class, "climber-L");
+        leftHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftHook.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        rightHook = hardwareMap.get(DcMotorEx.class, "climber-R");
+        rightHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightHook.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
@@ -216,28 +220,6 @@ public class RobotHardware {
             RightCascade.setPower(0);
         }
 
-        // Angle adjusting
-        if (gamepad1.dpad_up) {
-            // shooting angle
-            launcher_angle.setPosition(SHOOT_POS);
-            droneAngle = Launcher.LauncherAngle.READY;
-        } else if (gamepad1.dpad_down) {
-            // horizontal angle
-            launcher_angle.setPosition(HORIZONTAL_POS);
-            droneAngle = Launcher.LauncherAngle.RESET;
-        }
-
-        // Trigger controls
-        if (gamepad1.dpad_left) {
-            // standby
-            droneTrigger.setPosition(LOAD);
-            droneState = Launcher.LauncherState.LOADED;
-        } else if (gamepad1.share) {
-            // shoot
-            droneTrigger.setPosition(SHOOT);
-            droneState = Launcher.LauncherState.HAS_SHOT;
-        }
-
         // Intake controls
         if (gamepad1.right_trigger > 0) {
             // Intake
@@ -253,32 +235,6 @@ public class RobotHardware {
             Wheels.setPower(0);
             intake.setPower(0);
             Zip.setPower(0);
-        }
-
-        // Bucket controls
-        if (gamepad2.a) {
-            // bucket Position
-            rotateBucket.setPosition(POS_REST);
-            outtakeState = Intake.State.REST;
-        } else if (gamepad2.b && !low_Limit.isPressed()) {
-            if (rotateBucket.getPosition() == 1 || rotateBucket.getPosition() == 0) {
-                // Parallel
-                rotateBucket.setPosition(POS_PANEL);
-                outtakeState = Intake.State.PANEL;
-            } else if (rotateBucket.getPosition() == POS_PANEL) {
-                // Drop
-                rotateBucket.setPosition(POS_DUMP);
-                outtakeState = Intake.State.DUMP;
-            }
-        }
-
-        // Pixel retainer controls
-        if (gamepad2.x) {
-            // open
-            pixelRetainer.setPosition(0.46);
-        } else if (gamepad2.y) {
-            // grab
-            pixelRetainer.setPosition(0.42);
         }
 
         // LED INPUTS

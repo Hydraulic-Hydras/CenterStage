@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.RobotHardware;
+@Disabled
 
 @TeleOp (name = "Java TeleOp, Using Sensors")
 public class TeleOpSecond extends LinearOpMode {

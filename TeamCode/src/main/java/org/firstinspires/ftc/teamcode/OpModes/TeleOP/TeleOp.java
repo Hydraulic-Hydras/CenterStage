@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,11 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "Java TeleOp, No Sensors")
 public class TeleOp extends LinearOpMode {
 
-    private DcMotorEx leftFront, rightRear, leftRear, rightFront;
-    private DcMotorEx LeftCascade, RightCascade;
+    public DcMotorEx leftFront, rightRear, leftRear, rightFront;
+    public DcMotorEx LeftCascade, RightCascade;
+    public DcMotorEx leftHook, rightHook;
 
     public Servo rotateBucket, pixelRetainer, Dwayne, droneTrigger, launcher_angle;
     public CRServo Zip, intake, Wheels;
@@ -46,6 +49,15 @@ public class TeleOp extends LinearOpMode {
         RightCascade = hardwareMap.get(DcMotorEx.class, "RightCascade");
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // CLIMBER
+        leftHook = hardwareMap.get(DcMotorEx.class, "climber-L");
+        leftHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftHook.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        rightHook = hardwareMap.get(DcMotorEx.class, "climber-R");
+        rightHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightHook.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
