@@ -15,8 +15,6 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-
-@Disabled
 @Autonomous (name = "TensorFlowTest", group = "Testers")
 public class TensorFlowTest extends LinearOpMode {
 
@@ -77,7 +75,8 @@ public class TensorFlowTest extends LinearOpMode {
         // First, create a TfodProcessor.Builder.
         myTfodProcessorBuilder = new TfodProcessor.Builder();
         // Set the name of the file where the model can be found.
-        myTfodProcessorBuilder.setModelFileName("Team_Prop.tflite");
+        myTfodProcessorBuilder.setModelFileName("Blue Prop (States).tflite");
+        myTfodProcessorBuilder.setModelFileName("Red Prop (States).tflite");
         // Set the full ordered list of labels the model is trained to recognize.
         myTfodProcessorBuilder.setModelLabels(JavaUtil.createListWith("nothing", "Prop"));
         // Set the aspect ratio for the images used when the model was created.

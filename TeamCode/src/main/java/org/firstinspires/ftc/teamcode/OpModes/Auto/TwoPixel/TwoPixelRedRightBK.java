@@ -60,10 +60,6 @@ public class TwoPixelRedRightBK extends LinearOpMode {
         USE_WEBCAM = true;
         initTfod();
 
-        // Telemetry warning
-        telemetry.addLine("Robot initialization in process...");
-        telemetry.addLine("Do not press or move anything as Robot will move!!!");
-
         while (!isStarted()) {
             propLocation = scanLocation();
             telemetry.addData("Team Prop Location", propLocation);

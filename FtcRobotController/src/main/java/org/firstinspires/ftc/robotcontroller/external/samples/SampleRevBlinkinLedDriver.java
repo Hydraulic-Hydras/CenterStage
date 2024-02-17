@@ -65,6 +65,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     RevBlinkinLedDriver blinkinLedDriver;
     RevBlinkinLedDriver.BlinkinPattern pattern;
 
+
     Telemetry.Item patternName;
     Telemetry.Item display;
     DisplayKind displayKind;
