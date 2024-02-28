@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Auto.FourPixel;
+package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -12,24 +12,21 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous (name = "2 + 2 Red Left", group = "2 + 2")
-public class FourPixelRedLeft extends LinearOpMode {
-
+@Autonomous (group = "Red")
+public class RedRight extends LinearOpMode {
     // Hardware Setup
     private final Mitsumi mitsumi = new Mitsumi(this);
     private final Intake intake = new Intake(this);
-    private SampleMecanumDrive drive;
-    private final Launcher launcher = new Launcher(this);
+    public SampleMecanumDrive drive;
 
     // Led
     private final LEDS leds = new LEDS(this);
@@ -38,122 +35,27 @@ public class FourPixelRedLeft extends LinearOpMode {
     public List<Recognition> myTfodRecognitions;
     public TfodProcessor myTfodProcessor;
     public Recognition myTfodRecognition;
-    public VisionPortal myVisionPortal;
+    public VisionPortal Cam1Portal;
     public double propLocation;
     public boolean USE_WEBCAM;
     public double x;
     public float y;
 
-    // ** Useful **
+    /** useful **/
     public Side side = Side.LEFT;
-
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         Globals.IS_AUTO = true;
 
-        // Put initialization blocks here.
+        // Initialize hardware
         drive = new SampleMecanumDrive(hardwareMap);
-        leds.initialize(hardwareMap);
         mitsumi.initialize(hardwareMap);
         mitsumi.autoInit();
-
         intake.initialize(hardwareMap);
-        launcher.initialize(hardwareMap);
+        leds.initialize(hardwareMap);
 
         USE_WEBCAM = true;
         initTfod();
-
-        Pose2d startPose = Globals.StartPose;
-        drive.setPoseEstimate(startPose);
-
-        // LEFT ( Testing for a 2 + 3 PLEASE WORK )
-        TrajectorySequence preloadLeft = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(90)))
-                .addTemporalMarker(Intake::reverseIntake)
-                .back(4)
-                .addTemporalMarker(Intake::stopIntaking)
-
-                // 1st cycle
-                // Try to see if I can convert these first 2 LineTo's into one spline movement with no wait
-                .lineTo(new Vector2d(62.5, 0))
-                .waitSeconds(0.1)
-                .lineTo(new Vector2d(62.5, 20))
-
-                // Test
-                // .lineTo(new Vector2d(54, 0))
-                // .splineToConstantHeading(new Vector2d(63.1, 20), Math.toRadians(0))
-
-                .addTemporalMarker(Intake::fingerDown)
-                .waitSeconds(0.7)
-                .lineTo(new Vector2d(62.5, 12))
-                .addTemporalMarker(Intake::fingerReset)
-                .lineTo(new Vector2d(62.5, 28))
-                .addTemporalMarker(Intake::startIntaking)
-                .waitSeconds(1)
-                .lineTo(new Vector2d(62.5, -10))
-                .addTemporalMarker(Intake::stopIntaking)
-                .lineTo(new Vector2d(62.5, -67))
-
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
-                .splineToConstantHeading(new Vector2d(31, -75.5), Math.toRadians(0))
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .waitSeconds(0.6)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
-                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> Intake.rotateBucket.setPosition(0.4))
-                .waitSeconds(0.7)
-                // Remove these 2 markers if going for a 2 + 3*-/
-                // .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                // .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 0.75))
-
-                // 2nd cycle
-                .addTemporalMarker(() -> Launcher.launcher_angle.setPosition(0.6))
-                .splineToConstantHeading(new Vector2d(70, -67), Math.toRadians(90))
-
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
-                .addTemporalMarker(Intake::startIntaking)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(-200, 1))
-
-                .waitSeconds(0.5)
-                // grab from stack
-                .lineTo(new Vector2d(62.5, 23.5))
-                .waitSeconds(0.8)
-
-                .lineTo(new Vector2d(77, -67))
-                .addTemporalMarker(Intake::stopIntaking)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1550, 1))
-                .splineToConstantHeading(new Vector2d(35, -75.5), Math.toRadians(0))
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .waitSeconds(0.6)
-                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_DOUBLE_DUMP))
-
-                // park (if second cycle is removed)
-
-                // .lineTo(new Vector2d(62, -77.5))
-
-                .build();
-
-        TrajectorySequence preloadCenter = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .lineTo(new Vector2d(30, 0))
-                .addTemporalMarker(Intake::reverseIntake)
-                .back(6)
-                .addTemporalMarker(Intake::stopIntaking)
-
-                .build();
-
-        TrajectorySequence preloadRight = drive.trajectorySequenceBuilder(startPose)
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .lineToLinearHeading(new Pose2d(36, 0, Math.toRadians(-90)))
-                .forward(4)
-                .addTemporalMarker(Intake::reverseIntake)
-                .back(6)
-                .addTemporalMarker(Intake::stopIntaking)
-
-                .build();
 
         while (!isStarted()) {
             propLocation = scanLocation();
@@ -162,25 +64,117 @@ public class FourPixelRedLeft extends LinearOpMode {
             telemetry.update();
         }
 
-        waitForStart();
-        // Put run blocks here.
-        // Save computing resources by closing the camera stream, if no longer needed.
-        myVisionPortal.close();
-        telemetry.addData("Side: ", getSide());
-        telemetry.addData("Location: ", propLocation);
+        // RED RIGHT
+        drive.setPoseEstimate(Globals.RedRight_StartPoseBK);
 
-        if (isStopRequested()) return;
-        // Start is pressed
+        TrajectorySequence Right = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
+                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+
+                .addTemporalMarker(Intake::retainerClose)
+
+                // preload
+                .splineToConstantHeading(new Vector2d(28, -42), Math.toRadians(90))
+                .addTemporalMarker(Intake::reverseIntake)
+                .waitSeconds(0.5)
+
+                .back(8)
+                .addTemporalMarker(Intake::stopIntaking)
+                .turn(Math.toRadians(92))
+                .resetConstraints()
+
+                // backdrop
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
+                .lineTo(new Vector2d(53.5, -43))
+
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .addTemporalMarker(Intake::retainerOpen)
+                .forward(2.5)
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(1.5)
+                .forward(4)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+
+                // park
+                .lineTo(new Vector2d(48, -65))
+                .lineTo(new Vector2d(55, -65))
+
+                .build();
+
+        TrajectorySequence Center = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
+                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+
+                // preload
+                .lineToLinearHeading(new Pose2d(12.5, -34.5, Math.toRadians(90)))
+                .addTemporalMarker(Intake::reverseIntake)
+                .waitSeconds(0.1)
+
+                .back(7)
+                .addTemporalMarker(Intake::stopIntaking)
+                .turn(Math.toRadians(90))
+                .waitSeconds(1)
+
+                // backdrop
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
+                .resetConstraints()
+                .lineTo(new Vector2d(46, -33))
+
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .back(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.7, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(1.5)
+                .forward(2)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+
+                // park
+                .lineTo(new Vector2d(42, -64))
+                .lineTo(new Vector2d(50, -64))
+
+                .build();
+
+        TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
+                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+
+                // preload
+                .forward(32)
+                .turn(Math.toRadians(90))
+                .addTemporalMarker(Intake::reverseIntake)
+                .forward(3)
+                .waitSeconds(0.5)
+                .back(5)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                // backdrop
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
+                .resetConstraints()
+                .lineTo(new Vector2d(46, -27.5))
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .back(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(1.6)
+                .forward(2)
+                .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
+
+                // park
+                .lineTo(new Vector2d(42, -64))
+                .lineTo(new Vector2d(50, -64))
+
+                .build();
+
+        waitForStart();
+        // Save computing resources by closing the main stream, since it's no longer needed.
+        Cam1Portal.stopStreaming();
 
         if (propLocation == 3) {
-            drive.followTrajectorySequence(preloadRight);
-        }   else if (propLocation == 2) {
-            drive.followTrajectorySequence(preloadCenter);
-        }   else {
-            drive.followTrajectorySequence(preloadLeft);
+            drive.followTrajectorySequence(Right);
+        } else if (propLocation == 2) {
+            drive.followTrajectorySequence(Center);
+        } else {
+            drive.followTrajectorySequence(Left);
         }
+
     }
 
+    // Team Prop Cam (front c920)
     private void initTfod() {
         TfodProcessor.Builder myTfodProcessorBuilder;
         VisionPortal.Builder myVisionPortalBuilder;
@@ -188,7 +182,7 @@ public class FourPixelRedLeft extends LinearOpMode {
         // First, create a TfodProcessor.Builder.
         myTfodProcessorBuilder = new TfodProcessor.Builder();
         // Set the name of the file where the model can be found.
-        myTfodProcessorBuilder.setModelFileName("Team_Prop.tflite");
+        myTfodProcessorBuilder.setModelFileName("Red Prop (States).tflite");
         // Set the full ordered list of labels the model is trained to recognize.
         myTfodProcessorBuilder.setModelLabels(JavaUtil.createListWith("nothing", "Prop"));
         // Set the aspect ratio for the images used when the model was created.
@@ -207,17 +201,17 @@ public class FourPixelRedLeft extends LinearOpMode {
         // Add myTfodProcessor to the VisionPortal.Builder.
         myVisionPortalBuilder.addProcessor(myTfodProcessor);
         // Create a VisionPortal by calling build.
-        myVisionPortal = myVisionPortalBuilder.build();
+        Cam1Portal = myVisionPortalBuilder.build();
     }
-
     private int scanLocation() {
         // Get a list of recognitions from TFOD.
         myTfodRecognitions = myTfodProcessor.getRecognitions();
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
-            side = Side.LEFT;
             leds.LeftLightUp();
+            side = Side.LEFT;
+
         } else {
             // Iterate through list and call a function to display info for each recognized object.
             for (Recognition myTfodRecognition_item2 : myTfodRecognitions) {
@@ -235,26 +229,28 @@ public class FourPixelRedLeft extends LinearOpMode {
                 // Display size
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
-                if (x < 90 && x > 35) {
+
+                if (x < 50 && x > 25) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
-                } else if (x > 275 && x < 370) {
+                } else if (x > 260 && x < 300) {
                     Globals.LOCATION = 2;
                     side = Side.CENTER;
                     leds.CenterLightUp();
-                } else if (x > 500 && x < 620) {
+                } else if (x > 520 && x < 580) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();
                 }
+
             }
         }
-        return Globals.LOCATION;
 
+        return Globals.LOCATION;
     }
+
     public Side getSide() {
         return side;
     }
-
 }

@@ -127,15 +127,15 @@ public class TensorFlowTest extends LinearOpMode {
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
 
-                if (x < 90 && x > 35) {
+                if (x < 50 && x > 25) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
-                } else if (x > 275 && x < 370) {
+                } else if (x > 260 && x < 300) {
                     Globals.LOCATION = 2;
                     side = Side.CENTER;
                     leds.CenterLightUp();
-                } else if (x > 500 && x < 620) {
+                } else if (x > 520 && x < 580) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();

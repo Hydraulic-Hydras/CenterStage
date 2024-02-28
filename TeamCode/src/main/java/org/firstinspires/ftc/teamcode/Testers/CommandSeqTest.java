@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.common.CommandBase.ScoringCommand;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
@@ -13,15 +12,11 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 
 @Disabled
-@Autonomous (name = "Scoring Test for Lift")
-public class Fast extends CommandOpMode {
+@Autonomous
+public class CommandSeqTest extends CommandOpMode {
 
     public Mitsumi mitsumi = new Mitsumi(this);
     public Intake intake = new Intake(this);
-
-    private final ElapsedTime timer = new ElapsedTime();
-    private double endTime = 0;
-
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
@@ -38,17 +33,9 @@ public class Fast extends CommandOpMode {
                 )
         );
 
-        while (opModeIsActive() && !isStopRequested()) {
-            CommandScheduler.getInstance().run();
-
-            telemetry.addData("Runtime: ", endTime == 0 ? timer.seconds() : endTime);
-            telemetry.update();
-
-        }
-
-        if (isStopRequested()) {
-            stop();
-        }
-
+    }
+    @Override
+    public void run() {
+        super.run();
     }
 }

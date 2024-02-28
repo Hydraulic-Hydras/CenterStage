@@ -9,16 +9,19 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-@Disabled
+
+import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 
 @TeleOp (name = "Solo TeleOp" )
 public class SoloTeleOp extends LinearOpMode {
 
     private DcMotorEx leftFront, rightRear, leftRear, rightFront;
     private DcMotorEx LeftCascade, RightCascade;
+    public DcMotorEx leftHook, rightHook;
     public Servo rotateBucket, pixelRetainer, Dwayne, droneTrigger, launcher_angle;
     public CRServo Zip, intake, Wheels;
     public TouchSensor high_Limit, low_Limit;
+
     @Override
     public void runOpMode() {
         // DRIVETRAIN
@@ -47,6 +50,15 @@ public class SoloTeleOp extends LinearOpMode {
         RightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RightCascade.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        // CLIMBER
+        leftHook = hardwareMap.get(DcMotorEx.class, "climber-L");
+        leftHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftHook.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        rightHook = hardwareMap.get(DcMotorEx.class, "climber-R");
+        rightHook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightHook.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // INTAKE
         Wheels = hardwareMap.get(CRServo.class, "Wheels");
         Zip = hardwareMap.get(CRServo.class, "Zip");
@@ -55,13 +67,13 @@ public class SoloTeleOp extends LinearOpMode {
         Dwayne = hardwareMap.get(Servo.class, "claw");
 
         rotateBucket = hardwareMap.get(Servo.class, "rotateBucket");
-        rotateBucket.setPosition(0.2);
+        rotateBucket.setPosition(Intake.POS_REST);
 
         // DRONE SHOOTER
         launcher_angle = hardwareMap.get(Servo.class, "launcher_angle");
         droneTrigger = hardwareMap.get(Servo.class, "droneTrigger");
 
-        launcher_angle.setPosition(0.5);
+        // launcher_angle.setPosition(0.5);
 
         // Sensors
         high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
@@ -100,6 +112,7 @@ public class SoloTeleOp extends LinearOpMode {
                     RightCascade.setPower(0);
                 }
 
+                /*
                 // Angle adjusting
                 if (gamepad1.dpad_up) {
                     // shooting angle
@@ -117,6 +130,8 @@ public class SoloTeleOp extends LinearOpMode {
                     // shoot
                     droneTrigger.setPosition(0.9);
                 }
+
+                 */
 
                 // Intake controls
                 if (gamepad1.right_trigger > 0) {
@@ -137,22 +152,24 @@ public class SoloTeleOp extends LinearOpMode {
 
                 if (gamepad1.cross) {
                     // Reset
-                    rotateBucket.setPosition(0.4);
+                    rotateBucket.setPosition(Intake.POS_REST);
                 } else if (gamepad1.square && !low_Limit.isPressed()) {
                     // Panel
-                    rotateBucket.setPosition(0.7);
+                    rotateBucket.setPosition(Intake.POS_PANEL);
                 } else if (gamepad1.circle && !low_Limit.isPressed()) {
                     // Drop
-                    rotateBucket.setPosition(0.84);
+                    rotateBucket.setPosition(Intake.POS_DUMP);
                 }
 
-                // Pixel retainer controls
-                if (gamepad2.x) {
-                    // open
-                    pixelRetainer.setPosition(0.15);
-                } else if (gamepad2.y) {
-                    // grab
-                    pixelRetainer.setPosition(0.05);
+                if (gamepad1.dpad_up) {
+                    leftHook.setPower(1);
+                    rightHook.setPower(1);
+                } else if (gamepad1.dpad_down) {
+                    leftHook.setPower(-1);
+                    rightHook.setPower(-1);
+                } else {
+                    leftHook.setPower(0);
+                    rightHook.setPower(0);
                 }
 
             }

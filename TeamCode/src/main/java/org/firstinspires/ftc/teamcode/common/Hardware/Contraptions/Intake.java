@@ -24,15 +24,14 @@ public class Intake extends Contraption {
     public static double POS_PANEL = 0.65;
     public static double POS_DUMP = 0.84;
     public static double POS_DOUBLE_DUMP = 1;
+    public static double DWAYNE_CLOSE = 0.9;
+    public static double DWAYNE_OVERLOAD_EXTEND = 0.45;
+
+    public static double retainerOpen = 0.15;
+    public static double retainerClose = 0.05;
 
     public static boolean IS_INTAKING = false;
     public static boolean IS_REVERSED = false;
-
-    public static double DWAYNE_CLOSE = 0.55;
-    public static double DWAYNE_OVERLOAD_EXTEND = 0;
-
-    public static double retainerOpen = 0.17;
-    public static double retainerClose = 0.35;
 
     public enum State {
         REST,
@@ -56,12 +55,6 @@ public class Intake extends Contraption {
 
         // Default position
         rotateBucket.setPosition(POS_REST);
-
-        if (Globals.IS_AUTO) {
-            DWAYNE.setPosition(DWAYNE_CLOSE);
-        }   else {
-            DWAYNE.setPosition(0.48);
-        }
     }
 
     @Override
@@ -130,9 +123,9 @@ public class Intake extends Contraption {
     public static void reverseIntake() {
         IS_REVERSED = true;
         IS_INTAKING = false;
-        intake.setPower(-0.7);
-        Wheels.setPower(-0.7);
-        Zip.setPower(-0.7);
+        intake.setPower(-0.85);
+        Wheels.setPower(-0.85);
+        Zip.setPower(-0.85);
     }
 
     public static void fingerDown() {
@@ -140,7 +133,7 @@ public class Intake extends Contraption {
     }
 
     public static void fingerReset() {
-        DWAYNE.setPosition(0.4);
+        DWAYNE.setPosition(DWAYNE_CLOSE);
     }
 
     public static void retainerOpen() {
@@ -150,6 +143,11 @@ public class Intake extends Contraption {
     public static void retainerClose() {
         pixelRetainer.setPosition(retainerClose);
     }
+
+    public static void bucketRest() { rotateBucket.setPosition(POS_REST);}
+    public static void bucketPanel() { rotateBucket.setPosition(POS_PANEL);}
+    public static void bucketDump() { rotateBucket.setPosition(POS_DUMP);}
+    public static void doubleDump() { rotateBucket.setPosition(POS_DOUBLE_DUMP);}
 
     public static State getState() {
         return outtakeState;

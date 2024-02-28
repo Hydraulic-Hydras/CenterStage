@@ -21,17 +21,17 @@ public class Globals {
             100);
 
     public static final TrajectoryVelocityConstraint HalfVel = SampleMecanumDrive.getVelocityConstraint(
-            74, Math.toRadians(180), Math.toRadians(180));
+            90, Math.toRadians(180), Math.toRadians(180));
     public static final TrajectoryAccelerationConstraint HalfAccel = SampleMecanumDrive.getAccelerationConstraint
-            (74);
+            (65);
 
     // Start Position
     public static final Pose2d StartPose = new Pose2d(0, 0, Math.toRadians(0));
 
     // New StartPose
-    public static final Pose2d RedRight_StartPoseBK = new Pose2d(12.5, -62.5, Math.toRadians(90));
-    public static final Pose2d RedLeft_StartPose = new Pose2d(-35.5, -62.5, Math.toRadians(90));
-    public static final Pose2d BlueRight_StartPose = new Pose2d(-35.5, 62.5, Math.toRadians(270));
-    public static final Pose2d BlueLeft_StartPoseBK = new Pose2d(12.5, 62.5, Math.toRadians(270));
+    public static final Pose2d RedRight_StartPoseBK = new Pose2d(12.5, -65.5, Math.toRadians(90));
+    public static final Pose2d RedLeft_StartPose = new Pose2d(-35.5, -65.5, Math.toRadians(90));
+    public static final Pose2d BlueRight_StartPose = new Pose2d(-35.5, 65.5, Math.toRadians(270));
+    public static final Pose2d BlueLeft_StartPoseBK = new Pose2d(12.5, 65.5, Math.toRadians(270));
 
 }

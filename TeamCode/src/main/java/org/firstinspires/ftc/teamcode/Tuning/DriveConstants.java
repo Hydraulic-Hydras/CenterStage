@@ -6,20 +6,15 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 @Config
 public class DriveConstants {
 
-    // Switched from 15:1 to 20:1 to have more torque
-    // Switched back to 15:1
-
     public static final double TICKS_PER_REV = 420;
     public static final double MAX_RPM = 400;
 
-    /*
-    public static final double TICKS_PER_REV = 537.6;
-    public static final double MAX_RPM = 312.5;
-     */
-
-    public static final boolean RUN_USING_ENCODER = false; // keep this false if using odometry + feedforward
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-           getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
+    // 60mm long
+    // 70mm wide
+    // 61m heighhht
+    public static final boolean RUN_USING_ENCODER = true; // keep this false if using odometry + feedforward
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(22, 0, 9, 13);
+           // getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     // Realizing the limitations of the internal PIDF controller is very important in keeping your sanity.
 
@@ -38,24 +33,30 @@ public class DriveConstants {
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 17.67; // in
 
-    public static double kV =  0.01177; // 1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0.0021;
-    public static double kStatic =  0.1142;
+    public static double kV =  1.0 / rpmToVelocity(MAX_RPM); // 0.0124;
+    public static double kA = 0;
+    public static double kStatic =  0;
 
-    // First Tune (15 : 1)
+    // First Tune
     // kV = 0.011;
     // kA = 0.002;
     // kStatic = 0.105
 
-    // Qual #4 Tune (15 : 1)
+    // Qual #4 Tune
     // kV = 0.0141;
     // kA = 0.0029;
     // kStatic = 0.015;
 
-    // Super Qual #1 Tune (20 : 1)
-    // kV = 0.0154;
+    // Super Qual #1 Tune
+    // kV = 0.01177;
     // kA = 0.0024;
-    // kStatic = 0.12;
+    // kStatic = 0.1142;
+
+    // States Tune
+    // kV = 0.0124;
+    // kA = 0.0025;
+    // kStatic = 0.1148;
+
 
     public static double MAX_VEL = 45; // 65, 45
     public static double MAX_ACCEL = 45; // 65, 45
@@ -63,9 +64,9 @@ public class DriveConstants {
     public static double MAX_ANG_ACCEL = Math.toRadians(180); // 212
 
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+            RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+            RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;

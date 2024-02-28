@@ -30,6 +30,15 @@ public class Climber extends Contraption {
 
     @Override
     public void loop(Gamepad gamepad) {
-
+        if (gamepad.right_bumper) {
+            leftHook.setPower(1);
+            rightHook.setPower(1);
+        } else if (gamepad.y) {
+            leftHook.setPower(-1);
+            rightHook.setPower(-1);
+        } else {
+            leftHook.setPower(0);
+            rightHook.setPower(0);
+        }
     }
 }
