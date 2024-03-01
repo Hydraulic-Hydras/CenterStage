@@ -12,10 +12,11 @@ public class DriveConstants {
     // 60mm long
     // 70mm wide
     // 61m heighhht
-    public static final boolean RUN_USING_ENCODER = true; // keep this false if using odometry + feedforward
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(22, 0, 9, 13);
-           // getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
+    public static final boolean RUN_USING_ENCODER = false; // keep this false if using odometry + feedforward
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
+           getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
+    // 22, 0, 0, 13
     // Realizing the limitations of the internal PIDF controller is very important in keeping your sanity.
 
     /* NOTES
@@ -31,11 +32,11 @@ public class DriveConstants {
 
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 17.67; // in
+    public static double TRACK_WIDTH = 15; // in
 
-    public static double kV =  1.0 / rpmToVelocity(MAX_RPM); // 0.0124;
-    public static double kA = 0;
-    public static double kStatic =  0;
+    public static double kV = 0.0124; // 1.0 / rpmToVelocity(MAX_RPM); // 0.0124;
+    public static double kA = 0.0027;
+    public static double kStatic =  0.1148;
 
     // First Tune
     // kV = 0.011;

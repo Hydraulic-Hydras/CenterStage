@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
+import com.hydraulichydras.hydrauliclib.Geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,14 +24,14 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     // Perpendicular is perpendicular to the forward axis
 
     // cords for odo on the robot
-    public static double PARALLEL_X = -2; // X is the up and down direction
-    public static double PARALLEL_Y = 6; // Y is the strafe direction
+    public static double PARALLEL_X = 5.5; // X is the up and down direction
+    public static double PARALLEL_Y = 2.5; // Y is the strafe direction
 
-    public static double PERPENDICULAR_X = -6.25;
-    public static double PERPENDICULAR_Y = 1;
+    public static double PERPENDICULAR_X = -4;
+    public static double PERPENDICULAR_Y = -4;
 
-   // public static double X_MULTIPLIER = 1;// Multiplier in the X direction
-   // public static double Y_MULTIPLIER = 1;// Multiplier in the Y direction
+    public static double X_MULTIPLIER = 1.0010;// Multiplier in the X direction
+    public static double Y_MULTIPLIER = 1.0010;// Multiplier in the Y direction
 //    public static double Y_MULTIPLIER = 1.0086;// Multiplier in the Y direction
 
     // Parallel/Perpendicular to the forward axis
@@ -39,7 +40,6 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     private Encoder parallelEncoder, perpendicularEncoder;
 
     private SampleMecanumDrive drive;
-
     public TwoWheelTrackingLocalizer(HardwareMap hardwareMap, SampleMecanumDrive drive) {
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0), // (-2, 7, 0)
@@ -48,13 +48,14 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
         this.drive = drive;
 
-        parallelEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "parallelOdo"));
-        perpendicularEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "perpOdo"));
+        parallelEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "climber-L"));
+        perpendicularEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "climber-R"));
 
 
-        // perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
-        // parallelEncoder.setDirection(Encoder.Direction.FORWARD);
+        perpendicularEncoder.setDirection(Encoder.Direction.REVERSE);
+        parallelEncoder.setDirection(Encoder.Direction.FORWARD);
     }
+
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
@@ -74,8 +75,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     @Override
     public List<Double> getWheelPositions() {
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getCurrentPosition()), //* X_MULTIPLIER,
-                encoderTicksToInches(perpendicularEncoder.getCurrentPosition()) //* Y_MULTIPLIER
+                encoderTicksToInches(parallelEncoder.getCurrentPosition()) * X_MULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCurrentPosition() * Y_MULTIPLIER)
         );
     }
 
@@ -86,8 +87,21 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getCorrectedVelocity()), //* X_MULTIPLIER,
-                encoderTicksToInches(perpendicularEncoder.getCorrectedVelocity()) //* Y_MULTIPLIER
+                encoderTicksToInches(parallelEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCorrectedVelocity() * Y_MULTIPLIER)
         );
+    }
+
+    public void periodic() {
+        super.update();
+    }
+
+    public Pose getPose() {
+        Pose2d pose = getPoseEstimate();
+        return new Pose(-pose.getY(), pose.getX(), pose.getHeading());
+    }
+
+    public void setPose(Pose pose) {
+        super.setPoseEstimate(new Pose2d(pose.y, -pose.x, pose.heading));
     }
 }
