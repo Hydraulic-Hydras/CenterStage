@@ -35,3 +35,7 @@ dependencies {
 
     implementation project(':HydraulicLib')
 }
+
+dependencies {
+    implementation 'com.github.Tea505:HydraulicLib:1.1.5'
+}
