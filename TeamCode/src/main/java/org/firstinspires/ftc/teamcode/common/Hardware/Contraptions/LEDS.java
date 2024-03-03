@@ -91,6 +91,15 @@ public class LEDS extends Contraption {
                 LED_RedL.setState(false);
                 LED_GreenR.setState(true);
                 LED_RedR.setState(true);
+            } else {
+                ALED_Green.setState(false);
+                ALED_Red.setState(false);
+                BLED_Green.setState(false);
+                BLED_Red.setState(false);
+                LED_GreenL.setState(false);
+                LED_RedL.setState(false);
+                LED_GreenR.setState(false);
+                LED_RedR.setState(false);
             }
         } else {
             if (Double.parseDouble(JavaUtil.formatNumber(distanceBackdrop.getDistance(DistanceUnit.CM), 0)) >= 16
@@ -179,5 +188,16 @@ public class LEDS extends Contraption {
         LED_RedL.setState(false);
         LED_GreenR.setState(true);
         LED_RedR.setState(true);
+    }
+
+    public void noDetectLightUp() {
+        ALED_Green.setState(false);
+        ALED_Red.setState(false);
+        BLED_Green.setState(false);
+        BLED_Red.setState(false);
+        LED_GreenL.setState(false);
+        LED_RedL.setState(false);
+        LED_GreenR.setState(false);
+        LED_RedR.setState(false);
     }
 }

@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
+
 @Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "Java TeleOp, No Sensors")
 public class TeleOp extends LinearOpMode {
@@ -24,6 +26,8 @@ public class TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO = false;
+
         // DRIVETRAIN
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
+import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 
 @TeleOp (name = "Solo TeleOp" )
 public class SoloTeleOp extends LinearOpMode {
@@ -24,6 +24,8 @@ public class SoloTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        Globals.IS_AUTO = false;
+
         // DRIVETRAIN
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -105,8 +107,8 @@ public class SoloTeleOp extends LinearOpMode {
                     RightCascade.setPower(0.85);
                 } else if (gamepad1.left_bumper && !low_Limit.isPressed()) {
                     // down
-                    LeftCascade.setPower(-0.6);
-                    RightCascade.setPower(-0.6);
+                    LeftCascade.setPower(-0.5);
+                    RightCascade.setPower(-0.5);
                 } else {
                     LeftCascade.setPower(0);
                     RightCascade.setPower(0);
