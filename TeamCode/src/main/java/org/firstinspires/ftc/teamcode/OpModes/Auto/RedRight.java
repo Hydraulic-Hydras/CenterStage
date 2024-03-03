@@ -67,24 +67,25 @@ public class RedRight extends LinearOpMode {
         // RED RIGHT
         drive.setPoseEstimate(Globals.RedRight_StartPoseBK);
 
+        // PROB DONE? Test again
         TrajectorySequence Right = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
                 .setConstraints(Globals.MaxVel, Globals.HalfAccel)
 
                 .addTemporalMarker(Intake::retainerClose)
 
                 // preload
-                .splineToConstantHeading(new Vector2d(28, -42), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(28.5, -42), Math.toRadians(90))
                 .addTemporalMarker(Intake::reverseIntake)
                 .waitSeconds(0.5)
 
-                .back(8)
+                .back(10)
                 .addTemporalMarker(Intake::stopIntaking)
-                .turn(Math.toRadians(92))
+                .turn(Math.toRadians(90))
                 .resetConstraints()
 
                 // backdrop
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
-                .lineTo(new Vector2d(53.5, -43))
+                .lineTo(new Vector2d(56, -40))
 
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
                 .addTemporalMarker(Intake::retainerOpen)
@@ -95,20 +96,24 @@ public class RedRight extends LinearOpMode {
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
 
                 // park
-                .lineTo(new Vector2d(48, -65))
-                .lineTo(new Vector2d(55, -65))
+                .lineTo(new Vector2d(42, -67.5))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(100, 0.8))
+                .lineTo(new Vector2d(55, -67.5))
 
                 .build();
 
+        // DONE
         TrajectorySequence Center = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
                 .setConstraints(Globals.MaxVel, Globals.HalfAccel)
 
-                // preload
-                .lineToLinearHeading(new Pose2d(12.5, -34.5, Math.toRadians(90)))
-                .addTemporalMarker(Intake::reverseIntake)
-                .waitSeconds(0.1)
+                .addTemporalMarker(Intake::retainerClose)
 
-                .back(7)
+                // preload
+                .lineToLinearHeading(new Pose2d(12.5, -35, Math.toRadians(90)))
+                .addTemporalMarker(Intake::reverseIntake)
+                .waitSeconds(1)
+
+                .back(10)
                 .addTemporalMarker(Intake::stopIntaking)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
@@ -116,47 +121,52 @@ public class RedRight extends LinearOpMode {
                 // backdrop
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
                 .resetConstraints()
-                .lineTo(new Vector2d(46, -33))
+                .lineTo(new Vector2d(50, -35))
 
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .back(1)
+                .addTemporalMarker(Intake::retainerOpen)
                 .UNSTABLE_addTemporalMarkerOffset(0.7, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1.5)
                 .forward(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
 
                 // park
-                .lineTo(new Vector2d(42, -64))
-                .lineTo(new Vector2d(50, -64))
+                .lineTo(new Vector2d(42, -67))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(100, 0.8))
+                .lineTo(new Vector2d(50, -67))
 
                 .build();
 
         TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.RedRight_StartPoseBK)
                 .setConstraints(Globals.MaxVel, Globals.HalfAccel)
 
+                .addTemporalMarker(Intake::retainerClose)
+
                 // preload
-                .forward(32)
+                .lineTo(new Vector2d(14.5, -32))
                 .turn(Math.toRadians(90))
                 .addTemporalMarker(Intake::reverseIntake)
-                .forward(3)
+                .forward(5)
                 .waitSeconds(0.5)
                 .back(5)
                 .addTemporalMarker(Intake::stopIntaking)
 
                 // backdrop
                 .addTemporalMarker(() -> mitsumi.autoMoveTo(1100, 0.65))
+
                 .resetConstraints()
-                .lineTo(new Vector2d(46, -27.5))
+                .lineTo(new Vector2d(50, -27.5))
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
-                .back(1)
+                .addTemporalMarker(Intake::retainerOpen)
                 .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1.6)
                 .forward(2)
                 .addTemporalMarker(() -> Intake.rotateBucket.setPosition(Intake.POS_REST))
 
                 // park
-                .lineTo(new Vector2d(42, -64))
-                .lineTo(new Vector2d(50, -64))
+                .lineTo(new Vector2d(42, -67))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(100, 0.8))
+                .lineTo(new Vector2d(50, -67))
 
                 .build();
 
@@ -209,7 +219,7 @@ public class RedRight extends LinearOpMode {
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
-            leds.LeftLightUp();
+            leds.noDetectLightUp();
             side = Side.LEFT;
 
         } else {
@@ -230,18 +240,18 @@ public class RedRight extends LinearOpMode {
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
 
-                if (x < 50 && x > 25) {
+                if (x < 80) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
-                } else if (x > 260 && x < 300) {
-                    Globals.LOCATION = 2;
-                    side = Side.CENTER;
-                    leds.CenterLightUp();
-                } else if (x > 520 && x < 580) {
+                } else if (x > 500) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();
+                } else {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
                 }
 
             }
