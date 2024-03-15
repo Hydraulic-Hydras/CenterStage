@@ -67,6 +67,7 @@ public class SP_BlueRight extends LinearOpMode {
 
         drive.setPoseEstimate(Globals.BlueRight_StartPose);
 
+        // Failed auto, never ever making a 3am auto
         TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.BlueRight_StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
@@ -85,7 +86,7 @@ public class SP_BlueRight extends LinearOpMode {
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 // spikemark
-                .lineTo(new Vector2d(-35.5, -35))
+                .lineTo(new Vector2d(-35.5, 35))
                 .addTemporalMarker(Intake::reverseIntake)
                 .waitSeconds(0.8)
                 .back(8)
@@ -97,7 +98,7 @@ public class SP_BlueRight extends LinearOpMode {
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 // spikemark
-                .splineToConstantHeading(new Vector2d(-51.5, -40), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-51.5, 40), Math.toRadians(270))
                 .addTemporalMarker(Intake::reverseIntake)
                 .waitSeconds(0.7)
                 .back(10)
