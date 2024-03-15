@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.CenterStage.Side;
 import org.firstinspires.ftc.teamcode.Tuning.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Intake;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.LEDS;
-import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Launcher;
 import org.firstinspires.ftc.teamcode.common.Hardware.Contraptions.Mitsumi;
 import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -65,111 +64,154 @@ public class RedLeft extends LinearOpMode {
             telemetry.addData("Team Prop Location", propLocation);
             telemetry.addData("Side: ", getSide());
             telemetry.update();
-
-            Intake.retainerOpen();
-            Launcher.launcher_angle.setPosition(0.28);
         }
 
         drive.setPoseEstimate(Globals.RedLeft_StartPose);
 
+        // just leave it be
         TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
-                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .addTemporalMarker(Intake::retainerClose)
 
                 // spikemark
-                .lineToLinearHeading(new Pose2d(-35.5, -29, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-35.5, -34, Math.toRadians(90)))
                 .turn(Math.toRadians(90))
                 .addTemporalMarker(Intake::reverseIntake)
-
-                // stack
-                .setTangent(Math.PI)
-                .strafeRight(5)
+                .forward(4)
+                .waitSeconds(0.5)
+                .back(5)
                 .addTemporalMarker(Intake::stopIntaking)
-                .splineToConstantHeading(new Vector2d(-55.5, -5), Math.toRadians(180))
-                .forward(10)
+
+                .setTangent(Math.PI)
+                .strafeRight(10)
+                .splineToConstantHeading(new Vector2d(-60, -19.5), Math.toRadians(180))
+                .forward(3.5)
                 .addTemporalMarker(Intake::fingerDown)
-                .waitSeconds(1.5)
-                .back(10)
-                .addTemporalMarker(Intake::fingerReset)
+                .waitSeconds(0.5)
+                .back(5)
                 .addTemporalMarker(Intake::startIntaking)
-                .forward(13)
+                .forward(8.5)
+                .waitSeconds(0.5)
+
+                .lineTo(new Vector2d(-55, -12))
+                .lineTo(new Vector2d(29.5, -12))
+                .addTemporalMarker(Intake::stopIntaking)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
+                .lineTo(new Vector2d(29.5, -37))
+                .back(5.5) // CHANGE ONLY THIS IF ANYTHING
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1)
-                .resetConstraints()
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .back(10)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::retainerOpen)
+                .waitSeconds(1)
+                .forward(2)
+                .waitSeconds(0.5)
+                .back(2)
+                .waitSeconds(0.5)
+                .addTemporalMarker(Intake::bucketRest)
+
+                // park
+                .lineTo(new Vector2d(36, -12))
+                .lineTo(new Vector2d(50, -12))
 
                 .build();
 
         // YOU ARE A PAIN IN THE ASS <3
         TrajectorySequence Center = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
-                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .addTemporalMarker(Intake::retainerClose)
 
                 // spikemark
-                .lineToLinearHeading(new Pose2d(-35.5, -33, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-35.5, -36.5, Math.toRadians(90)))
                 .addTemporalMarker(Intake::reverseIntake)
+                .waitSeconds(0.7)
                 .back(7)
                 .addTemporalMarker(Intake::stopIntaking)
                 .strafeLeft(22)
 
                 // stack
-                .lineTo(new Vector2d(-55.5, -13))
+                .lineTo(new Vector2d(-55.5, -19.3))
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(90))
                 .waitSeconds(0.5)
-                .forward(7)
+                .lineTo(new Vector2d(-64.2, -19.3))
                 .addTemporalMarker(Intake::fingerDown)
-                .waitSeconds(1.5)
-                .back(10)
+                .waitSeconds(0.5)
+                .back(6.5)
                 .addTemporalMarker(Intake::fingerReset)
                 .addTemporalMarker(Intake::startIntaking)
-                .forward(13)
+                .forward(8)
                 .waitSeconds(1)
-                .resetConstraints()
-                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-                .back(10)
+                .lineTo(new Vector2d(-60, -14))
 
                 // under the door
-                .lineToLinearHeading(new Pose2d(-50, -11.5, Math.toRadians(180)))
-                .waitSeconds(0.5)
-                .lineTo(new Vector2d(35, -11.5))
+                .lineTo(new Vector2d(29.5, -14.3))
                 .addTemporalMarker(Intake::stopIntaking)
-
-                // backdrop
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1200, 0.85))
-
-                .resetConstraints()
-                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
-
-                .lineTo(new Vector2d(42, -35))
-                .addTemporalMarker(Intake::bucketPanel)
-                .back(2)
-                .addTemporalMarker(Intake::bucketDump)
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
+                .lineTo(new Vector2d(29.5, -46))
+                .back(6) // CHANGE ONLY THIS IF ANYTHING
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
                 .waitSeconds(1)
-                .addTemporalMarker(Intake::bucketPanel)
-                .addTemporalMarker(() -> mitsumi.autoMoveTo(1300, 1))
-                .lineTo(new Vector2d(42, -43))
-                .lineTo(new Vector2d(44.5, -47))
-                .UNSTABLE_addTemporalMarkerOffset(0.1, Intake::retainerOpen)
-                .addTemporalMarker(Intake::bucketDump)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::retainerOpen)
                 .waitSeconds(1)
+                .forward(2)
+                .addTemporalMarker(Intake::bucketRest)
 
                 // park
-                .addTemporalMarker(Intake::bucketRest)
-                .forward(4)
+                .lineTo(new Vector2d(29.5, -19.3))
+                .lineTo(new Vector2d(50, -12))
 
                 .build();
 
+        // Heavily despise this but WE BALL
         TrajectorySequence Right = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
-                .setConstraints(Globals.MaxVel, Globals.HalfAccel)
+                .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
                 .addTemporalMarker(Intake::retainerClose)
 
-                .lineToLinearHeading(new Pose2d(-35.5, -32, Math.toRadians(90)))
-                .turn(-Math.PI / 2)
+                // spikemark
+                .lineTo(new Vector2d(-35.5, -34))
+                .turn(Math.toRadians(-90))
                 .addTemporalMarker(Intake::reverseIntake)
+                .forward(4)
+                .waitSeconds(0.5)
+                .back(8)
+                .addTemporalMarker(Intake::stopIntaking)
+
+                // stack
+                .turn(Math.toRadians(90))
+                .lineTo(new Vector2d(-45.5, -34))
+                .turn(Math.toRadians(90))
+                .lineTo(new Vector2d(-60.5, -34))
+                .addTemporalMarker(Intake::fingerDown)
+                .waitSeconds(0.5)
+                .back(6)
+                .addTemporalMarker(Intake::startIntaking)
+                .forward(7.5)
+                .waitSeconds(1)
+                .back(10)
+
+                // under the door
+                .setTangent(Math.PI)
+                .splineToConstantHeading(new Vector2d(-55, -13), Math.toRadians(180))
+                .lineTo(new Vector2d(29, -13))
+                .addTemporalMarker(() -> mitsumi.autoMoveTo(1250, 1))
+                .lineTo(new Vector2d(29, -45))
+                .back(5.5) // CHANGE ONLY THIS IF ANYTHING
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> Intake.rotateBucket.setPosition(Intake.POS_PANEL))
+                .UNSTABLE_addTemporalMarkerOffset(0.8, () -> Intake.rotateBucket.setPosition(Intake.POS_DUMP))
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0.5, Intake::retainerOpen)
+                .waitSeconds(1)
+                .forward(2)
+                .addTemporalMarker(Intake::bucketRest)
+
+                // park
+                .lineTo(new Vector2d(29.5, -19.3))
+                .lineTo(new Vector2d(50, -14))
 
                 .build();
 
@@ -184,7 +226,6 @@ public class RedLeft extends LinearOpMode {
         } else {
             drive.followTrajectorySequence(Left);
         }
-
     }
 
     // Team Prop Cam (front c920)
@@ -222,7 +263,7 @@ public class RedLeft extends LinearOpMode {
         telemetry.addData("# Objects Detected", JavaUtil.listLength(myTfodRecognitions));
         if (JavaUtil.listLength(myTfodRecognitions) == 0) {
             Globals.LOCATION = 1;
-            leds.LeftLightUp();
+            leds.noDetectLightUp();
             side = Side.LEFT;
 
         } else {
@@ -243,18 +284,18 @@ public class RedLeft extends LinearOpMode {
                 // Display the size of detection boundary for the recognition
                 telemetry.addData("- Size", JavaUtil.formatNumber(myTfodRecognition.getWidth(), 0) + " x " + JavaUtil.formatNumber(myTfodRecognition.getHeight(), 0));
 
-                if (x < 50 && x > 25) {
+                if (x < 80) {
                     Globals.LOCATION = 1;
                     side = Side.LEFT;
                     leds.LeftLightUp();
-                } else if (x > 260 && x < 300) {
-                    Globals.LOCATION = 2;
-                    side = Side.CENTER;
-                    leds.CenterLightUp();
-                } else if (x > 520 && x < 580) {
+                } else if (x > 500) {
                     Globals.LOCATION = 3;
                     side = Side.RIGHT;
                     leds.RightLightUp();
+                } else {
+                    Globals.LOCATION = 2;
+                    side = Side.CENTER;
+                    leds.CenterLightUp();
                 }
 
             }

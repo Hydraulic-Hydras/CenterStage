@@ -75,8 +75,6 @@ public class SoloTeleOp extends LinearOpMode {
         launcher_angle = hardwareMap.get(Servo.class, "launcher_angle");
         droneTrigger = hardwareMap.get(Servo.class, "droneTrigger");
 
-        // launcher_angle.setPosition(0.5);
-
         // Sensors
         high_Limit = hardwareMap.get(TouchSensor.class, "high_Limit");
         low_Limit = hardwareMap.get(TouchSensor.class, "low_Limit");
@@ -114,26 +112,24 @@ public class SoloTeleOp extends LinearOpMode {
                     RightCascade.setPower(0);
                 }
 
-                /*
+
                 // Angle adjusting
-                if (gamepad1.dpad_up) {
+                if (gamepad1.options) {
                     // shooting angle
-                    launcher_angle.setPosition(0.28);
-                } else if (gamepad1.dpad_down) {
+                    launcher_angle.setPosition(0.34);
+                } else if (gamepad1.share) {
                     // horizontal angle
-                    launcher_angle.setPosition(0.5);
+                    launcher_angle.setPosition(0.6);
                 }
 
                 // Trigger controls
                 if (gamepad1.dpad_left) {
                     // standby
                     droneTrigger.setPosition(0);
-                } else if (gamepad1.share) {
+                } else if (gamepad1.dpad_right) {
                     // shoot
                     droneTrigger.setPosition(0.9);
                 }
-
-                 */
 
                 // Intake controls
                 if (gamepad1.right_trigger > 0) {

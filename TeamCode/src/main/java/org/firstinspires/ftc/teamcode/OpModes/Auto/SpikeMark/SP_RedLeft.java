@@ -70,8 +70,6 @@ public class SP_RedLeft extends LinearOpMode {
         TrajectorySequence Left = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .addTemporalMarker(Intake::retainerClose)
-
                 // spikemark
                 .lineToLinearHeading(new Pose2d(-35.5, -34, Math.toRadians(90)))
                 .turn(Math.toRadians(90))
@@ -86,8 +84,6 @@ public class SP_RedLeft extends LinearOpMode {
         TrajectorySequence Center = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
 
-                .addTemporalMarker(Intake::retainerClose)
-
                 // spikemark
                 .lineToLinearHeading(new Pose2d(-35.5, -36.5, Math.toRadians(90)))
                 .addTemporalMarker(Intake::reverseIntake)
@@ -99,8 +95,6 @@ public class SP_RedLeft extends LinearOpMode {
 
         TrajectorySequence Right = drive.trajectorySequenceBuilder(Globals.RedLeft_StartPose)
                 .setConstraints(Globals.MaxVel, Globals.MaxAccel)
-
-                .addTemporalMarker(Intake::retainerClose)
 
                 // spikemark
                 .lineTo(new Vector2d(-35.5, -34))
