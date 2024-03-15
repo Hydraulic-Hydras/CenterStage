@@ -5,7 +5,9 @@ Welcome!
 HydraulicLib is a custom library that I created for the ease of veteran programmers, as well as 
 benefit young programmers by improving their code. As of right now this library is a module but
 I plan to release this library public to everyone and I hope it helps everyone who crosses paths 
-with it. 
+with it. For now it stays a module.
+
+Edit: The library was released and became public on 2/26/2024
 
 ## How does it work? 
 

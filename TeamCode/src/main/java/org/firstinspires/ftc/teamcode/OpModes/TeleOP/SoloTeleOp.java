@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.Hardware.Globals;
 
 @TeleOp (name = "Solo TeleOp" )
 public class SoloTeleOp extends LinearOpMode {
-
+    // BOOOOO SOLO DRIVING
     private DcMotorEx leftFront, rightRear, leftRear, rightFront;
     private DcMotorEx LeftCascade, RightCascade;
     public DcMotorEx leftHook, rightHook;
